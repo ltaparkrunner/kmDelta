@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>ChatW.qml</file>
+        <file>CondLine.qml</file>
+        <file>ControlP.qml</file>
+        <file>IP_Addr.qml</file>
+        <file>messageBox.qml</file>
+    </qresource>
+</RCC>
