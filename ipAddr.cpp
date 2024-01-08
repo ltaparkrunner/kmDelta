@@ -23,10 +23,12 @@ void IpAddr::init()
 {
     emit sendToQml2(ip_addr, ip_mask, port);
 }
-/*
-void IpAddr:: receiveFromQml()
-{
-    count++;
-    emit sendToQml(count);
+
+QHostAddress IpAddr::get_ip() {
+    return QHostAddress(ip_addr);
 }
-*/
+
+quint16 IpAddr::get_port() {
+    return port.toShort();
+}
+

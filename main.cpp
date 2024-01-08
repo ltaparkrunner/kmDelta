@@ -7,6 +7,7 @@
 
 #include "controlip.h"
 #include "ipAddr.h"
+#include "mbtcpClient.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,10 +17,12 @@ int main(int argc, char *argv[])
     QQuickView viewer;
     ControlIp controlIp;
     IpAddr ipAddr;
+    MbtcpClient cl;
 
     QQmlContext *context = viewer.rootContext();
     context->setContextProperty("controlIp", &controlIp);
     context->setContextProperty("ipAddr", &ipAddr);
+    context->setContextProperty("mbtcpClient", &cl);
 
     // The following are needed to make examples run without having to install the module
     // in desktop environments.

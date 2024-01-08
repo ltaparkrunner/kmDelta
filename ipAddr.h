@@ -2,6 +2,7 @@
 #define IPADDR_H
 
 #include <QObject>
+#include <QHostAddress>
 
 class IpAddr : public QObject
 {
@@ -15,6 +16,9 @@ signals:
 public slots:
     void receiveFromQml();
     void commitFromQml(QString str);
+public:
+    QHostAddress get_ip();
+    quint16 get_port();
 private:
     int count;
     QString ip_addr;
