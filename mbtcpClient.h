@@ -17,13 +17,18 @@ class MbtcpClient : public QObject
 public:
     explicit MbtcpClient(QObject *parent = nullptr);
 
-private slots:
+public slots:
     void requestNewFortune();
     void readFortune();
     void displayError(QAbstractSocket::SocketError socketError);
+
+public slots:
+    void receiveIpFromQml();
+    void commitIpFromQml(QString str);
 //    void enableGetFortuneButton();
 
 private:
+    int count;
     QTcpSocket *tcpSocket = nullptr;
     QDataStream in;
     QString currentFortune;
@@ -31,6 +36,8 @@ private:
 signals:
     void sendToCond1(QString str, bool bl);
     void sendToCond2(QString str1, QString str2);
+signals:
+    void sendToQml2(QString addr, QString mask, QString port);
 };
 
 //! [0]

@@ -18,7 +18,11 @@ public slots:
     void commitFromQml(QString str);
 public:
     QHostAddress get_ip();
+
     quint16 get_port();
+    QString get_ip2();
+    QString get_port2();
+    QString get_mask2();
 private:
     int count;
     QString ip_addr;

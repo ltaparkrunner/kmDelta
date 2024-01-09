@@ -32,3 +32,12 @@ quint16 IpAddr::get_port() {
     return port.toShort();
 }
 
+QString IpAddr::get_ip2(){
+    return ip_addr;
+}
+QString IpAddr::get_port2() {
+    return port;
+}
+QString IpAddr::get_mask2() {
+    return ip_mask;
+}

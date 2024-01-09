@@ -90,6 +90,18 @@ void MbtcpClient::displayError(QAbstractSocket::SocketError socketError)
     //getFortuneButton->setEnabled(true);
 }
 
+void MbtcpClient::receiveIpFromQml()
+{
+    count++;
+    emit sendToQml2(ip.get_ip2(), ip.get_mask2(), ip.get_port2());
+}
+void MbtcpClient::commitIpFromQml(QString str)
+{
+    str.append("for");
+    emit sendToQml2(str, ip.get_mask2(), ip.get_port2());
+    //messageDialog
+}
+
 //! [13]
 
 //! [0]

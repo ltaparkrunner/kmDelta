@@ -4,8 +4,17 @@ import QtCharts 2.0
 import QtQuick.Controls 1.0
 
 Rectangle {
+    // Connections{
+    //     target: ipAddr
+    //     function onSendToQml2(addrp, maskp, portp)
+    //     {
+    //        ip.text = addrp;
+    //        mask.text = maskp;
+    //        port.text = portp;
+    //     }
+    // }
     Connections{
-        target: ipAddr
+        target: mbtcpClient
         function onSendToQml2(addrp, maskp, portp)
         {
            ip.text = addrp;
@@ -13,7 +22,6 @@ Rectangle {
            port.text = portp;
         }
     }
-
     ColumnLayout{
         spacing: 2
         anchors.fill: parent
@@ -23,7 +31,8 @@ Rectangle {
             height: 20
             text: "Load_IP"
             onClicked: {
-                ipAddr.receiveFromQml()
+ //               ipAddr.receiveFromQml()
+                mbtcpClient.receiveIpFromQml()
                 }
         }
 
@@ -92,7 +101,8 @@ Rectangle {
             height: 20
             text: "Установить"
             onClicked: {
-                ipAddr.commitFromQml(ip.text)
+//                ipAddr.commitFromQml(ip.text)
+                mbtcpClient.commitIpFromQml(ip.text)
                 }
         }
     }
