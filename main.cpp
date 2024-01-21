@@ -15,14 +15,18 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QQuickView viewer;
-    ControlIp controlIp;
+    MbtcpClient tcpC;
+    ControlIp controlIp(tcpC);
     IpAddr ipAddr;
-    MbtcpClient cl;
+
+    //mbtcpClient tcpC2;
 
     QQmlContext *context = viewer.rootContext();
     context->setContextProperty("controlIp", &controlIp);
     context->setContextProperty("ipAddr", &ipAddr);
-    context->setContextProperty("mbtcpClient", &cl);
+    context->setContextProperty("tcpC", &tcpC);
+
+    //context->setContextObject();
 
     // The following are needed to make examples run without having to install the module
     // in desktop environments.

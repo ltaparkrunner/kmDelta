@@ -3,6 +3,11 @@
 
 #include <QDataStream>
 #include <QTcpSocket>
+#include <QtQuick/QQuickView>
+#include <QTimer>
+//#include <string>
+#include <QString>
+
 #include "ipAddr.h"
 
 QT_BEGIN_NAMESPACE
@@ -16,27 +21,45 @@ class MbtcpClient : public QObject
 
 public:
     explicit MbtcpClient(QObject *parent = nullptr);
-
+//    void requestNewFortune(std::string ip_t, std::string port_t);
+    void requestNewFortune(QString ip_t, QString port_t);
 public slots:
-    void requestNewFortune();
+
     void readFortune();
     void displayError(QAbstractSocket::SocketError socketError);
+    void successMsg();
+    int checkConnected();
+
+//    void enableGetFortuneButton();
 
 public slots:
     void receiveIpFromQml();
     void commitIpFromQml(QString str);
-//    void enableGetFortuneButton();
+    int request();
+    int request2(QByteArray &bdata);
+    int setParam();
+    int periodReq();
+
+signals:
+    void sendToMB(const QString &title, const QString &text);
+    //void sendToMB(QString &title, QString &text);
 
 private:
-    int count;
     QTcpSocket *tcpSocket = nullptr;
-    QDataStream in;
-    QString currentFortune;
     IpAddr ip;
+    QTimer tmr;
+//    QDataStream in_out;
+//    QDataStream in;
+//    QDataStream out;
+    QString currentFortune;
+    quint16 blockSize;
+    int count;
+    QByteArray answer;
+    //QQuickView* qwp;
+
 signals:
     void sendToCond1(QString str, bool bl);
     void sendToCond2(QString str1, QString str2);
-signals:
     void sendToQml2(QString addr, QString mask, QString port);
 };
 

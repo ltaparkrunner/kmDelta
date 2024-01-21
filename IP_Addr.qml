@@ -4,26 +4,19 @@ import QtCharts 2.0
 import QtQuick.Controls 1.0
 
 Rectangle {
-    // Connections{
-    //     target: ipAddr
-    //     function onSendToQml2(addrp, maskp, portp)
-    //     {
-    //        ip.text = addrp;
-    //        mask.text = maskp;
-    //        port.text = portp;
-    //     }
-    // }
     Connections{
-        target: mbtcpClient
-        function onSendToQml2(addrp, maskp, portp)
+        target: ipAddr
+//        function onSendToQml2(addrp, maskp, portp)
+        onSendToQml2:
         {
-           ip.text = addrp;
-           mask.text = maskp;
-           port.text = portp;
+           ip.text = ip_addr;   //addrp;
+           mask.text = ip_mask; //maskp;
+           port.text = ip_port;    //portp;
         }
     }
+
     ColumnLayout{
-        spacing: 2
+        spacing: 3
         anchors.fill: parent
         Button{
             id : butt_ip
@@ -31,11 +24,22 @@ Rectangle {
             height: 20
             text: "Load_IP"
             onClicked: {
- //               ipAddr.receiveFromQml()
-                mbtcpClient.receiveIpFromQml()
+                ipAddr.receiveFromQml()
                 }
         }
-
+        RowLayout{
+            spacing: 8
+            //anchors.fill: parent
+            Text {
+                Layout.leftMargin: 30
+                text: qsTr("текущие")
+            }
+            Text {
+//                id: ip_a
+                Layout.leftMargin: 20
+                text: qsTr("установить ")
+            }
+        }
         RowLayout{
             spacing: 8
             //anchors.fill: parent
@@ -101,9 +105,8 @@ Rectangle {
             height: 20
             text: "Установить"
             onClicked: {
-//                ipAddr.commitFromQml(ip.text)
-                mbtcpClient.commitIpFromQml(ip.text)
-                }
+                ipAddr.commitFromQml(ip.text)
+            }
         }
     }
 }

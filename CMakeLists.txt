@@ -8,11 +8,12 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Charts)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Charts)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Charts Network)
+message("QT_VERSION_MAJOR= ${QT_VERSION_MAJOR}" )
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Charts Network)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -23,6 +24,12 @@ set(PROJECT_SOURCES
         ipAddr.cpp
         mbtcpClient.h
         mbtcpClient.cpp
+        tcp_req.h
+        tcp_req.cpp
+        crc32.h
+        crc32.cpp
+#        messbox.h
+#        messbox.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -51,7 +58,7 @@ endif()
 target_compile_definitions(kmdelta6
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(kmdelta6
-  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick  Qt${QT_VERSION_MAJOR}::Charts)
+  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick  Qt${QT_VERSION_MAJOR}::Charts Qt${QT_VERSION_MAJOR}::Network)
 
 set_target_properties(kmdelta6 PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

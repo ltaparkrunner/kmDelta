@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtCharts 2.0
 import QtQuick.Controls 1.0
@@ -9,6 +9,7 @@ Item {
     width: 640
     height: 480
     visible: true
+//    property int ip_w: Math.max(c_ip.t1.width, t2.width, t3.width) + rect_2 *2
 /*
     Connections {
             target: ControlP // Указываем целевое соединение
@@ -54,8 +55,11 @@ Item {
                 }
 
                 ControlP{
+                    //id: c_ip
+                    //Layout.preferredWidth:  parent.width/3
+                    //Layout.preferredWidth:   child.width//c_ip2.width    //270//ip_contain.width
 
-                    Layout.preferredWidth: parent.width/3
+                    //Layout.fillWidth: true
                     Layout.fillHeight: true
                 }
             }
@@ -73,7 +77,8 @@ Item {
             id: bott1
 //            height: parent.height/3
             Layout.fillWidth: true
-            Layout.preferredHeight: parent.height/3
+//            Layout.preferredHeight: parent.height/3
+            //Layout.fillHeight: true
         }
     }
 }
