@@ -37,7 +37,7 @@ public slots:
     void commitIpFromQml(QString str);
     int request();
     int request2(QByteArray &bdata);
-    int setParam();
+    int setParam(QString ip_t, QString port_t, QByteArray mess);
     int periodReq();
 
 signals:

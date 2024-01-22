@@ -56,7 +56,7 @@ class tcp_req
 {
 public:
     tcp_req();
-    ret_t tcp_req_init();
+    static ret_t tcp_req_init();
 private:
 
 };

@@ -1,4 +1,6 @@
 #include "controlip.h"
+//#include "crc32.h"
+#include "tcp_req.h"
 #include<QDebug>
 
 //ControlIp::ControlIp(QObject *parent) : QObject(parent)
@@ -19,7 +21,8 @@ void ControlIp::periodReqButt(QString ip_t, QString port_t) {
 }
 
 void ControlIp::setParamButt(QString ip_t, QString port_t) {
-    if(tcpC->setParam() > 0) qDebug("success /n");
+    ret_t rez = tcp_req::tcp_req_init();
+    if(tcpC->setParam(ip_t,  port_t, *(rez.bdata)) > 0) qDebug("success /n");
     else qDebug("fault /n");
 }
 

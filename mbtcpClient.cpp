@@ -2,7 +2,8 @@
 #include <QMessageBox>
 #include <QDebug>
 #include "mbtcpClient.h"
-#include "crc32.h"
+
+
 //#include "messbox.h"
 
 //! [0]
@@ -195,16 +196,16 @@ int MbtcpClient::request() {
     if(checkConnected() < 0){
         return -1;
     }
-    else sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
+    else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
     const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
     return tcpSocket->write(QByteArray(data,12));
 }
 
-int MbtcpClient::setParam() {
+int MbtcpClient::setParam(QString ip_t, QString port_t, QByteArray mess) {
     if(checkConnected() < 0){
         return -1;
     }
-    else sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
+    else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
     const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
     return tcpSocket->write(QByteArray(data,12));
 }
@@ -213,7 +214,7 @@ int MbtcpClient::periodReq() {
     if(checkConnected() < 0){
         return -1;
     }
-    else sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
+    else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
     const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
     return tcpSocket->write(QByteArray(data,12));
 }

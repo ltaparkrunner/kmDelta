@@ -73,20 +73,44 @@ bool glob::check_IP(uint8_t ip[]){
     auto i = IP.split('.').begin();
     for(int i1 = 0; i1 < 4; i1++){
         uint8_t t1 = (*i).toShort();
-        if(t1>0 && t1<256) ip[i1] = t1;
-        else return false;
+        ip[i1] = t1;
     }
+    return true;
 }
+/*
+temporary-iterator
+
+            Detects when you're using using functions returning iterators (eg. begin() or end()) on a temporary container.
+Example
+
+                    // temporary list returned by function
+                    QList<type> getList()
+{
+    QList<type> list;
+    ... add some items to list ...
+        return list;
+}
+
+// Will cause a crash if iterated using:
+
+for (QList<type>::iterator it = getList().begin(); it != getList().end(); ++it)
+{
+    ...
+}
+
+because the end iterator was returned from a different container object than the begin iterator.
+*/
 
 bool glob::check_MASK(uint8_t ip[]){
     if (IP.count('.') < 3) return false;
     auto i = IP.split('.').begin();
     for(int i1 = 0; i1 < 4; i1++){
         uint8_t t1 = (*i).toShort();
-        if(t1>0 && t1<256) ip[i1] = t1;
-        else return false;
+        ip[i1] = t1;
     }
+    return true;
 }
+
 
 //uint32_t crc32(QByteArray m){
 //    uint8_t crc[m.length];
@@ -194,6 +218,7 @@ ret_t tcp_req::tcp_req_init()
         QByteArray crc = bdata; //[] = new byte[58 + pr];
 
         uint32_t crc_f = crc32(crc, crc.length());
+//        crc32(crc, crc.length());
         GL.version_proshivki = Crc16(crc, 58 + pr);
         ipr = GL.version_proshivki;
         bdata[59 + pr] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
