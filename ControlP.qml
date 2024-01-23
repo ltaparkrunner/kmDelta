@@ -54,9 +54,9 @@ ColumnLayout{
         //x: uppText.x;
         //y: connectButt.y + connectButt.height + 10
         //y: connectButt.bottom + 10
-        text: "Send Message"
+        text: "Request params"
         onClicked: {
-            controlIp.sendMsgButt()
+            controlIp.requestParamsButt()
         }
 
     }

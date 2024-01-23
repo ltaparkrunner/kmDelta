@@ -56,7 +56,10 @@ class tcp_req
 {
 public:
     tcp_req();
-    static ret_t tcp_req_init();
+//    static ret_t tcp_req_init();
+    static ret_t period_req();
+    static ret_t set_params();
+    static ret_t req_param();
 private:
 
 };

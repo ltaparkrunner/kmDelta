@@ -22,7 +22,8 @@ public slots:
     void connectButt(QString ip_t, QString port_t);
     void periodReqButt(QString ip_t, QString port_t);
     void setParamButt(QString ip_t, QString port_t);
-    void sendMsgButt();
+    void requestParamsButt();
+//    void sendMsgButt();
 private:
     int count;
     MbtcpClient* tcpC;

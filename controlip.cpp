@@ -16,17 +16,20 @@ void ControlIp::connectButt(QString ip_t, QString port_t) {
 }
 
 void ControlIp::periodReqButt(QString ip_t, QString port_t) {
+    ret_t rez = tcp_req::period_req();
     if(tcpC->periodReq() > 0) qDebug("success /n");
     else qDebug("fault /n");
 }
 
 void ControlIp::setParamButt(QString ip_t, QString port_t) {
-    ret_t rez = tcp_req::tcp_req_init();
+    ret_t rez = tcp_req::set_params();
     if(tcpC->setParam(ip_t,  port_t, *(rez.bdata)) > 0) qDebug("success /n");
     else qDebug("fault /n");
 }
 
-void ControlIp::sendMsgButt() {
+//void ControlIp::sendMsgButt() {
+void ControlIp::requestParamsButt() {
+    ret_t rez = tcp_req::req_param();
     if(tcpC->request() > 0) qDebug("success /n");
     else qDebug("fault /n");
 }
