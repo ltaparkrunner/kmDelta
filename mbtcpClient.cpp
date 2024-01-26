@@ -191,32 +191,39 @@ void MbtcpClient::commitIpFromQml(QString str)
     emit sendToQml2(str, ip.get_mask2(), ip.get_port2());
     //messageDialog
 }
-
 int MbtcpClient::request() {
-    if(checkConnected() < 0){
-        return -1;
-    }
-    else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
-    const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
-    return tcpSocket->write(QByteArray(data,12));
+    return 0;
 }
 
-int MbtcpClient::setParam(QString ip_t, QString port_t, QByteArray mess) {
+int MbtcpClient::getParams(QString ip_t, QString port_t, QByteArray mess) {
     if(checkConnected() < 0){
         return -1;
     }
     else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
-    const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
-    return tcpSocket->write(QByteArray(data,12));
+//    const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
+    connect(tcpSocket, &QIODevice::readyRead, this, &MbtcpClient::getParamsResp);
+    return tcpSocket->write(mess);
 }
 
-int MbtcpClient::periodReq() {
+int MbtcpClient::setParams(QString ip_t, QString port_t, QByteArray mess) {
     if(checkConnected() < 0){
         return -1;
     }
     else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
-    const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
-    return tcpSocket->write(QByteArray(data,12));
+//    const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
+    connect(tcpSocket, &QIODevice::readyRead, this, &MbtcpClient::setParamsResp);
+    return tcpSocket->write(mess);
+}
+
+int MbtcpClient::periodReq(QString ip_t, QString port_t, QByteArray mess) {
+    if(checkConnected() < 0){
+        return -1;
+    }
+    else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
+//    const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
+//    return tcpSocket->write(QByteArray(data,12));
+    connect(tcpSocket, &QIODevice::readyRead, this, &MbtcpClient::periodReqResp);
+    return tcpSocket->write(mess);
 }
 
 
@@ -240,6 +247,89 @@ int MbtcpClient::request2(QByteArray &bdata){
 //    return;
 }
 
+int MbtcpClient::getParamsResp() {
+    if (blockSize == 0) {
+       if (tcpSocket->bytesAvailable() < (int)sizeof(quint16))
+                return 0;
+
+     QByteArray rdata = tcpSocket->readAll();
+     char mass[64*3 + 5] = {0};
+     char mass2[ ] = "     ";
+     int indx = 0;
+
+     for(auto i = rdata.begin(); i != rdata.end(); i++){
+         sprintf(mass2, " %02x",static_cast<uchar>(*i));
+         mass[indx++] = mass2[0];
+         mass[indx++] = mass2[1];
+         mass[indx++] = mass2[2];
+     }
+     mass[indx++] = 0;
+
+     qDebug("on_read string: 0x%s", mass);
+
+//! [8]
+    emit sendToMB(tr("Fortune Client"), QString(mass));
+//! [10]
+//        in_out >> blockSize;
+    }
+    return 2;
+}
+
+int MbtcpClient::setParamsResp() {
+    if (blockSize == 0) {
+       if (tcpSocket->bytesAvailable() < (int)sizeof(quint16))
+                return 0;
+
+     QByteArray rdata = tcpSocket->readAll();
+     char mass[64*3 + 5] = {0};
+     char mass2[ ] = "     ";
+     int indx = 0;
+
+     for(auto i = rdata.begin(); i != rdata.end(); i++){
+         sprintf(mass2, " %02x",static_cast<uchar>(*i));
+         mass[indx++] = mass2[0];
+         mass[indx++] = mass2[1];
+         mass[indx++] = mass2[2];
+     }
+     mass[indx++] = 0;
+
+     qDebug("on_read string: 0x%s", mass);
+
+//! [8]
+    emit sendToMB(tr("Fortune Client"), QString(mass));
+//! [10]
+//        in_out >> blockSize;
+    }
+    return 2;
+}
+
+int MbtcpClient::periodReqResp() {
+    if (blockSize == 0) {
+       if (tcpSocket->bytesAvailable() < (int)sizeof(quint16))
+                return 0;
+
+     QByteArray rdata = tcpSocket->readAll();
+     char mass[64*3 + 5] = {0};
+     char mass2[ ] = "     ";
+     int indx = 0;
+
+     for(auto i = rdata.begin(); i != rdata.end(); i++){
+         sprintf(mass2, " %02x",static_cast<uchar>(*i));
+         mass[indx++] = mass2[0];
+         mass[indx++] = mass2[1];
+         mass[indx++] = mass2[2];
+     }
+     mass[indx++] = 0;
+
+     qDebug("on_read string: 0x%s", mass);
+
+//! [8]
+    emit sendToMB(tr("Fortune Client"), QString(mass));
+//! [10]
+//        in_out >> blockSize;
+    }
+    return 2;
+}
 
 //! [13]
 

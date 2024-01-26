@@ -20,13 +20,17 @@ public slots:
 //    void receiveFromQml();
 //    void connectButt(std::string ip_t, std::string port_t);
     void connectButt(QString ip_t, QString port_t);
-    void periodReqButt(QString ip_t, QString port_t);
-    void setParamButt(QString ip_t, QString port_t);
-    void requestParamsButt();
+    void periodReqButt(QString ip_t, QString port_t, int t_out);
+    void setParamsButt(QString ip_t, QString port_t);
+    void getParamsButt(QString ip_t, QString port_t);
+    void periodReq(/*QString ip_t, QString port_t*/);
 //    void sendMsgButt();
 private:
     int count;
     MbtcpClient* tcpC;
+    QTimer tm_tcp_req;
+    QString ipt;
+    QString portt;
 //    QDataStream in_out;
 };
 

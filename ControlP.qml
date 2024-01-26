@@ -56,11 +56,10 @@ ColumnLayout{
         //y: connectButt.bottom + 10
         text: "Request params"
         onClicked: {
-            controlIp.requestParamsButt()
+            controlIp.getParamsButt(ip_2.ip_t, ip_2.port_t)
         }
 
     }
-
     /*
     Connections {
             target: butt1
@@ -92,14 +91,14 @@ ColumnLayout{
             id : periodicRequestButt
             text: "Periodic request"
             onClicked: {
-                controlIp.periodReqButt(ip_2.ip_t, ip_2.port_t)
+                controlIp.periodReqButt(ip_2.ip_t, ip_2.port_t, 3000)
             }
         }
         Button{
             id : setParamButt
             text: "Set params"
             onClicked: {
-                controlIp.setParamButt(ip_2.ip_t, ip_2.port_t)
+                controlIp.setParamsButt(ip_2.ip_t, ip_2.port_t)
             }
         }
     }

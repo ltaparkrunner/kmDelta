@@ -123,7 +123,10 @@ bool glob::check_MASK(uint8_t ip[]){
 
 //ret_t tcp_req::tcp_req_init()
 ret_t tcp_req::period_req() {
-    QByteArray *bdt = new QByteArray();
+//    QByteArray *bdt = new QByteArray();
+//    return {2,bdt};
+    const char data[12] = {1, 1, 0,0,0,6,33,3,0,0,0,16};
+    QByteArray *bdt = new QByteArray(data, 12);
     return {2,bdt};
 }
 
@@ -267,6 +270,7 @@ ret_t tcp_req::set_params()
 
 ret_t tcp_req::req_param() {
 //    QByteArray *bdt = new QByteArray(12, {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0});
-    QByteArray *bdt = new QByteArray(12, 0x47);
+    const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
+    QByteArray *bdt = new QByteArray(data, 12);
     return {2,bdt};
 }
