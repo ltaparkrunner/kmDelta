@@ -2,14 +2,21 @@
 //#include "crc32.h"
 #include "tcp_req.h"
 #include<QDebug>
+#include <QObject>
 
 //ControlIp::ControlIp(QObject *parent) : QObject(parent)
-ControlIp::ControlIp(MbtcpClient &tcpC_, QObject *parent) : QObject(parent)
+ControlIp::ControlIp(tcpMan *parent) : /*QObject(parent),*/ tcpMan(parent)
+//ControlIp::ControlIp(QObject *parent) : /*QObject(parent)*/ tcpMan()
+    ,count(0)
+//    ,tcpC(new MbtcpClient(dynamic_cast<tcpMan*>(this), this))
+    ,tcpC(new MbtcpClient(this, this))
+    ,ipt("")
+    ,portt("")
 {
-    tcpC = &tcpC_;
-    count = 0; 
-    ipt = "";
-    portt = "";
+    // tcpC = &tcpC_;
+    // count = 0;
+    // ipt = "";
+    // portt = "";
     QObject::connect(&tm_tcp_req, &QTimer::timeout, this, &ControlIp::periodReq);//QOverload<>::of(&AnalogClock::update));
 }
 
@@ -43,3 +50,20 @@ void ControlIp::getParamsButt(QString ip_t, QString port_t) {
     if(tcpC->getParams(ip_t,  port_t, *(rez.bdata)) > 0) qDebug("success /n");
     else qDebug("fault /n");
 }
+
+// void ControlIp::displayError(QAbstractSocket::SocketError socketError){
+
+// }
+
+// void ControlIp::successConn(){}
+
+// void ControlIp::parseMessage(){}
+
+// void ControlIp::getParamsResp(){}
+
+// void ControlIp::setParamsResp(){}
+
+void ControlIp::periodReqResp(){
+    qDebug("non-virtual func");
+}
+

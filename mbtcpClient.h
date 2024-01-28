@@ -9,6 +9,7 @@
 #include <QString>
 
 #include "ipAddr.h"
+#include "tcpman.h"
 
 QT_BEGIN_NAMESPACE
 class QTcpSocket;
@@ -20,7 +21,8 @@ class MbtcpClient : public QObject
     Q_OBJECT
 
 public:
-    explicit MbtcpClient(QObject *parent = nullptr);
+//    explicit MbtcpClient(QObject *parent = nullptr);
+    explicit MbtcpClient(tcpMan *tm, QObject *parent = nullptr);
 //    void requestNewFortune(std::string ip_t, std::string port_t);
     void requestNewFortune(QString ip_t, QString port_t);
 public slots:
@@ -45,6 +47,7 @@ public slots:
     int getParams(QString ip_t, QString port_t, QByteArray mess);
     int periodReq(QString ip_t, QString port_t, QByteArray mess);
 
+
 signals:
     void sendToMB(const QString &title, const QString &text);
     //void sendToMB(QString &title, QString &text);
@@ -53,6 +56,7 @@ private:
     QTcpSocket *tcpSocket = nullptr;
     IpAddr ip;
     QTimer tmr;
+    tcpMan *tcpm;
 //    QDataStream in_out;
 //    QDataStream in;
 //    QDataStream out;
@@ -61,6 +65,12 @@ private:
     int count;
     QByteArray answer;
     //QQuickView* qwp;
+    int (*func)(QByteArray &barr);
+    // int(*TEST(TestSuite, TestName)
+    //     {
+
+    //     }
+    //     )
 
 signals:
     void sendToCond1(QString str, bool bl);
