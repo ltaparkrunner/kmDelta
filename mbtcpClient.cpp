@@ -21,12 +21,12 @@ MbtcpClient::MbtcpClient(tcpMan *tm, QObject *parent)
 //        connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::parseMessage);
 //        connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::periodReqResp);
 //        connect(tcpSocket, &QAbstractSocket::connected, this, &MbtcpClient::successMsg);
-//        connect(tcpSocket, &QAbstractSocket::connected, tcpm, &tcpMan::successConn);
+        connect(tcpSocket, &QAbstractSocket::connected, tcpm, &tcpMan::successConn);
         typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
         connect(tcpSocket, static_cast<QAbstractSocketErrorSignal>(&QAbstractSocket::error),
 //                this, &MbtcpClient::displayError);
-//                  tcpm, &tcpMan::displayError);
-            tcpm, &tcpMan::periodReqResp);
+                  tcpm, &tcpMan::displayError);
+//            tcpm, &tcpMan::periodReqResp);
      //! [2]
 }
 void MbtcpClient::successMsg(){
@@ -149,7 +149,7 @@ int MbtcpClient::getParams(QString ip_t, QString port_t, QByteArray mess) {
         return -1;
     }
     else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
-//    connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::getParamsResp);
+    connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::getParamsResp);
     return tcpSocket->write(mess);
 }
 
@@ -158,7 +158,7 @@ int MbtcpClient::setParams(QString ip_t, QString port_t, QByteArray mess) {
         return -1;
     }
     else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
-//    connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::setParamsResp);
+    connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::setParamsResp);
     return tcpSocket->write(mess);
 }
 

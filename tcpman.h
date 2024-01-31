@@ -13,12 +13,12 @@ public:
     tcpMan(QObject *parent) : QObject(parent){}
 //    tcpMan(QObject *parent) : QObject(parent){};
 public slots:
-    // virtual void displayError(QAbstractSocket::SocketError socketError);
-    // virtual void successConn();
-    // virtual void parseMessage();
-    // virtual void getParamsResp();
-    // virtual void setParamsResp();
-    virtual void periodReqResp();
+    virtual void displayError(QAbstractSocket::SocketError socketError) = 0;
+    virtual void successConn() = 0;
+    virtual void parseMessage() = 0;
+    virtual int getParamsResp() = 0;
+    virtual int setParamsResp() = 0;
+    virtual int periodReqResp() = 0;
     //void periodReqResp(){}
 //private:
 //    tcpMan();

@@ -25,6 +25,10 @@ public:
     explicit MbtcpClient(tcpMan *tm, QObject *parent = nullptr);
 //    void requestNewFortune(std::string ip_t, std::string port_t);
     void requestNewFortune(QString ip_t, QString port_t);
+    QString getErrString(){return tcpSocket->errorString();}
+    quint16 getBlSz(){return blockSize;}
+    int  getBAvl(){return tcpSocket->bytesAvailable();}
+    QByteArray getAll(){return tcpSocket->readAll();}
 public slots:
 
     void readFortune();
