@@ -54,6 +54,7 @@ else()
         add_executable(kmdelta6
           ${PROJECT_SOURCES}
           tcpman.h tcpman.cpp
+          configs.h configs.cpp
         )
     endif()
 endif()

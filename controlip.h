@@ -5,6 +5,8 @@
 #include "mbtcpClient.h"
 //#include <string>
 #include <QString>
+#include "tcp_req.h"
+
 struct avar_t{
     bool alarm;
     uint16_t value;
@@ -33,9 +35,11 @@ public:
 
 
 signals:
-    void sendToQml(int count);
+
     void sendToMB(const QString &title, const QString &text);
+    void sendToQml(qint16 count);
     void sendToChat(QVariantList abs);
+    void sendToDialog(const QString &title);
 public slots:
 //    void receiveFromQml();
 //    void connectButt(std::string ip_t, std::string port_t);
@@ -60,8 +64,10 @@ private:
     QString ipt;
     QString portt;
 //    QDataStream in_out;
-    void respToCondLine(QByteArray rdata);
+    void respToCondLine(QByteArray rdata, QString title);
     chat_data* periodRespToData(QByteArray rdata);
+    int getParamParse(QByteArray dt);
+    glob gl;
 };
 
 #endif // CONTROLIP_H

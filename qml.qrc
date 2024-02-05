@@ -5,7 +5,6 @@
         <file>CondLine.qml</file>
         <file>ControlP.qml</file>
         <file>IP_Addr.qml</file>
-        <file>messageBox.qml</file>
         <file>IP_Addr2.qml</file>
     </qresource>
 </RCC>

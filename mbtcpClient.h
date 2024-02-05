@@ -36,16 +36,16 @@ public slots:
     void successMsg();
     int checkConnected();
 
-    int getParamsResp();
-    int setParamsResp();
-    int periodReqResp();
+//    int getParamsResp();
+//    int setParamsResp();
+//    int periodReqResp();
 
 //    void enableGetFortuneButton();
 
 public slots:
     void receiveIpFromQml();
     void commitIpFromQml(QString str);
-    int request();
+//    int request();
     int request2(QByteArray &bdata);
     int setParams(QString ip_t, QString port_t, QByteArray mess);
     int getParams(QString ip_t, QString port_t, QByteArray mess);
@@ -77,8 +77,8 @@ private:
     //     )
 
 signals:
-    void sendToCond1(QString str, bool bl);
-    void sendToCond2(QString str1, QString str2);
+//    void sendToCond1(QString str, bool bl);
+//    void sendToCond2(QString str1, QString str2);
     void sendToQml2(QString addr, QString mask, QString port);
 };
 

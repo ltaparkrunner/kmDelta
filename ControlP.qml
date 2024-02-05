@@ -2,11 +2,12 @@ import QtQuick 2.0
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 //import QtQuick.Controls.Styles 1.0
-//import QtQuick.Dialogs 1.0
+import QtQuick.Dialogs 1.1
 
 ///import IP_Addr2.qml 1.0
 
 Rectangle{
+//Item{
     id:c_ip2
     width: ip_2.width
     color: 'blue'
@@ -21,8 +22,42 @@ Rectangle{
 //        function onSendToQml(count) {
           onSendToQml: {
             bottomText1.text = count // Устанавливаем счётчик в текстовый лейбл
+//            messageDialog.show("title")
+//            messageDialog.show(qsTr("Button 1 pressed"))
+//            onClicked: messageDialog.open()
+//            console.log("Point_1")
+//            messageDialog.open("title")
+//            console.log("Point_1_5")
         }
+//        onSendToDialog: {
+//            console.log("Point_2")
+//            messageDialog.open("title")
+//        }
     }
+/*
+    MessageDialog {
+        id: messageDialog
+        title: qsTr("May I have your attention, please?")
+        text: "Forever"
+        standardButtons: MessageDialog.Ok | MessageDialog.Cancel
+//        onAccepted: {
+            //console.log("And of course ...")
+            //Qt.quit()
+//        }
+//        Component.onCompleted: visible = false
+    }
+*/
+//    MessageDialog {
+    MessageDialog{
+        id: messageDialog
+        title: qsTr("May I have your attention, please?")
+        text: qsTr("The document has been modified.")
+//        informativeText: "Do you want to save your changes?"
+        standardButtons: StandardButton.Ok //| StandardButton.Cancel
+//        onAccepted: document.save()
+//        modality :Qt.WindowModal
+    }
+
 ColumnLayout{
     spacing: 3
 //    anchors.top: parent
@@ -45,7 +80,8 @@ ColumnLayout{
         //y: butt1.y + butt1.height + 10
         text: "Connect"
         onClicked: {
-            controlIp.connectButt(ip_2.ip_t, ip_2.port_t)
+//            controlIp.connectButt(ip_2.ip_t, ip_2.port_t)
+            messageDialog.open()
         }
 
     }

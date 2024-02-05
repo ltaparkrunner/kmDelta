@@ -8,8 +8,8 @@ const int n_dat = 8;
 
 struct Data
 {
-    double absolutnoe;
-    double smeshenie;
+    int32_t absolutnoe;
+    int32_t smeshenie;
     Data();
 };
 
@@ -32,16 +32,21 @@ struct glob
 {
     uchar otnositelnoe_otobragenie;
     bool inversion_data;
+    bool inversion_dt;
     avar  avariya[n_avar];
     int porog_max;
     int porog_min;
+
     uint16_t timeout_alarm;
     uint16_t version_proshivki;
     uint16_t alarmt;
     QString IP;
+    QString IP1;
     QString IP_new;
     QString MASK;
+    QString MASKA;
 //    uint16_t  DPORT;
+    QString SPORT;
     QString DPORT;
     QString DPORT_new;
 
@@ -49,6 +54,7 @@ struct glob
     bool check_IP(uint8_t ip[]);
     bool check_MASK(uint8_t ip[]);
     glob();
+    bool obnovlenie_proshivki;
 //    uint32_t crc32(QByteArray m);
 };
 
