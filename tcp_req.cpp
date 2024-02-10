@@ -15,10 +15,10 @@ avar::avar() {
     kolvo_avariynih_datchikov = 0;
 }
 
-glob::glob() {
+glob::glob(QObject *parent = nullptr) {
     otnositelnoe_otobragenie = 0;
     inversion_data = true;
-
+    inversion_dt = false;
     avariya[0].avariya1_predupregdenie0 = 1;
     avariya[0].kolvo_avariynih_datchikov = 1;
     avariya[0].porog_max = 420;
@@ -37,11 +37,13 @@ glob::glob() {
     }
     porog_max = 420;
     porog_min = 560;
+    timeout_alarm = 2;
     version_proshivki = 0;
     alarmt = 4;
     IP = "192.168.1.170";
     IP_new = "192.168.1.170";
     MASK = "255.255.0.0";
+    MASKA = "255.255.0.0";
     DPORT = "502";
     DPORT_new = "503";
 
@@ -66,6 +68,11 @@ glob::glob() {
         data[6].smeshenie = -1736.0;
         data[7].absolutnoe = 0;
         data[7].smeshenie = -1612.0;
+
+        mashtab = 10;
+        graph_memory = 100;
+        obnovlenie_proshivki = false;
+        config_file = "config.ini";
 }
 
 bool glob::check_IP(uint8_t ip[]){
@@ -133,7 +140,8 @@ ret_t tcp_req::period_req() {
 ret_t tcp_req::set_params()
 {
     const int pr = 10;
-    glob GL = glob();
+    glob* gl = new glob();
+//    glob& GL = *gl1;
     QByteArray *bdt = new QByteArray();
 //    try
     {
@@ -156,29 +164,29 @@ ret_t tcp_req::set_params()
         bdata[10] = 0;
 
         char tbdata = 0;
-        if (GL.otnositelnoe_otobragenie == true) { tbdata = 1; } else { tbdata = 0; }
-        if (GL.inversion_data == true) { tbdata += 0x02; }
+        if (gl->otnositelnoe_otobragenie == true) { tbdata = 1; } else { tbdata = 0; }
+        if (gl->inversion_data == true) { tbdata += 0x02; }
         //if (GL.otkl_panel == true) { bdata[1 + pr] += 0x04; }
         //if (GL.sensorReset == true) { bdata[1 + pr] += 0x08; }
-        if (GL.avariya[0].avariya1_predupregdenie0 == 1) { tbdata += 0x10; }//avariya1_predupregdenie0 == 1, когда выбран тип "Авария"
-        if (GL.avariya[1].avariya1_predupregdenie0 == 1) { tbdata += 0x20; }
-        if (GL.avariya[2].avariya1_predupregdenie0 == 1) { tbdata += 0x40; }
-        if (GL.avariya[3].avariya1_predupregdenie0 == 1) { tbdata += 0x80; }
+        if (gl->avariya[0].avariya1_predupregdenie0 == 1) { tbdata += 0x10; }//avariya1_predupregdenie0 == 1, когда выбран тип "Авария"
+        if (gl->avariya[1].avariya1_predupregdenie0 == 1) { tbdata += 0x20; }
+        if (gl->avariya[2].avariya1_predupregdenie0 == 1) { tbdata += 0x40; }
+        if (gl->avariya[3].avariya1_predupregdenie0 == 1) { tbdata += 0x80; }
         bdata[1 + pr] = tbdata;
-        uint16_t time = GL.timeout_alarm;
+        uint16_t time = gl->timeout_alarm;
         bdata[3 + pr] = static_cast<uchar>(time); //time = Convert.ToUInt16(time >> 8);
         bdata[2 + pr] = static_cast<uchar>(time>>8);
 
         uint8_t ip[4];
-        if (!GL.check_IP(ip)) { return {1, bdt}; }
+        if (!gl->check_IP(ip)) { return {1, bdt}; }
         for (i = 0; i < n_avar; i++) { bdata[i + 4 + pr] = ip[i]; }
         // maska
         //flag = string_to_ip(text_maska_new.Text, ref ip, 2);
-        if (!GL.check_MASK(ip)) { return {1, bdt}; }
+        if (!gl->check_MASK(ip)) { return {1, bdt}; }
         for (i = 0; i < n_avar; i++) { bdata[i + 8 + pr] = ip[i]; }
 
         //int sp = Convert.ToInt32(text_sport_new.Text);
-        uint16_t dp = GL.DPORT_new.toShort();
+        uint16_t dp = gl->DPORT_new.toShort();
         //bdata[17 + pr] = (byte)(sp & 0x00FF);
         //bdata[16 + pr] = (byte)((sp >> 8) & 0x00FF);
         bdata[19 + pr] = static_cast<uint8_t>(dp & 0x00FF);
@@ -187,30 +195,30 @@ ret_t tcp_req::set_params()
         int smechenie = 20;
         for (i = 0; i < n_dat; i++)
         {
-            double dd = GL.data[i].smeshenie * 2.0;
+            double dd = gl->data[i].smeshenie * 2.0;
             int idd = static_cast<uint16_t>(dd);
             bdata[smechenie + pr] = static_cast<uint8_t>((idd >> 8) & 0x00FF); smechenie++;
             bdata[smechenie + pr] = static_cast<uint8_t>(idd & 0x00FF); smechenie++;
         }
-        int ipr = GL.porog_max;
+        int ipr = gl->porog_max;
         bdata[37 + pr] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
         bdata[36 + pr] = static_cast<uint8_t>(ipr & 0x00FF);
 
-        ipr = GL.porog_min;
+        ipr = gl->porog_min;
         bdata[39 + pr] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
         bdata[38 + pr] = static_cast<uint8_t>(ipr & 0x00FF);
 
 
-        bdata[40 + pr] = static_cast<uint8_t>((((GL.avariya[0].kolvo_avariynih_datchikov << 4) & 0xF0) | (GL.avariya[1].kolvo_avariynih_datchikov & 0x0F)));
-        bdata[41 + pr] = static_cast<uint8_t>((((GL.avariya[2].kolvo_avariynih_datchikov << 4) & 0xF0) | (GL.avariya[3].kolvo_avariynih_datchikov & 0x0F)));
+        bdata[40 + pr] = static_cast<uint8_t>((((gl->avariya[0].kolvo_avariynih_datchikov << 4) & 0xF0) | (gl->avariya[1].kolvo_avariynih_datchikov & 0x0F)));
+        bdata[41 + pr] = static_cast<uint8_t>((((gl->avariya[2].kolvo_avariynih_datchikov << 4) & 0xF0) | (gl->avariya[3].kolvo_avariynih_datchikov & 0x0F)));
 
         smechenie = 42;
         for (i = 0; i < n_avar; i++)
         {
-            int idd = GL.avariya[i].porog_max;
+            int idd = gl->avariya[i].porog_max;
             bdata[smechenie + pr] = static_cast<uint8_t>((idd >> 8) & 0x00FF); smechenie++;
             bdata[smechenie + pr] = static_cast<uint8_t>(idd & 0x00FF); smechenie++;
-            idd = GL.avariya[i].porog_min;
+            idd = gl->avariya[i].porog_min;
             bdata[smechenie + pr] = static_cast<uint8_t>((idd >> 8) & 0x00FF); smechenie++;
             bdata[smechenie + pr] = static_cast<uint8_t>(idd & 0x00FF); smechenie++;
         }
@@ -228,13 +236,13 @@ ret_t tcp_req::set_params()
 
         uint32_t crc_f = crc32(crc, crc.length());
 //        crc32(crc, crc.length());
-        GL.version_proshivki = Crc16(crc, 58 + pr);
-        ipr = GL.version_proshivki;
+        gl->version_proshivki = Crc16(crc, 58 + pr);
+        ipr = gl->version_proshivki;
         bdata[59 + pr] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
         bdata[58 + pr] = static_cast<uint8_t>(ipr & 0x00FF);
 
         // ////////////////////////////////////////
-        ipr = GL.alarmt;
+        ipr = gl->alarmt;
         bdata[60 + pr] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
         bdata[61 + pr] = static_cast<uint8_t>(ipr & 0x00FF);
 
@@ -274,3 +282,133 @@ ret_t tcp_req::req_param() {
     QByteArray *bdt = new QByteArray(data, 12);
     return {2,bdt};
 }
+
+#include <QFile>
+#include <QTextStream>
+
+int glob::save_configs() {
+/*
+ *  Messagebox open file if we need something unusual.
+ *
+    QString sf = GL.config_file;
+
+    saveFileDialog_ini.FileName = "";
+    if (MessageBox.Show("Сохранить настройки ПТК КМ-Дельта в отдельный файл?", "", MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
+    {
+        if (saveFileDialog_ini.ShowDialog() == DialogResult.OK)
+            if (saveFileDialog_ini.FileName != GL.save_file)
+            {
+                sf = saveFileDialog_ini.FileName;                   //System.IO.File.Copy(GL.save_file, saveFileDialog1.FileName, true);
+            }
+    }
+    else { MessageBox.Show("Параметры будут сохранены в файл по умолчанию"); }
+*/
+    QFile cfile(config_file);
+    if (!cfile.open(QIODevice::WriteOnly | QIODevice::Text))
+            return -1;
+    QTextStream wr(&cfile);
+//    using (StreamWriter wr = new StreamWriter(sf, false))
+    {
+        wr << "IP-адрес ПТК КМ-Дельта:" + IP << "\n";
+        wr << "Маска подсети:" + MASKA << "\n";
+        wr << "Удалённый IP1:" + IP1 << "\n";
+        wr << "Порт ПТК КМ-Дельта:" + DPORT << "\n";
+        //wr << "Порт программы:" + SPORT << "\n";
+        wr << "Задержка срабатывания сигнализации:" + QString::number(timeout_alarm) << "\n";
+        wr << "Масштаб отображения, с:" + QString::number(mashtab) << "\n";
+        wr << "Отображение относительных данных:" + QString::number(otnositelnoe_otobragenie) << "\n";
+        wr << "Смещение канала 1, мкм:" + QString::number(data[0].smeshenie) << "\n";
+        wr << "Смещение канала 2, мкм:" + QString::number(data[1].smeshenie) << "\n";
+        wr << "Смещение канала 3, мкм:" + QString::number(data[2].smeshenie) << "\n";
+        wr << "Смещение канала 4, мкм:" + QString::number(data[3].smeshenie) << "\n";
+        wr << "Смещение канала 5, мкм:" + QString::number(data[4].smeshenie) << "\n";
+        wr << "Смещение канала 6, мкм:" + QString::number(data[5].smeshenie) << "\n";
+        wr << "Смещение канала 7, мкм:" + QString::number(data[6].smeshenie) << "\n";
+        wr << "Смещение канала 8, мкм:" + QString::number(data[7].smeshenie) << "\n";
+        for (int i = 0; i < 4; i++)
+        {
+            QString str = "Реле " + QString::number(i + 1) + " верхний порог: "; wr << str + QString::number(avariya[i].porog_max) << "\n";
+            str = "Реле " + QString::number(i + 1) + " нижний порог: "; wr << str + QString::number(avariya[i].porog_min) << "\n";
+            str = "Реле " + QString::number(i + 1) + " аварийные датчики: "; wr << str + QString::number(avariya[i].kolvo_avariynih_datchikov) << "\n";
+            str = "Реле " + QString::number(i + 1) + " признак сигнализации: "; wr << str + QString::number(avariya[i].avariya1_predupregdenie0) << "\n";
+        }
+        wr << "Максимум шкалы:" + QString::number(porog_max) << "\n";
+        wr << "Минимум шкалы:" + QString::number(porog_min) << "\n";
+        wr << "Инверсия данных:" + QString::number(inversion_data) << "\n";
+        //wr.WriteLine("Отключение реле:" + GL.otkl_panel.ToString());
+        //wr.WriteLine("Сброс датчиков:" + GL.sensorReset.ToString());
+        wr << "Память, точек:" + QString::number(graph_memory) << "\n";
+        wr << "Версия прошивки:" + QString::number(version_proshivki) << "\n";
+        wr << "Time_sec:" + QString::number(alarmt) << "\n";
+//        wr.Close();
+        cfile.close();
+    }
+}
+int glob::load_configs() {
+    //DialogResult dr = MessageBox.Show("Загрузить настройки ПТК КМ-Дельта из отдельного файла?", "", MessageBoxButtons.YesNo);
+    /*            if (FormMessBox.dr == DialogResult.Yes)
+                        {
+                            if (openFileDialog1.ShowDialog() != DialogResult.OK) { GL.open_file = GL.config_file; }// return;
+                            else { GL.open_file = openFileDialog1.FileName; }
+                        }
+                        else { GL.open_file = GL.config_file; }
+            */
+    /*
+    GL.open_file = FormMessBox.open_file;
+    if (File.Exists(GL.open_file) != true) { return -1; }
+    */
+    QFile cfile(config_file);
+    if (!cfile.open(QIODevice::ReadOnly | QIODevice::Text))
+            return -1;
+    QTextStream rd(&cfile);
+
+//    using (StreamReader rd = new StreamReader(GL.open_file))//System.IO.StreamReader rd= new System.IO.StreamReader(GL.config_file);
+    {
+//        try
+        {
+            QString str = rd.readLine(); int ind = str.indexOf(':'); ind++; IP = str.mid(ind, str.length() - ind);
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; MASKA = str.mid(ind, str.length() - ind);
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; IP1 = str.mid(ind, str.length() - ind);
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; DPORT = str.mid(ind, str.length() - ind);
+            //str = rd.readLine(); ind = str.indexOf(':'); ind++; SPORT = (str.mid(ind, str.length() - ind)).toInt();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; timeout_alarm = (str.mid(ind, str.length() - ind)).toDouble();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; mashtab = (str.mid(ind, str.length() - ind)).toDouble();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; otnositelnoe_otobragenie = (str.mid(ind, str.length() - ind) == QString("true"));
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; data[0].smeshenie = (str.mid(ind, str.length() - ind)).toDouble();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; data[1].smeshenie = (str.mid(ind, str.length() - ind)).toDouble();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; data[2].smeshenie = (str.mid(ind, str.length() - ind)).toDouble();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; data[3].smeshenie = (str.mid(ind, str.length() - ind)).toDouble();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; data[4].smeshenie = (str.mid(ind, str.length() - ind)).toDouble();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; data[5].smeshenie = (str.mid(ind, str.length() - ind)).toDouble();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; data[6].smeshenie = (str.mid(ind, str.length() - ind)).toDouble();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; data[7].smeshenie = (str.mid(ind, str.length() - ind)).toDouble();
+            for (int i = 0; i < 4; i++)
+            {
+                str = rd.readLine(); ind = str.indexOf(':'); ind++; avariya[i].porog_max = (str.mid(ind, str.length() - ind)).toInt();
+                str = rd.readLine(); ind = str.indexOf(':'); ind++; avariya[i].porog_min = (str.mid(ind, str.length() - ind)).toInt();
+                str = rd.readLine(); ind = str.indexOf(':'); ind++; avariya[i].kolvo_avariynih_datchikov = (str.mid(ind, str.length() - ind)).toInt();
+                str = rd.readLine(); ind = str.indexOf(':'); ind++; avariya[i].avariya1_predupregdenie0 = (str.mid(ind, str.length() - ind)).toInt();
+            }
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; porog_max = (str.mid(ind, str.length() - ind)).toShort();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; porog_min = (str.mid(ind, str.length() - ind)).toShort();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; inversion_data = (str.mid(ind, str.length() - ind)== QString("true"));
+            //str = rd.ReadLine(); ind = str.IndexOf(':'); ind++; gl.otkl_panel = Convert.ToBoolean(str.Substring(ind, str.Length - ind));
+            //sensorReset = true;                     str = rd.ReadLine();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; graph_memory = (str.mid(ind, str.length() - ind)).toInt();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; version_proshivki = (str.mid(ind, str.length() - ind)).toUShort();
+            str = rd.readLine(); ind = str.indexOf(':'); ind++; alarmt = (str.mid(ind, str.length() - ind)).toShort();
+            cfile.close();
+        }
+//        catch
+        {
+            cfile.close();
+//            MessageBox.Show("Ошибка чтения файла! Перезапустите программу.");
+            emit mesBox("Ошибка чтения файла! Перезапустите программу.");
+//            System.IO.File.Delete(gl.config_file);
+//            this.Dispose();
+        }
+    }
+    //MessageBox.Show("*****Settings has been Loaded*****");
+    return 0;
+}
+

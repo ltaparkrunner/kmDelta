@@ -15,7 +15,14 @@ signals:
     //void sendToQml2(QString addr, QString mask, QString port);
     void sendToQml2(QString ip_addr, QString ip_mask, QString ip_port);
 public slots:
-    void receiveFromQml();
+//    void receiveFromQml();
+
+    void load_File_Qml();
+    void save_File_Qml();
+    void load_Device_Qml();
+    void save_Device_Qml();
+    void load_Default_Qml();
+
     void commitFromQml(QString str);
 
 public:

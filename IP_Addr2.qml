@@ -8,7 +8,7 @@ Rectangle {
     id: ip_contain
     width: 270
     //height: 200
-    property int ht: 200
+    property int ht: 230
     property string ip_t: ip.text
     property string port_t: port.text
 //    property int ip_w: Math.max(t1.width, t2.width, t3.width) + rect_2 *2
@@ -33,14 +33,60 @@ Rectangle {
         spacing: 3
         anchors.fill: parent
 
+        RowLayout{
+            Button{
+                id : butt_load_file
+                width: 420
+                height: 20
+                text: "Load_From_File"
+                onClicked: {
+                    ipAddr.load_File_Qml()
+                    }
+                implicitWidth: 107
+            }
+            Button{
+                id : butt_save_file
+
+                width: 1020
+                height: 20
+                text: "Save_To_File"
+                onClicked: {
+                    ipAddr.save_File_Qml()
+                    }
+                implicitWidth: 107
+            }
+        }
+        RowLayout{
+            Button{
+                id : butt_load_device
+                width: 220
+                height: 20
+                text: "Load_From_Device"
+                onClicked: {
+                    ipAddr.load_Device_Qml()
+                    }
+                implicitWidth: 107
+            }
+            Button{
+                id : butt_save_device
+                width: 220
+                height: 20
+                text: "Load_From_Device"
+                onClicked: {
+                    ipAddr.save_Device_Qml()
+                    }
+                implicitWidth: 107
+            }
+        }
         Button{
-            id : butt_ip
-            width: 100
+            id : butt_default
+            width: 640
             height: 20
-            text: "Load_IP"
+            text: "Load_Defaults"
             onClicked: {
-                ipAddr.receiveFromQml()
+                ipAddr.load_Default_Qml()
                 }
+            implicitWidth: 220
         }
         RowLayout{
             ColumnLayout{

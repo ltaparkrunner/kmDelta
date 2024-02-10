@@ -28,8 +28,11 @@ struct ret_t{
     QByteArray *bdata;
 };
 
-struct glob
+class glob : public QObject
 {
+    Q_OBJECT
+public:
+    explicit glob(QObject *parent);
     uchar otnositelnoe_otobragenie;
     bool inversion_data;
     bool inversion_dt;
@@ -46,16 +49,24 @@ struct glob
     QString MASK;
     QString MASKA;
 //    uint16_t  DPORT;
-    QString SPORT;
+//    QString SPORT;
     QString DPORT;
     QString DPORT_new;
 
     Data data[n_dat];
     bool check_IP(uint8_t ip[]);
     bool check_MASK(uint8_t ip[]);
-    glob();
+    int32_t mashtab;
+    int32_t graph_memory;
+
     bool obnovlenie_proshivki;
 //    uint32_t crc32(QByteArray m);
+    QString config_file = "config.ini";
+    int save_configs();
+    int load_configs();
+
+signals:
+    void mesBox(const QString &m);
 };
 
 class tcp_req

@@ -130,13 +130,13 @@ ColumnLayout{
                 controlIp.periodReqButt(ip_2.ip_t, ip_2.port_t, 3000)
             }
         }
-        Button{
-            id : setParamButt
-            text: "Set params"
-            onClicked: {
-                controlIp.setParamsButt(ip_2.ip_t, ip_2.port_t)
-            }
-        }
+//        Button{
+//            id : setParamButt
+//            text: "Set params"
+//            onClicked: {
+//                controlIp.setParamsButt(ip_2.ip_t, ip_2.port_t)
+//            }
+//        }
     }
     }
 }

@@ -1,11 +1,86 @@
 #ifndef CONFIGS_H
 #define CONFIGS_H
 
-class configs
+//#include <stdint.h>
+#include <QString>
+#include "tcp_exch.h"
+
+const int n_avar = 4;
+const int n_dat = 8;
+
+struct ret_t{
+    int res;
+    QByteArray *bdata;
+};
+
+struct Data
 {
+    int32_t absolutnoe;
+    int32_t smeshenie;
+    Data();
+};
+
+struct avar
+{
+    uchar avariya1_predupregdenie0;
+//    uint16_t porog_max;
+//    uint16_t porog_min;
+    uint16_t porog_max;
+    uint16_t porog_min;
+    uchar kolvo_avariynih_datchikov;
+    avar();
+};
+
+class parms// : public QObject
+{
+//    Q_OBJECT
 public:
-    int save_configs();
-    int load_configs();
+    uchar otnositelnoe_otobragenie;
+    bool inversion_data;
+    bool inversion_dt;
+    avar  avariya[n_avar];
+    int porog_max;
+    int porog_min;
+
+    uint16_t timeout_alarm;
+    uint16_t version_proshivki;
+    uint16_t alarmt;
+    QString IP;
+    QString IP1;
+    QString IP_new;
+    QString MASK;
+    QString MASKA;
+
+    QString DPORT;
+    QString DPORT_new;
+
+    Data data[n_dat];
+    int32_t mashtab;
+    int32_t graph_memory;
+
+    bool obnovlenie_proshivki;
+};
+
+class configs  //: public QObject
+{
+    //Q_OBJECT
+public:
+    explicit configs(tcp_exch* tcpe);
+    ~configs();
+    int save_file_configs(QString filen = "config.ini");
+    int load_file_configs(QString filen = "config.ini");
+    int save_eth_configs();
+    int load_eth_configs();
+    int save_view_configs();
+    int load_view_configs();
+    parms cnfg;
+    tcp_exch* te;
+
+private:
+    ret_t eth_set_params();
+    ret_t eth_load_params();
+    bool check_IP(uint8_t ip[], QString& ip_s);
+//    bool check_MASK(uint8_t ip[]);
 };
 
 #endif // CONFIGS_H

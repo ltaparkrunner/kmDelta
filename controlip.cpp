@@ -13,6 +13,7 @@ ControlIp::ControlIp(tcpMan *parent) : /*QObject(parent),*/ tcpMan(parent)
     ,tcpC(new MbtcpClient(this, this))
     ,ipt("")
     ,portt("")
+    ,gl(this)
 {
     // tcpC = &tcpC_;
     // count = 0;
@@ -234,7 +235,8 @@ int ControlIp::getParamParse(QByteArray dt) {
             j = i + 16; t_ip3[i] = dt[j];
         }
         gl.IP1 = QString::number(t_ip2[0]) + "." + QString::number(t_ip2[1]) + "." + QString::number(t_ip2[2]) + "." + QString::number(t_ip2[3]);
-        gl.SPORT = (t_ip3[0] << 8) | (t_ip3[1]); gl.DPORT = (t_ip3[2] << 8) | (t_ip3[3]);
+        //gl.SPORT = (t_ip3[0] << 8) | (t_ip3[1]);
+        gl.DPORT = (t_ip3[2] << 8) | (t_ip3[3]);
         gl.MASKA = QString::number(maska[0]) + "." + QString::number(maska[1]) + "." + QString::number(maska[2]) + "." + QString::number(maska[3]);
         gl.IP = QString::number(ipi[0]) + "." + QString::number(ipi[1]) + "." + QString::number(ipi[2]) + "." + QString::number(ipi[3]);
         for (int i = 0; i < 8; i++)

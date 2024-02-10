@@ -30,6 +30,8 @@ set(PROJECT_SOURCES
         crc32.cpp
         tcpman.h
         tcpman.cpp
+        tcp_exch.h
+        tcp_exch.cpp
 #        messbox.h
 #        messbox.cpp
 )

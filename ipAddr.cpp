@@ -10,7 +10,31 @@ IpAddr::IpAddr(QObject *parent) : QObject(parent)
    // emit sendToQml(ip_addr, ip_mask, port);
 }
 
-void IpAddr:: receiveFromQml()
+void IpAddr::load_File_Qml()
+{
+    count++;
+    //emit sendToQml2(ip_addr, ip_mask, port);
+    emit sendToQml2(ip_addr, ip_mask, ip_port);
+}
+void IpAddr::save_File_Qml()
+{
+    count++;
+    //emit sendToQml2(ip_addr, ip_mask, port);
+    emit sendToQml2(ip_addr, ip_mask, ip_port);
+}
+void IpAddr::load_Device_Qml()
+{
+    count++;
+    //emit sendToQml2(ip_addr, ip_mask, port);
+    emit sendToQml2(ip_addr, ip_mask, ip_port);
+}
+void IpAddr::save_Device_Qml()
+{
+    count++;
+    //emit sendToQml2(ip_addr, ip_mask, port);
+    emit sendToQml2(ip_addr, ip_mask, ip_port);
+}
+void IpAddr::load_Default_Qml()
 {
     count++;
     //emit sendToQml2(ip_addr, ip_mask, port);
@@ -57,11 +81,3 @@ QString IpAddr::get_port2() {
 QString IpAddr::get_mask2() {
     return ip_mask;
 }
-
-/*
-void IpAddr:: receiveFromQml()
-{
-    count++;
-    emit sendToQml(count);
-}
-*/
