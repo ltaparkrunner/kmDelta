@@ -52,10 +52,10 @@ public slots:
 
     void displayError(QAbstractSocket::SocketError socketError) override;
     void successConn() override;
-    void parseMessage() override;
-    int getParamsResp() override;
-    int setParamsResp() override;
-    int periodReqResp() override;
+//    void parseMessage() override;
+//    int getParamsResp() override;
+//    int setParamsResp() override;
+//    int periodReqResp() override;
 
 private:
     int count;

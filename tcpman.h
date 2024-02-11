@@ -15,10 +15,10 @@ public:
 public slots:
     virtual void displayError(QAbstractSocket::SocketError socketError) = 0;    // Error message
     virtual void successConn() = 0;                                             // Success connection
-    virtual void parseMessage() = 0;
-    virtual int getParamsResp() = 0;
-    virtual int setParamsResp() = 0;
-    virtual int periodReqResp() = 0;
+//    virtual void parseMessage() = 0;
+//    virtual int getParamsResp() = 0;
+//    virtual int setParamsResp() = 0;
+//    virtual int periodReqResp() = 0;
     //void periodReqResp(){}
 //private:
 //    tcpMan();

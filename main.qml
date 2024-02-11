@@ -12,7 +12,7 @@ Item {
 //    property int ip_w: Math.max(c_ip.t1.width, t2.width, t3.width) + rect_2 *2
 
     Connections {
-            target: controlIp // Указываем целевое соединение
+            target: mvConfigs // Указываем целевое соединение
 //            onSendToDialog: {
 //                messageDialog.show(title)
 //            }

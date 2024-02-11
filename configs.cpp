@@ -1,12 +1,13 @@
 #include "configs.h"
 #include "crc32.h"
-#include "tcpman.h"
+#include "mbtcpClient.h"
 #include <QFile>
 #include <QTextStream>
 
-configs::configs(tcp_exch* tcpe):
+configs::configs(MbtcpClient* tcpe):
 //    ,cnfg(0)
-    te(tcpe)
+    tcpC(tcpe)
+//    ,cnfg({0})
 {
     cnfg.otnositelnoe_otobragenie = 0;
     cnfg.inversion_data = true;
@@ -110,6 +111,7 @@ int configs::save_file_configs(QString filen) {
 //        wr.Close();
         cfile.close();
     }
+    return 0;
 }
 int configs::load_file_configs(QString filen) {
     QFile cfile(filen);
@@ -276,7 +278,7 @@ ret_t configs::eth_set_params()
 }
 
 int configs::save_eth_configs() {
-
+    return 0;
 }
 
 ret_t configs::eth_load_params(){
@@ -286,13 +288,14 @@ ret_t configs::eth_load_params(){
 }
 
 int configs::load_eth_configs() {
-
+    return 0;
 }
 
 int configs::save_view_configs() {
-
+    return 0;
 }
 
 int configs::load_view_configs() {
-
+    return 0;
 }
+

@@ -18,20 +18,20 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Charts Network
 set(PROJECT_SOURCES
         main.cpp
         qml.qrc
-        controlip.h
-        controlip.cpp
+#        controlip.h
+#        controlip.cpp
         ipAddr.h
         ipAddr.cpp
         mbtcpClient.h
         mbtcpClient.cpp
-        tcp_req.h
-        tcp_req.cpp
+#        tcp_req.h
+#        tcp_req.cpp
         crc32.h
         crc32.cpp
         tcpman.h
         tcpman.cpp
-        tcp_exch.h
-        tcp_exch.cpp
+#        tcp_exch.h
+#        tcp_exch.cpp
 #        messbox.h
 #        messbox.cpp
 )
@@ -57,6 +57,7 @@ else()
           ${PROJECT_SOURCES}
           tcpman.h tcpman.cpp
           configs.h configs.cpp
+          mvConfigs.h mvConfigs.cpp
         )
     endif()
 endif()

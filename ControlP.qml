@@ -13,7 +13,7 @@ Rectangle{
     color: 'blue'
 
     Connections {
-        target: controlIp // Указываем целевое соединение
+        target: mvConfigs // Указываем целевое соединение
         /* Объявляем и реализуем функцию, как параметр
          * объекта и с имененем похожим на название сигнала
          * Разница в том, что добавляем в начале on и далее пишем
@@ -92,7 +92,7 @@ ColumnLayout{
         //y: connectButt.bottom + 10
         text: "Request params"
         onClicked: {
-            controlIp.getParamsButt(ip_2.ip_t, ip_2.port_t)
+            mvConfigs.getParamsButt(ip_2.ip_t, ip_2.port_t)
         }
 
     }
@@ -127,7 +127,7 @@ ColumnLayout{
             id : periodicRequestButt
             text: "Periodic request"
             onClicked: {
-                controlIp.periodReqButt(ip_2.ip_t, ip_2.port_t, 3000)
+                mvConfigs.periodReqButt(ip_2.ip_t, ip_2.port_t, 3000)
             }
         }
 //        Button{

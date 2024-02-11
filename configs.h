@@ -3,7 +3,8 @@
 
 //#include <stdint.h>
 #include <QString>
-#include "tcp_exch.h"
+//#include "tcp_exch.h"
+#include "mbtcpClient.h"
 
 const int n_avar = 4;
 const int n_dat = 8;
@@ -17,7 +18,7 @@ struct Data
 {
     int32_t absolutnoe;
     int32_t smeshenie;
-    Data();
+//    Data();
 };
 
 struct avar
@@ -28,10 +29,10 @@ struct avar
     uint16_t porog_max;
     uint16_t porog_min;
     uchar kolvo_avariynih_datchikov;
-    avar();
+//    avar();
 };
 
-class parms// : public QObject
+struct parms// : public QObject
 {
 //    Q_OBJECT
 public:
@@ -65,21 +66,24 @@ class configs  //: public QObject
 {
     //Q_OBJECT
 public:
-    explicit configs(tcp_exch* tcpe);
-    ~configs();
+    explicit configs(MbtcpClient* tcpe);
+    ~configs(){}
     int save_file_configs(QString filen = "config.ini");
     int load_file_configs(QString filen = "config.ini");
     int save_eth_configs();
     int load_eth_configs();
     int save_view_configs();
     int load_view_configs();
-    parms cnfg;
-    tcp_exch* te;
+//    parms cnfg;
+//    tcp_exch* te;
 
 private:
     ret_t eth_set_params();
     ret_t eth_load_params();
     bool check_IP(uint8_t ip[], QString& ip_s);
+    MbtcpClient* tcpC;
+    parms cnfg;
+//    tcp_exch* te;
 //    bool check_MASK(uint8_t ip[]);
 };
 

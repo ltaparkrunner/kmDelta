@@ -9,7 +9,7 @@ class messBox : public QObject
 public:
     explicit messBox(QObject *parent = 0);
 signals:
-    void sendToMB(QString &title, QString &text);
+    //void sendToMB(QString &title, QString &text);
 public slots:
 };
 

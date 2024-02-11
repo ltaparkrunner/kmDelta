@@ -8,20 +8,23 @@
 //#include "messbox.h"
 
 //! [0]
-MbtcpClient::MbtcpClient(tcpMan *tm, QObject *parent)
+MbtcpClient::MbtcpClient(/*tcpMan *tm,*/ QObject *parent)
     : tcpSocket(new QTcpSocket(this))
     , ip(new IpAddr(this))
-    , tmr(new QTimer(this))
-    , tcpm(tm)
+//    , tmr(new QTimer(this))
+    , tcpm(nullptr)
 {
 //        connect(tcpSocket, &QIODevice::readyRead, this, &MbtcpClient::readFortune);
 //        connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::parseMessage);
 //        connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::periodReqResp);
+/*
         connect(tcpSocket, &QAbstractSocket::connected, tcpm, &tcpMan::successConn);
         typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
         connect(tcpSocket, static_cast<QAbstractSocketErrorSignal>(&QAbstractSocket::error),
+*/
 //                this, &MbtcpClient::displayError);
-                  tcpm, &tcpMan::displayError);
+/*                  tcpm, &tcpMan::displayError);
+ *                  */
 //            tcpm, &tcpMan::periodReqResp);
 }
 
@@ -43,7 +46,7 @@ void MbtcpClient::connectTcp(QString ip_t, QString port_t)
     tcpSocket->abort();
     tcpSocket->connectToHost(ip_t, port_t.toInt());
 
-    tmr.singleShot(1000, this, &MbtcpClient::checkConnected);
+//    tmr.singleShot(1000, this, &MbtcpClient::checkConnected);
 }
 
 void MbtcpClient::readFortune()
@@ -135,6 +138,9 @@ void MbtcpClient::readFortune()
 //     return tcpSocket->write(mess);
 // }
 
+int setReadyReadconn() {
+
+}
 
 int MbtcpClient::sendToTcp(QByteArray &bdata){
     if(checkConnected() < 0){

@@ -93,47 +93,47 @@ void ControlIp::successConn() {
     emit sendToChat(abs);
 }
 
- void ControlIp::parseMessage(){
-     qDebug("parseMessage non-virtual func");
- }
+//  void ControlIp::parseMessage(){
+//      qDebug("parseMessage non-virtual func");
+//  }
 
-int ControlIp::getParamsResp() {
-    qDebug("getParamsResp non-virtual func");
-    if (tcpC ->getBlSz() == 0) {
-        if (tcpC -> getBAvl() < (int)sizeof(quint16))
-                 return 0;
+// int ControlIp::getParamsResp() {
+//     qDebug("getParamsResp non-virtual func");
+//     if (tcpC ->getBlSz() == 0) {
+//         if (tcpC -> getBAvl() < (int)sizeof(quint16))
+//                  return 0;
 
-        QByteArray rdata = tcpC ->getAll();
-        respToCondLine(rdata, "Success ");
-    }
-    return 2;
-}
+//         QByteArray rdata = tcpC ->getAll();
+//         respToCondLine(rdata, "Success ");
+//     }
+//     return 2;
+// }
 
-int ControlIp::setParamsResp() {
-    qDebug("setParamsResp non-virtual func");
-    if (tcpC ->getBlSz() == 0) {
-       if (tcpC -> getBAvl() < (int)sizeof(quint16))
-                return 0;
-        QByteArray rdata = tcpC ->getAll();
-        respToCondLine(rdata, "Set param success ");
-    }
-    return 2;
-}
+// int ControlIp::setParamsResp() {
+//     qDebug("setParamsResp non-virtual func");
+//     if (tcpC ->getBlSz() == 0) {
+//        if (tcpC -> getBAvl() < (int)sizeof(quint16))
+//                 return 0;
+//         QByteArray rdata = tcpC ->getAll();
+//         respToCondLine(rdata, "Set param success ");
+//     }
+//     return 2;
+// }
 
-int ControlIp::periodReqResp(){
-    qDebug("periodReqResp non-virtual func");
-    if (tcpC ->getBlSz() == 0) {
-       if (tcpC -> getBAvl() < (int)sizeof(quint16))
-                return 0;
+// int ControlIp::periodReqResp(){
+//     qDebug("periodReqResp non-virtual func");
+//     if (tcpC ->getBlSz() == 0) {
+//        if (tcpC -> getBAvl() < (int)sizeof(quint16))
+//                 return 0;
 
-        QByteArray rdata = tcpC ->getAll();
-        chat_data* chat_d = periodRespToData(rdata);
-        QVariantList abs;
-        for(int i = 0; i<8; i++) abs.append(chat_d->abs[i]);
-        emit sendToChat(abs);
-    }
-    return 2;
-}
+//         QByteArray rdata = tcpC ->getAll();
+//         chat_data* chat_d = periodRespToData(rdata);
+//         QVariantList abs;
+//         for(int i = 0; i<8; i++) abs.append(chat_d->abs[i]);
+//         emit sendToChat(abs);
+//     }
+//     return 2;
+// }
 
 void ControlIp::respToCondLine(QByteArray rdata, QString title) {
     char mass[64*3 + 5] = {0};

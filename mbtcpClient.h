@@ -22,13 +22,15 @@ class MbtcpClient : public QObject
 
 public:
 //    explicit MbtcpClient(QObject *parent = nullptr);
-    explicit MbtcpClient(tcpMan *tm, QObject *parent = nullptr);
+    explicit MbtcpClient(QObject *parent = nullptr);
 
     void connectTcp(QString ip_t, QString port_t);
     QString getErrString(){return tcpSocket->errorString();}
     quint16 getBlSz(){return blockSize;}
     int  getBAvl(){return tcpSocket->bytesAvailable();}
     QByteArray getAll(){return tcpSocket->readAll();}
+    int setConnectReadyRead();
+    int setConnectEvents();
 public slots:
 
     void readFortune();
@@ -57,9 +59,9 @@ signals:
     //void sendToMB(QString &title, QString &text);
 
 private:
-    QTcpSocket *tcpSocket = nullptr;
+    QTcpSocket *tcpSocket;
     IpAddr ip;
-    QTimer tmr;
+//    QTimer tmr;
     tcpMan *tcpm;
 //    QDataStream in_out;
 //    QDataStream in;
