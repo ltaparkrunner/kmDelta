@@ -23,8 +23,8 @@ class MbtcpClient : public QObject
 public:
 //    explicit MbtcpClient(QObject *parent = nullptr);
     explicit MbtcpClient(tcpMan *tm, QObject *parent = nullptr);
-//    void requestNewFortune(std::string ip_t, std::string port_t);
-    void requestNewFortune(QString ip_t, QString port_t);
+
+    void connectTcp(QString ip_t, QString port_t);
     QString getErrString(){return tcpSocket->errorString();}
     quint16 getBlSz(){return blockSize;}
     int  getBAvl(){return tcpSocket->bytesAvailable();}
@@ -32,8 +32,8 @@ public:
 public slots:
 
     void readFortune();
-    void displayError(QAbstractSocket::SocketError socketError);
-    void successMsg();
+//    void displayError(QAbstractSocket::SocketError socketError);
+//    void successMsg();
     int checkConnected();
 
 //    int getParamsResp();
@@ -43,17 +43,17 @@ public slots:
 //    void enableGetFortuneButton();
 
 public slots:
-    void receiveIpFromQml();
-    void commitIpFromQml(QString str);
+//    void receiveIpFromQml();
+//    void commitIpFromQml(QString str);
 //    int request();
-    int request2(QByteArray &bdata);
-    int setParams(QString ip_t, QString port_t, QByteArray mess);
-    int getParams(QString ip_t, QString port_t, QByteArray mess);
-    int periodReq(QString ip_t, QString port_t, QByteArray mess);
+    int sendToTcp(QByteArray &bdata);
+//    int setParams(QString ip_t, QString port_t, QByteArray mess);
+//    int getParams(QString ip_t, QString port_t, QByteArray mess);
+//    int periodReq(QString ip_t, QString port_t, QByteArray mess);
 
 
 signals:
-    void sendToMB(const QString &title, const QString &text);
+//    void sendToMB(const QString &title, const QString &text);
     //void sendToMB(QString &title, QString &text);
 
 private:

@@ -343,6 +343,7 @@ int glob::save_configs() {
 //        wr.Close();
         cfile.close();
     }
+    return 0;
 }
 int glob::load_configs() {
     //DialogResult dr = MessageBox.Show("Загрузить настройки ПТК КМ-Дельта из отдельного файла?", "", MessageBoxButtons.YesNo);

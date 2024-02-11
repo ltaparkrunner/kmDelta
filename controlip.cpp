@@ -3,7 +3,7 @@
 
 #include<QDebug>
 #include <QObject>
-#include <exception>
+//#include <exception>
 
 //ControlIp::ControlIp(QObject *parent) : QObject(parent)
 ControlIp::ControlIp(tcpMan *parent) : /*QObject(parent),*/ tcpMan(parent)
@@ -23,7 +23,7 @@ ControlIp::ControlIp(tcpMan *parent) : /*QObject(parent),*/ tcpMan(parent)
 }
 
 void ControlIp::connectButt(QString ip_t, QString port_t) {
-    tcpC->requestNewFortune(ip_t, port_t);
+    tcpC->connectTcp(ip_t, port_t);
     ++count;
     emit sendToQml(count);
 }
@@ -36,21 +36,23 @@ void ControlIp::periodReqButt(QString ip_t, QString port_t, int t_out) {
 
 void ControlIp::periodReq(/*QString ip_t, QString port_t*/) {
     ret_t rez = tcp_req::period_req();
-    if(tcpC->periodReq(ipt,  portt, *(rez.bdata)) > 0) qDebug("success /n");
+//    if(tcpC->periodReq(ipt,  portt, *(rez.bdata)) > 0) qDebug("success /n");
+    if(tcpC->sendToTcp(*(rez.bdata)) > 0) qDebug("success /n");
     else qDebug("fault /n");
 }
 
 void ControlIp::setParamsButt(QString ip_t, QString port_t) {
     ret_t rez = tcp_req::set_params();
-    if(tcpC->setParams(ip_t,  port_t, *(rez.bdata)) > 0) qDebug("success /n");
+//    if(tcpC->setParams(ip_t,  port_t, *(rez.bdata)) > 0) qDebug("success /n");
+    if(tcpC->sendToTcp(*(rez.bdata)) > 0) qDebug("success /n");
     else qDebug("fault /n");
 }
 
 //void ControlIp::sendMsgButt() {
 void ControlIp::getParamsButt(QString ip_t, QString port_t) {
     ret_t rez = tcp_req::req_param();
-//    if(tcpC->request() > 0) qDebug("success /n");
-    if(tcpC->getParams(ip_t,  port_t, *(rez.bdata)) > 0) qDebug("success /n");
+//    if(tcpC->getParams(ip_t,  port_t, *(rez.bdata)) > 0) qDebug("success /n");
+    if(tcpC->sendToTcp(*(rez.bdata)) > 0) qDebug("success /n");
     else qDebug("fault /n");
 }
 
