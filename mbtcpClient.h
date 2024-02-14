@@ -15,75 +15,36 @@ QT_BEGIN_NAMESPACE
 class QTcpSocket;
 QT_END_NAMESPACE
 
-//! [0]
 class MbtcpClient : public QObject
 {
     Q_OBJECT
 
 public:
-//    explicit MbtcpClient(QObject *parent = nullptr);
     explicit MbtcpClient(QObject *parent = nullptr);
 
-    void connectTcp(QString ip_t, QString port_t);
+    int connectTcp(QString ip_t, QString port_t);
     QString getErrString(){return tcpSocket->errorString();}
     quint16 getBlSz(){return blockSize;}
     int  getBAvl(){return tcpSocket->bytesAvailable();}
     QByteArray getAll(){return tcpSocket->readAll();}
-    int setConnectReadyRead();
-    int setConnectEvents();
+    int setReadyReadSlot();
+    int setEventsSlot();
 public slots:
 
-    void readFortune();
-//    void displayError(QAbstractSocket::SocketError socketError);
-//    void successMsg();
+    void printTcpResp();
     int checkConnected();
-
-//    int getParamsResp();
-//    int setParamsResp();
-//    int periodReqResp();
-
-//    void enableGetFortuneButton();
-
-public slots:
-//    void receiveIpFromQml();
-//    void commitIpFromQml(QString str);
-//    int request();
     int sendToTcp(QByteArray &bdata);
-//    int setParams(QString ip_t, QString port_t, QByteArray mess);
-//    int getParams(QString ip_t, QString port_t, QByteArray mess);
-//    int periodReq(QString ip_t, QString port_t, QByteArray mess);
-
-
-signals:
-//    void sendToMB(const QString &title, const QString &text);
-    //void sendToMB(QString &title, QString &text);
+    int onChangeIpPort(QString ip, QString port);
 
 private:
     QTcpSocket *tcpSocket;
-    IpAddr ip;
-//    QTimer tmr;
+
     tcpMan *tcpm;
-//    QDataStream in_out;
-//    QDataStream in;
-//    QDataStream out;
-    QString currentFortune;
     quint16 blockSize;
-    int count;
     QByteArray answer;
-    //QQuickView* qwp;
-    int (*func)(QByteArray &barr);
-    // int(*TEST(TestSuite, TestName)
-    //     {
 
-    //     }
-    //     )
-
-signals:
-//    void sendToCond1(QString str, bool bl);
-//    void sendToCond2(QString str1, QString str2);
-    void sendToQml2(QString addr, QString mask, QString port);
+    QString cur_ip;
+    QString cur_port;
 };
-
-//! [0]
 
 #endif // MBTCPCLIENT_H

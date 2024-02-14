@@ -4,70 +4,34 @@
 #include <QFile>
 #include <QTextStream>
 
+parms::parms():
+    otnositelnoe_otobragenie( 0 )
+    ,inversion_data(true)
+    ,inversion_dt (false)
+    ,avariya({{1,420,560,1},{0,380,720,1},{0,0,0,0},{0,0,0,0}})
+    ,porog_max (420)
+    ,porog_min (560)
+    ,timeout_alarm (2)
+    ,version_proshivki (0)
+    ,alarmt (4)
+    ,IP ("192.168.1.170")
+    ,IP1 ("192.168.1.170")
+    ,IP_new ("192.168.1.170")
+    ,MASK ("255.255.0.0")
+    ,MASKA ("255.255.0.0")
+    ,DPORT ("502")
+    ,DPORT_new ("503")
+    ,data ({{0, -273.5}, {0, -2648.5}, {0, -711.5}, {0, -1910.5}, {0, -845.5}, {0, -1519.5}, {0, -1736.0}, {0, -1612.0}})
+    ,mashtab (10)
+    ,graph_memory (100)
+    ,obnovlenie_proshivki (false)
+{ }
+
 configs::configs(MbtcpClient* tcpe):
 //    ,cnfg(0)
     tcpC(tcpe)
-//    ,cnfg({0})
-{
-    cnfg.otnositelnoe_otobragenie = 0;
-    cnfg.inversion_data = true;
-    cnfg.inversion_dt = false;
-    cnfg.avariya[0].avariya1_predupregdenie0 = 1;
-    cnfg.avariya[0].kolvo_avariynih_datchikov = 1;
-    cnfg.avariya[0].porog_max = 420;
-    cnfg.avariya[0].porog_min = 560;
-    cnfg.avariya[1].avariya1_predupregdenie0 = 0;
-    cnfg.avariya[1].kolvo_avariynih_datchikov = 1;
-    cnfg.avariya[1].porog_max = 380;
-    cnfg.avariya[1].porog_min = 720;
-
-    for(int i = 2; i < n_avar; i++)
-    {
-        cnfg.avariya[i].avariya1_predupregdenie0 = 0;
-        cnfg.avariya[i].kolvo_avariynih_datchikov = 0;
-        cnfg.avariya[i].porog_max = 0;
-        cnfg.avariya[i].porog_min = 0;
-    }
-    cnfg.porog_max = 420;
-    cnfg.porog_min = 560;
-    cnfg.timeout_alarm = 2;
-    cnfg.version_proshivki = 0;
-    cnfg.alarmt = 4;
-    cnfg.IP = "192.168.1.170";
-    cnfg.IP1 = "192.168.1.170";
-    cnfg.IP_new = "192.168.1.170";
-    cnfg.MASK = "255.255.0.0";
-    cnfg.MASKA = "255.255.0.0";
-    cnfg.DPORT = "502";
-    cnfg.DPORT_new = "503";
-
-//    for(int i = 0; i < n_dat; i++)
-//    {
-//        data[i].absolutnoe = 0;
-//        data[i].smeshenie = 0;
-//    }
-    cnfg.data[0].absolutnoe = 0;
-    cnfg.data[0].smeshenie = -273.5;
-    cnfg.data[1].absolutnoe = 0;
-    cnfg.data[1].smeshenie = -2648.5;
-    cnfg.data[2].absolutnoe = 0;
-    cnfg.data[2].smeshenie = -711.5;
-    cnfg.data[3].absolutnoe = 0;
-    cnfg.data[3].smeshenie = -1910.5;
-    cnfg.data[4].absolutnoe = 0;
-    cnfg.data[4].smeshenie = -845.5;
-    cnfg.data[5].absolutnoe = 0;
-    cnfg.data[5].smeshenie = -1519.5;
-    cnfg.data[6].absolutnoe = 0;
-    cnfg.data[6].smeshenie = -1736.0;
-    cnfg.data[7].absolutnoe = 0;
-    cnfg.data[7].smeshenie = -1612.0;
-
-    cnfg.mashtab = 10;
-    cnfg.graph_memory = 100;
-    cnfg.obnovlenie_proshivki = false;
-//    cnfg.config_file = "config.ini";
-}
+    ,cnfg(parms())
+{ }
 
 int configs::save_file_configs(QString filen) {
 
@@ -175,7 +139,7 @@ bool configs::check_IP(uint8_t ip[], QString& ip_s){
 //    return true;
 //}
 
-ret_t configs::eth_set_params()
+ret_t configs::save_eth_configs_bArray()
 {
     const int pr = 10;
     QByteArray *bdata = new QByteArray(61 + pr + 1, 0);
@@ -278,17 +242,30 @@ ret_t configs::eth_set_params()
 }
 
 int configs::save_eth_configs() {
-    return 0;
+    ret_t rez = save_eth_configs_bArray();
+    if(rez.res < 0) return -1;
+    else if(tcpC->sendToTcp(*(rez.bdata)) > 0) {
+        qDebug("success /n");
+        return 0;
+    }
+    else return -2;
 }
 
-ret_t configs::eth_load_params(){
+ret_t configs::load_eth_configs_bArray(){
     const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
     QByteArray *bdt = new QByteArray(data, 12);
     return {2,bdt};
 }
 
 int configs::load_eth_configs() {
-    return 0;
+    ret_t rez = load_eth_configs_bArray();
+    if(rez.res < 0) return -1;
+    else if(tcpC->sendToTcp(*(rez.bdata)) > 0) {
+        qDebug("success /n");
+        // тут разбор и запись в configs -> parms
+        return 0;
+    }
+    else return -2;
 }
 
 int configs::save_view_configs() {

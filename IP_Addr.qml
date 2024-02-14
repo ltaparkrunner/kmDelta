@@ -15,6 +15,9 @@ Rectangle {
         }
     }
 
+    Binding{ target: vmConfigs; property: "np_p"; value: {ip; mask}}
+    Binding{ target: vmConfigs; property: "ip_n"; value: ip }
+
     ColumnLayout{
         spacing: 3
         anchors.fill: parent

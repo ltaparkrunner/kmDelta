@@ -6,7 +6,7 @@
 #include <QtQml/QQmlContext>
 
 //#include "controlip.h"
-#include "mvConfigs.h"
+#include "vmConfigs.h"
 #include "ipAddr.h"
 //#include "mbtcpClient.h"
 
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 //    MbtcpClient tcpC;   //(pCIP);
     MbtcpClient mc;
     configs cs(&mc);
-    mvConfigs mv(cs);
+    vmConfigs vm(cs);
     //ControlIp controlIp;
 //    pCIP = &controlIp;
     IpAddr ipAddr;
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     //mbtcpClient tcpC2;
 
     QQmlContext *context = viewer.rootContext();
-    context->setContextProperty("mvConfigs", &mv);
+    context->setContextProperty("vmConfigs", &vm);
     context->setContextProperty("ipAddr", &ipAddr);
 //    context->setContextProperty("tcpC", &tcpC);
 

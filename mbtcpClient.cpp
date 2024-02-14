@@ -10,9 +10,11 @@
 //! [0]
 MbtcpClient::MbtcpClient(/*tcpMan *tm,*/ QObject *parent)
     : tcpSocket(new QTcpSocket(this))
-    , ip(new IpAddr(this))
+//    , ip(new IpAddr(this))
 //    , tmr(new QTimer(this))
     , tcpm(nullptr)
+    , cur_ip("192.168.1.170")
+    , cur_port("502")
 {
 //        connect(tcpSocket, &QIODevice::readyRead, this, &MbtcpClient::readFortune);
 //        connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::parseMessage);
@@ -41,15 +43,15 @@ int MbtcpClient::checkConnected(){
     return -1;
 }
 
-void MbtcpClient::connectTcp(QString ip_t, QString port_t)
+int MbtcpClient::connectTcp(QString ip_t, QString port_t)
 {
     tcpSocket->abort();
     tcpSocket->connectToHost(ip_t, port_t.toInt());
-
+    return 0;
 //    tmr.singleShot(1000, this, &MbtcpClient::checkConnected);
 }
 
-void MbtcpClient::readFortune()
+void MbtcpClient::printTcpResp()
 {
     if (blockSize == 0) {
        if (tcpSocket->bytesAvailable() < (int)sizeof(quint16))
@@ -73,73 +75,8 @@ void MbtcpClient::readFortune()
     }
 }
 
-// void MbtcpClient::displayError(QAbstractSocket::SocketError socketError)
-// {
-//     switch (socketError) {
-//     case QAbstractSocket::RemoteHostClosedError:
-//         break;
-//     case QAbstractSocket::HostNotFoundError:
-//         emit sendToMB(tr("Km_Delta_connection"), tr("The host was not found. Please check the "
-//                                                "host name and port settings."));
-//         break;
-//     case QAbstractSocket::ConnectionRefusedError:
-//         emit sendToMB(tr("Km_Delta_connection"), tr("The connection was refused by the peer. "
-//                                                "Make sure the fortune server is running, "
-//                                                "and check that the host name and port "
-//                                                "settings are correct."));
-//         break;
-//     default:
-//         emit sendToMB(tr("Km_Delta_connection"), tr("The following error occurred: %1.")
-//                       .arg(tcpSocket->errorString()));
-//     }
-// }
-
-// void MbtcpClient::receiveIpFromQml()
-// {
-//     count++;
-//     emit sendToQml2(ip.get_ip2(), ip.get_mask2(), ip.get_port2());
-// }
-
-// void MbtcpClient::commitIpFromQml(QString str)
-// {
-//     str.append("for");
-//     emit sendToQml2(str, ip.get_mask2(), ip.get_port2());
-//     //messageDialog
-// }
-
-//int MbtcpClient::request() {
-//    return 0;
-//}
-
-// int MbtcpClient::getParams(QString ip_t, QString port_t, QByteArray mess) {
-//     if(checkConnected() < 0){
-//         return -1;
-//     }
-//     else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
-//     connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::getParamsResp);
-//     return tcpSocket->write(mess);
-// }
-
-// int MbtcpClient::setParams(QString ip_t, QString port_t, QByteArray mess) {
-//     if(checkConnected() < 0){
-//         return -1;
-//     }
-//     else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
-//     connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::setParamsResp);
-//     return tcpSocket->write(mess);
-// }
-
-// int MbtcpClient::periodReq(QString ip_t, QString port_t, QByteArray mess) {
-//     if(checkConnected() < 0){
-//         return -1;
-//     }
-//     else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
-//     connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::periodReqResp);
-//     return tcpSocket->write(mess);
-// }
-
 int setReadyReadconn() {
-
+    return 0;
 }
 
 int MbtcpClient::sendToTcp(QByteArray &bdata){
@@ -148,4 +85,12 @@ int MbtcpClient::sendToTcp(QByteArray &bdata){
     }
 //    else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
     return tcpSocket->write(bdata);
+}
+
+int MbtcpClient::onChangeIpPort(QString ip, QString port){
+    cur_ip = ip;
+    cur_port = port;
+    if(tcpSocket->state() == QAbstractSocket::ConnectedState)
+        tcpSocket->disconnectFromHost();
+    return 0;
 }

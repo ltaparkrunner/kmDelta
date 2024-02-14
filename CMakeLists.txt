@@ -57,7 +57,7 @@ else()
           ${PROJECT_SOURCES}
           tcpman.h tcpman.cpp
           configs.h configs.cpp
-          mvConfigs.h mvConfigs.cpp
+          vmConfigs.h vmConfigs.cpp
         )
     endif()
 endif()

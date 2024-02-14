@@ -60,6 +60,7 @@ public:
     int32_t graph_memory;
 
     bool obnovlenie_proshivki;
+    parms();
 };
 
 class configs  //: public QObject
@@ -78,10 +79,11 @@ public:
 //    tcp_exch* te;
 
 private:
-    ret_t eth_set_params();
-    ret_t eth_load_params();
+    ret_t save_eth_configs_bArray();
+    ret_t load_eth_configs_bArray();
     bool check_IP(uint8_t ip[], QString& ip_s);
     MbtcpClient* tcpC;
+public:
     parms cnfg;
 //    tcp_exch* te;
 //    bool check_MASK(uint8_t ip[]);

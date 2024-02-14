@@ -29,6 +29,8 @@ Rectangle {
 //           r_port = port.text
 //        }
     }
+//    Binding{ target: vmConfigs; property: "np_p"; value: {ip.text; mask.text}}
+
     ColumnLayout{
         spacing: 3
         anchors.fill: parent
@@ -117,7 +119,8 @@ Rectangle {
                         color: "green"
                         anchors.fill: parent
                         id: ip
-                        text: "forever"
+                        text: vmConfigs.ip_n //"forever"
+                        Binding{ target: vmConfigs; property: "ip_n"; value: ip.text }
                     }
                 }
                 Rectangle{
