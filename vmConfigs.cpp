@@ -36,7 +36,7 @@ void vmConfigs::setParamsButt(QVariant n) {
 //void vmConfigs::getParamsButt(QString ip_t, QString port_t) {
 QVariant vmConfigs::getParamsButt() {
     QStringList *sl = new QStringList();
-//    ip_n = "192.168.10.2";
+    //ip_n = "192.168.10.2";
     sl->append(cs.cnfg.IP);
     sl->append(cs.cnfg.DPORT);
     qDebug("called getParamsButt \n");
@@ -53,5 +53,8 @@ QString vmConfigs::ip_n() const {
 
 void vmConfigs::setIp(QString ip_n){
     qDebug("called setIp \n");
+    if(ip_n == cs.cnfg.IP) return;
+    cs.cnfg.IP = "192.168.10.2";
+
     emit ipChanged(ip_n);
 }
