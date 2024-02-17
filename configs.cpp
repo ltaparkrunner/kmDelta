@@ -14,14 +14,15 @@ parms::parms():
     ,timeout_alarm (2)
     ,version_proshivki (0)
     ,alarmt (4)
-    ,IP ("192.168.1.170")
-    ,IP1 ("192.168.1.170")
-    ,IP_new ("192.168.1.170")
-    ,MASK ("255.255.0.0")
-    ,MASKA ("255.255.0.0")
-    ,DPORT ("502")
-    ,DPORT_new ("503")
-    ,data ({{0, -273.5}, {0, -2648.5}, {0, -711.5}, {0, -1910.5}, {0, -845.5}, {0, -1519.5}, {0, -1736.0}, {0, -1612.0}})
+    ,ethIP ("192.168.1.80")
+//    ,IP1 ("192.168.1.170")
+    ,ethIP_new ("192.168.1.170")
+    ,ethMASK ("255.255.0.0")
+    ,ethMASK_new ("255.255.0.0")
+    ,ethPORT ("502")
+    ,ethPORT_new ("503")
+ //   ,data ({{0, -273.5}, {0, -2648.5}, {0, -711.5}, {0, -1910.5}, {0, -845.5}, {0, -1519.5}, {0, -1736.0}, {0, -1612.0}})
+    ,data ({{0, -273}, {0, -2648}, {0, -711}, {0, -1910}, {0, -845}, {0, -1519}, {0, -1736}, {0, -1612}})
     ,mashtab (10)
     ,graph_memory (100)
     ,obnovlenie_proshivki (false)
@@ -41,10 +42,10 @@ int configs::save_file_configs(QString filen) {
     QTextStream wr(&cfile);
 //    using (StreamWriter wr = new StreamWriter(sf, false))
     {
-        wr << "IP-адрес ПТК КМ-Дельта:" + cnfg.IP << "\n";
-        wr << "Маска подсети:" + cnfg.MASKA << "\n";
-        wr << "Удалённый IP1:" + cnfg.IP1 << "\n";
-        wr << "Порт ПТК КМ-Дельта:" + cnfg.DPORT << "\n";
+        wr << "IP-адрес ПТК КМ-Дельта:" + cnfg.ethIP << "\n";
+        wr << "Маска подсети:" + cnfg.ethMASK << "\n";
+        wr << "Удалённый IP:" + cnfg.ethIP << "\n";
+        wr << "Порт ПТК КМ-Дельта:" + cnfg.ethPORT << "\n";
 //        wr << "Порт программы:" + gl.SPORT << "\n";
         wr << "Задержка срабатывания сигнализации:" + QString::number(cnfg.timeout_alarm) << "\n";
         wr << "Масштаб отображения, с:" + QString::number(cnfg.mashtab) << "\n";
@@ -83,10 +84,10 @@ int configs::load_file_configs(QString filen) {
             return -1;
     QTextStream rd(&cfile);
     {
-        QString str = rd.readLine(); int ind = str.indexOf(':'); ind++; cnfg.IP = str.mid(ind, str.length() - ind);
-        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.MASKA = str.mid(ind, str.length() - ind);
-        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.IP1 = str.mid(ind, str.length() - ind);
-        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.DPORT = str.mid(ind, str.length() - ind);
+        QString str = rd.readLine(); int ind = str.indexOf(':'); ind++; cnfg.ethIP = str.mid(ind, str.length() - ind);
+        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.ethMASK = str.mid(ind, str.length() - ind);
+        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.ethIP = str.mid(ind, str.length() - ind);
+        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.ethPORT = str.mid(ind, str.length() - ind);
 //        str = rd.readLine(); ind = str.indexOf(':'); ind++; gl.SPORT = (str.mid(ind, str.length() - ind)).toInt();
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.timeout_alarm = (str.mid(ind, str.length() - ind)).toDouble();
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.mashtab = (str.mid(ind, str.length() - ind)).toDouble();
@@ -130,8 +131,8 @@ bool configs::check_IP(uint8_t ip[], QString& ip_s){
 }
 
 //bool configs::check_MASK(uint8_t ip[]){
-//    if (cnfg.IP.count('.') < 3) return false;
-//    auto i = cnfg.IP.split('.').begin();
+//    if (cnfg.ethIP.count('.') < 3) return false;
+//    auto i = cnfg.ethIP.split('.').begin();
 //    for(int i1 = 0; i1 < 4; i1++){
 //        uint8_t t1 = (*i).toShort();
 //        ip[i1] = t1;
@@ -177,15 +178,15 @@ ret_t configs::save_eth_configs_bArray()
         bdt[2 + pr] = static_cast<uchar>(time>>8);
 
         uint8_t ip[4];
-        if (!check_IP(ip, cnfg.IP)) { return {1, bdata}; }
+        if (!check_IP(ip, cnfg.ethIP)) { return {1, bdata}; }
         for (i = 0; i < n_avar; i++) { bdt[i + 4 + pr] = ip[i]; }
         // maska
         //flag = string_to_ip(text_maska_new.Text, ref ip, 2);
-        if (!check_IP(ip, cnfg.MASK)) { return {1, bdata}; }
+        if (!check_IP(ip, cnfg.ethMASK)) { return {1, bdata}; }
         for (i = 0; i < n_avar; i++) { bdt[i + 8 + pr] = ip[i]; }
 
         //int sp = Convert.ToInt32(text_sport_new.Text);
-        uint16_t dp = cnfg.DPORT_new.toShort();
+        uint16_t dp = cnfg.ethPORT_new.toShort();
         //bdata[17 + pr] = (byte)(sp & 0x00FF);
         //bdata[16 + pr] = (byte)((sp >> 8) & 0x00FF);
         bdt[19 + pr] = static_cast<uint8_t>(dp & 0x00FF);
@@ -276,3 +277,23 @@ int configs::load_view_configs() {
     return 0;
 }
 
+QList<QString>* configs::fillList() {
+    QList<QString> *ls = new QList<QString>();
+    ls->append(cnfg.ethIP);
+    ls->append(cnfg.ethIP_new);
+    ls->append(cnfg.ethMASK);
+    ls->append(cnfg.ethMASK_new);
+    ls->append(cnfg.ethPORT);
+    ls->append(cnfg.ethPORT_new);
+    return ls;
+}
+
+int configs::fillCfg(QList<QString> &ls) {
+    cnfg.ethIP = ls[0];
+    cnfg.ethIP_new = ls[1];
+    cnfg.ethMASK = ls[2];
+    cnfg.ethMASK_new = ls[3];
+    cnfg.ethPORT = ls[4];
+    cnfg.ethPORT_new = ls[5];
+    return 0;
+}

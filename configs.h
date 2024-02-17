@@ -46,14 +46,14 @@ public:
     uint16_t timeout_alarm;
     uint16_t version_proshivki;
     uint16_t alarmt;
-    QString IP;
-    QString IP1;
-    QString IP_new;
-    QString MASK;
-    QString MASKA;
+    QString ethIP;
+//    QString IP1;
+    QString ethIP_new;
+    QString ethMASK;
+    QString ethMASK_new;
 
-    QString DPORT;
-    QString DPORT_new;
+    QString ethPORT;
+    QString ethPORT_new;
 
     Data data[n_dat];
     int32_t mashtab;
@@ -77,6 +77,8 @@ public:
     int load_view_configs();
 //    parms cnfg;
 //    tcp_exch* te;
+    QList<QString>* fillList();
+    int fillCfg(QList<QString> &ls);
 
 private:
     ret_t save_eth_configs_bArray();
@@ -89,4 +91,7 @@ public:
 //    bool check_MASK(uint8_t ip[]);
 };
 
+
+
 #endif // CONFIGS_H
+

@@ -13,24 +13,34 @@ Rectangle {
     property string port_t: port.text
 //    property int ip_w: Math.max(t1.width, t2.width, t3.width) + rect_2 *2
 //    height: 2000
-    Connections{
-        target: ipAddr
-//        function onSendToQml2(addrp, maskp, portp)
-        onSendToQml2:
-        {
-           ip.text = ip_addr;   //addrp;
-           mask.text = ip_mask; //maskp;
-           port.text = ip_port;    //portp;
-        }
-//        onRequestFromQml2:
-//        {
-//           r_ip = ip.text
-//           r_mask = mask.text
-//           r_port = port.text
-//        }
-    }
-//    Binding{ target: vmConfigs; property: "np_p"; value: {ip.text; mask.text}}
 
+    function sendParams(){
+        var sList = [" Forever For "];
+//        sList.append(ip.text);
+        sList.push(ip.text)
+        sList.push(mask.text);
+        sList.push(port.text);
+        vmConfigs.load_Default_Qml(sList)
+//        return(sList);
+    }
+
+    Connections{
+        target: vmConfigs
+//        function onSendToQml2(addrp, maskp, portp)
+        onSendCurrIp:
+        {
+           ip.text = ls[0];   //addrp;
+           mask.text = ls[2]; //maskp;
+           port.text = ls[4];    //portp;
+           ip_2.text = ls[1];
+           mask_2.text = ls[3];
+           port_2.text = ls[5];
+        }
+        onSendCurrIp_2:
+        {
+            ip.text = ls;
+        }
+    }
     ColumnLayout{
         spacing: 3
         anchors.fill: parent
@@ -42,7 +52,7 @@ Rectangle {
                 height: 20
                 text: "Load_From_File"
                 onClicked: {
-                    ipAddr.load_File_Qml()
+                    vmConfigs.load_File_Qml()
                     }
                 implicitWidth: 107
             }
@@ -53,8 +63,15 @@ Rectangle {
                 height: 20
                 text: "Save_To_File"
                 onClicked: {
-                    ipAddr.save_File_Qml()
-                    }
+                    var ls = [];
+                    ls[0] = ip.text;   //addrp;
+                    ls[2] = mask.text; //maskp;
+                    ls[4] = port.text;    //portp;
+                    ls[1] =  ip_2.text;
+                    ls[3] = mask_2.text;
+                    ls[5] = port_2.text;
+                    vmConfigs.save_File_Qml(ls)
+                }
                 implicitWidth: 107
             }
         }
@@ -65,7 +82,7 @@ Rectangle {
                 height: 20
                 text: "Load_From_Device"
                 onClicked: {
-                    ipAddr.load_Device_Qml()
+                    vmConfigs.load_Device_Qml()
                     }
                 implicitWidth: 107
             }
@@ -73,9 +90,9 @@ Rectangle {
                 id : butt_save_device
                 width: 220
                 height: 20
-                text: "Load_From_Device"
+                text: "Save_To_Device"
                 onClicked: {
-                    ipAddr.save_Device_Qml()
+                    vmConfigs.save_Device_Qml()
                     }
                 implicitWidth: 107
             }
@@ -86,7 +103,10 @@ Rectangle {
             height: 20
             text: "Load_Defaults"
             onClicked: {
-                ipAddr.load_Default_Qml()
+//                String t =
+//                property var  str: ip.text
+                sendParams();
+//                vmConfigs.load_Default_Qml()
                 }
             implicitWidth: 220
         }
@@ -119,8 +139,8 @@ Rectangle {
                         color: "green"
                         anchors.fill: parent
                         id: ip
-                        text: vmConfigs.ip_n //"forever"
-                        Binding{ target: vmConfigs; property: "ip_n"; value: ip.text }
+                        text: /*vmConfigs.ip_n */ "forever"
+                        //Binding{ target: vmConfigs; property: "ip_n"; value: ip.text }
                     }
                 }
                 Rectangle{
@@ -149,8 +169,6 @@ Rectangle {
             }
             ColumnLayout{
                 Text {
-    //                id: ip_a
-//                    Layout.leftMargin: 20
                     text: qsTr("установить ")
                 }
                 Rectangle{
@@ -195,7 +213,7 @@ Rectangle {
             height: 20
             text: "Установить"
             onClicked: {
-                ipAddr.commitFromQml(ip.text)
+                vmConfigs.commitFromQml(ip.text)
             }
         }
     }
