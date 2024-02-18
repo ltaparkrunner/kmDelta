@@ -8,8 +8,8 @@
 //#include <string>
 #include <QString>
 
-#include "ipAddr.h"
-#include "tcpman.h"
+//#include "ipAddr.h"
+#include "tcpIntrfc.h"
 
 QT_BEGIN_NAMESPACE
 class QTcpSocket;
@@ -27,19 +27,21 @@ public:
     quint16 getBlSz(){return blockSize;}
     int  getBAvl(){return tcpSocket->bytesAvailable();}
     QByteArray getAll(){return tcpSocket->readAll();}
-    int setReadyReadSlot();
+    int set_loadDev_ReadyReadSlot(tcpIntrfc *cl);
+    int set_saveDev_ReadyReadSlot(tcpIntrfc *cl);
+    int set_loadChart_ReadyReadSlot(tcpIntrfc *cl);
     int setEventsSlot();
 public slots:
 
     void printTcpResp();
     int checkConnected();
-    int sendToTcp(QByteArray &bdata);
+    int sendToTcp(QByteArray *bdata);
     int onChangeIpPort(QString ip, QString port);
 
 private:
     QTcpSocket *tcpSocket;
 
-    tcpMan *tcpm;
+    tcpIntrfc *tcpm;
     quint16 blockSize;
     QByteArray answer;
 

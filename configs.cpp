@@ -245,7 +245,7 @@ ret_t configs::save_eth_configs_bArray()
 int configs::save_eth_configs() {
     ret_t rez = save_eth_configs_bArray();
     if(rez.res < 0) return -1;
-    else if(tcpC->sendToTcp(*(rez.bdata)) > 0) {
+    else if(tcpC->sendToTcp(rez.bdata) > 0) {
         qDebug("success /n");
         return 0;
     }
@@ -261,7 +261,7 @@ ret_t configs::load_eth_configs_bArray(){
 int configs::load_eth_configs() {
     ret_t rez = load_eth_configs_bArray();
     if(rez.res < 0) return -1;
-    else if(tcpC->sendToTcp(*(rez.bdata)) > 0) {
+    else if(tcpC->sendToTcp(rez.bdata) > 0) {
         qDebug("success /n");
         // тут разбор и запись в configs -> parms
         return 0;
@@ -295,5 +295,27 @@ int configs::fillCfg(QList<QString> &ls) {
     cnfg.ethMASK_new = ls[3];
     cnfg.ethPORT = ls[4];
     cnfg.ethPORT_new = ls[5];
+    return 0;
+}
+
+int configs::setResp_loadDev_readyRead(tcpIntrfc *cl) {
+    tcpC->set_loadDev_ReadyReadSlot(cl);
+    ret_t res = save_eth_configs_bArray();
+    tcpC->sendToTcp(res.bdata);
+//    else if(str == "") tcpC->setReadyReadSlot(cl->loadChart_readyRead);
+    return 0;
+}
+
+int configs::setResp_saveDev_readyRead(tcpIntrfc *cl) {
+    tcpC->set_saveDev_ReadyReadSlot(cl);
+    //    else if(str == "loadDev") tcpC->setReadyReadSlot(cl->loadDev_readyRead);
+    //    else if(str == "") tcpC->setReadyReadSlot(cl->loadChart_readyRead);
+    return 0;
+}
+
+int configs::setResp_loadChart_readyRead(tcpIntrfc *cl) {
+    tcpC->set_loadChart_ReadyReadSlot(cl);
+    //    else if(str == "loadDev") tcpC->setReadyReadSlot(cl->loadDev_readyRead);
+    //    else if(str == "") tcpC->setReadyReadSlot(cl->loadChart_readyRead);
     return 0;
 }

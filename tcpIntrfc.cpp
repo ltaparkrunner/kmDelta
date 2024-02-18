@@ -1,4 +1,4 @@
-#include "tcpman.h"
+#include "tcpIntrfc.h"
 #include <QDebug>
 
 //tcpMan::tcpMan() {}

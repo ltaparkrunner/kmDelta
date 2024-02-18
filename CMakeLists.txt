@@ -28,8 +28,8 @@ set(PROJECT_SOURCES
 #        tcp_req.cpp
         crc32.h
         crc32.cpp
-        tcpman.h
-        tcpman.cpp
+#        tcpman.h
+#        tcpman.cpp
 #        tcp_exch.h
 #        tcp_exch.cpp
 #        messbox.h
@@ -55,7 +55,11 @@ else()
     else()
         add_executable(kmdelta6
           ${PROJECT_SOURCES}
-          tcpman.h tcpman.cpp
+#          tcpIntrfc.h
+           tcpIntrfc.h
+#          tcpIntrfc.h
+          tcpIntrfc.cpp
+#          tcpIntrfc.cpp
           configs.h configs.cpp
           vmConfigs.h vmConfigs.cpp
         )

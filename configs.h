@@ -4,6 +4,7 @@
 //#include <stdint.h>
 #include <QString>
 //#include "tcp_exch.h"
+
 #include "mbtcpClient.h"
 
 const int n_avar = 4;
@@ -75,6 +76,9 @@ public:
     int load_eth_configs();
     int save_view_configs();
     int load_view_configs();
+    int setResp_loadDev_readyRead(tcpIntrfc *cl);
+    int setResp_saveDev_readyRead(tcpIntrfc *cl);
+    int setResp_loadChart_readyRead(tcpIntrfc *cl);
 //    parms cnfg;
 //    tcp_exch* te;
     QList<QString>* fillList();

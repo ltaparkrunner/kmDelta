@@ -9,8 +9,8 @@
 //}
 
 
-vmConfigs::vmConfigs(configs cs_, tcpMan *parent):
-    tcpMan(parent)
+vmConfigs::vmConfigs(configs cs_, tcpIntrfc *parent):
+    tcpIntrfc(parent)
     ,cs(cs_)
 {
 //    connect(this, this->ParamsChanged, this, this->dbg_message);
@@ -69,14 +69,20 @@ void vmConfigs::save_File_Qml(QList<QString> ls)
     else emit saveFileSucc("config.ini");
     return;
 }
+void loadDev_readyRead2()
+{
+
+}
 void vmConfigs::load_Device_Qml()
 {
     count++;
-    cs.load_file_configs();
-    QList<QString> *str_cs = cs.fillList();
+    cs.load_eth_configs();
+ //   cs.setResp_readyRead(this, loadDev_readyRead);
+    cs.setResp_loadDev_readyRead(this);
+    // QList<QString> *str_cs = cs.fillList();
 
-    emit sendCurrIp(*str_cs);
-    delete str_cs;
+    // emit sendCurrIp(*str_cs);
+    // delete str_cs;
 }
 void vmConfigs::save_Device_Qml()
 {
@@ -120,3 +126,22 @@ void vmConfigs::commitFromQml(QString ls)
     //messageDialog
 }
 
+void vmConfigs::loadDevice_readyRead(){
+
+}
+void vmConfigs::saveDevice_readyRead(){
+
+}
+void vmConfigs::loadDev_readyRead(){
+    count++;
+    cs.load_eth_configs();
+    //   cs.setResp_readyRead(this, loadDev_readyRead);
+    cs.setResp_loadDev_readyRead(this);
+
+}
+void vmConfigs::saveDev_readyRead(){
+
+}
+void vmConfigs::loadChart_readyRead(){
+
+}

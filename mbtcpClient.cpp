@@ -79,12 +79,12 @@ int setReadyReadconn() {
     return 0;
 }
 
-int MbtcpClient::sendToTcp(QByteArray &bdata){
+int MbtcpClient::sendToTcp(QByteArray *bdata){
     if(checkConnected() < 0){
         return -1;
     }
 //    else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
-    return tcpSocket->write(bdata);
+    return tcpSocket->write(*bdata);
 }
 
 int MbtcpClient::onChangeIpPort(QString ip, QString port){
@@ -94,3 +94,19 @@ int MbtcpClient::onChangeIpPort(QString ip, QString port){
         tcpSocket->disconnectFromHost();
     return 0;
 }
+
+int MbtcpClient::set_loadDev_ReadyReadSlot(tcpIntrfc *cl) {
+    connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::loadDev_readyRead);
+    return 0;
+}
+
+int MbtcpClient::set_saveDev_ReadyReadSlot(tcpIntrfc *cl) {
+    connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::saveDev_readyRead);
+    return 0;
+}
+
+int MbtcpClient::set_loadChart_ReadyReadSlot(tcpIntrfc *cl) {
+    connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::loadChart_readyRead);
+    return 0;
+}
+
