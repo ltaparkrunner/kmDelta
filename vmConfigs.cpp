@@ -76,9 +76,9 @@ void loadDev_readyRead2()
 void vmConfigs::load_Device_Qml()
 {
     count++;
-    cs.load_eth_configs();
+    cs.load_eth_configs(this);
  //   cs.setResp_readyRead(this, loadDev_readyRead);
-    cs.setResp_loadDev_readyRead(this);
+//    cs.setResp_loadDev_readyRead(this);
     // QList<QString> *str_cs = cs.fillList();
 
     // emit sendCurrIp(*str_cs);
@@ -126,22 +126,24 @@ void vmConfigs::commitFromQml(QString ls)
     //messageDialog
 }
 
-void vmConfigs::loadDevice_readyRead(){
+//void vmConfigs::loadDevice_readyRead(){
 
-}
-void vmConfigs::saveDevice_readyRead(){
+//}
+//void vmConfigs::saveDevice_readyRead(){
 
-}
-void vmConfigs::loadDev_readyRead(){
+//}
+
+void vmConfigs::loadDev_Respond(){ // This is respond to readyread after return
     count++;
-    cs.load_eth_configs();
-    //   cs.setResp_readyRead(this, loadDev_readyRead);
-    cs.setResp_loadDev_readyRead(this);
+    cs.load_eth_configs(this);
+    cs.setReadyRead_loadDev(this);
+}
+
+void vmConfigs::saveDev_Respond(){
 
 }
-void vmConfigs::saveDev_readyRead(){
+
+void vmConfigs::loadChart_Respond(){
 
 }
-void vmConfigs::loadChart_readyRead(){
 
-}

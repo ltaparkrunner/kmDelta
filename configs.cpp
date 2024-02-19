@@ -140,7 +140,7 @@ bool configs::check_IP(uint8_t ip[], QString& ip_s){
 //    return true;
 //}
 
-ret_t configs::save_eth_configs_bArray()
+ret_t configs::save_eth_configs_bArray() // save to device
 {
     const int pr = 10;
     QByteArray *bdata = new QByteArray(61 + pr + 1, 0);
@@ -242,7 +242,8 @@ ret_t configs::save_eth_configs_bArray()
     return {2, bdata};
 }
 
-int configs::save_eth_configs() {
+int configs::save_eth_configs(tcpIntrfc *cl) {   // save to device
+    tcpC->setReadyRead_saveDev(cl);
     ret_t rez = save_eth_configs_bArray();
     if(rez.res < 0) return -1;
     else if(tcpC->sendToTcp(rez.bdata) > 0) {
@@ -251,14 +252,22 @@ int configs::save_eth_configs() {
     }
     else return -2;
 }
+int configs::save_eth_configs_resp() { // respond after save to device
+    QByteArray ba = tcpC->getAll();
+    if (ba[1] == 'O' && ba[2] == 'K' && ba[3] == '!')  // successfully save to device
+        return 0;
+    else if (ba == nullptr) return -2;
+    else return -1;
+}
 
-ret_t configs::load_eth_configs_bArray(){
+ret_t configs::load_eth_configs_bArray(){ // message to respond params from device
     const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
     QByteArray *bdt = new QByteArray(data, 12);
     return {2,bdt};
 }
 
-int configs::load_eth_configs() {
+int configs::load_eth_configs(tcpIntrfc *cl) { // send message to load params from device
+    tcpC->setReadyRead_loadDev(cl);
     ret_t rez = load_eth_configs_bArray();
     if(rez.res < 0) return -1;
     else if(tcpC->sendToTcp(rez.bdata) > 0) {
@@ -269,13 +278,78 @@ int configs::load_eth_configs() {
     else return -2;
 }
 
-int configs::save_view_configs() {
+int configs::load_eth_configs_resp(){ // respond after load params from device and parsing
+    QByteArray ba = tcpC->getAll();
+    if(ba == nullptr) return -2;
+    else  if (ba[0] != 'Q' || ba[0x3D] != 'G' || ba[0x3E] != 'B') return -1;
+    else {
+        if ((ba[1] & 0x01) != 0) { cnfg.otnositelnoe_otobragenie = true; } else { cnfg.otnositelnoe_otobragenie = false; }
+        if ((ba[1] & 0x02) != 0) { cnfg.inversion_data = true; } else { cnfg.inversion_data = false; }
+                        //if ((data[1] & 0x04) != 0) { GL.otkl_panel = true; } else { GL.otkl_panel = false; }
+                        //if ((data[1] & 0x08) != 0) { GL.sensorReset = true; } else { GL.sensorReset = false; }
+        if ((ba[1] & 0x10) != 0) { cnfg.avariya[0].avariya1_predupregdenie0 = 1; } else { cnfg.avariya[0].avariya1_predupregdenie0 = 0; }
+        if ((ba[1] & 0x20) != 0) { cnfg.avariya[1].avariya1_predupregdenie0 = 1; } else { cnfg.avariya[1].avariya1_predupregdenie0 = 0; }
+        if ((ba[1] & 0x40) != 0) { cnfg.avariya[2].avariya1_predupregdenie0 = 1; } else { cnfg.avariya[2].avariya1_predupregdenie0 = 0; }
+        if ((ba[1] & 0x80) != 0) { cnfg.avariya[3].avariya1_predupregdenie0 = 1; } else { cnfg.avariya[3].avariya1_predupregdenie0 = 0; }
+        int timeout_alarm;
+        timeout_alarm = ba[2]; timeout_alarm <<= 8; timeout_alarm |= ba[3];
+        cnfg.timeout_alarm = (double)timeout_alarm;
+        int ipi[4], maska[4], t_ip2[4], t_ip3[4];
+
+        for (int i = 0; i < 4; i++)
+        {
+            int j = i + 4; ipi[i] = ba[j];
+            j = i + 8; maska[i] = ba[j];
+            j = i + 12; t_ip2[i] = ba[j];
+            j = i + 16; t_ip3[i] = ba[j];
+        }
+        cnfg.ethIP_extr = QString::number(t_ip2[0]) + "." + QString::number(t_ip2[1]) + "." + QString::number(t_ip2[2]) + "." + QString::number(t_ip2[3]);
+        cnfg.ethPORT_extr = (t_ip3[0] << 8) | (t_ip3[1]); cnfg.ethPORT = (t_ip3[2] << 8) | (t_ip3[3]);
+        cnfg.ethMASK = QString::number(maska[0]) + "." + QString::number(maska[1]) + "." + QString::number(maska[2]) + "." + QString::number(maska[3]);
+        cnfg.ethIP = QString::number(ipi[0]) + "." + QString::number(ipi[1]) + "." + QString::number(ipi[2]) + "." + QString::number(ipi[3]);
+        for (int i = 0; i < 8; i++)
+        {
+            int j = i * 2; j = j + 20;
+            uint16_t smehenie = ba[j]; j++;
+            smehenie = (uint16_t)(smehenie << 8);
+            smehenie = (uint16_t)(smehenie | ba[j]);
+            int16_t re = (int16_t)smehenie;
+            cnfg.data[i].smeshenie = re;
+            cnfg.data[i].smeshenie = cnfg.data[i].smeshenie / 2.0;
+        }
+        cnfg.avariya[0].kolvo_avariynih_datchikov = (ba[40] >> 4) & 0x0F;
+        cnfg.avariya[1].kolvo_avariynih_datchikov = ba[40] & 0x0F;
+        cnfg.avariya[2].kolvo_avariynih_datchikov = (ba[41] >> 4) & 0x0F;
+        cnfg.avariya[3].kolvo_avariynih_datchikov = ba[41] & 0x0F;
+        int sm = 42;
+        for (int i = 0; i < 4; i++)
+        {
+            int16_t porog = ba[sm]; sm++;
+            porog = (int16_t)((porog << 8) | ba[sm]); sm++;
+            cnfg.avariya[i].porog_max = porog;
+            porog = ba[sm]; sm++;
+            porog = (int16_t)((porog << 8) | ba[sm]); sm++;
+            cnfg.avariya[i].porog_min = porog;
+        }
+        cnfg.porog_max = ba[36]; cnfg.porog_max = (int16_t)((cnfg.porog_max << 8) + ba[37]);
+        cnfg.porog_min = ba[38]; cnfg.porog_min = (int16_t)((cnfg.porog_min << 8) + ba[39]);
+        cnfg.version_proshivki = ba[58]; cnfg.version_proshivki = (int16_t)(cnfg.version_proshivki << 8);
+        cnfg.version_proshivki = (int16_t)(cnfg.version_proshivki | ba[59]);
+//        MessageBox.Show("Новые параметры получены");
+
+        cnfg.obnovlenie_proshivki = true;
+    }
+    // здесь получили, разбор сообщения, запись в cnfg
     return 0;
 }
 
-int configs::load_view_configs() {
-    return 0;
-}
+//int configs::save_view_configs() {
+//    return 0;
+//}
+
+//int configs::load_view_configs() {
+//    return 0;
+//}
 
 QList<QString>* configs::fillList() {
     QList<QString> *ls = new QList<QString>();
@@ -298,24 +372,21 @@ int configs::fillCfg(QList<QString> &ls) {
     return 0;
 }
 
-int configs::setResp_loadDev_readyRead(tcpIntrfc *cl) {
-    tcpC->set_loadDev_ReadyReadSlot(cl);
+int configs::setReadyRead_loadDev(tcpIntrfc *cl) {
+    tcpC->setReadyRead_loadDev(cl);
     ret_t res = save_eth_configs_bArray();
     tcpC->sendToTcp(res.bdata);
 //    else if(str == "") tcpC->setReadyReadSlot(cl->loadChart_readyRead);
     return 0;
 }
 
-int configs::setResp_saveDev_readyRead(tcpIntrfc *cl) {
-    tcpC->set_saveDev_ReadyReadSlot(cl);
-    //    else if(str == "loadDev") tcpC->setReadyReadSlot(cl->loadDev_readyRead);
-    //    else if(str == "") tcpC->setReadyReadSlot(cl->loadChart_readyRead);
-    return 0;
-}
+//int configs::setReadyRead_saveDev(tcpIntrfc *cl) {
+//    tcpC->setReadyRead_saveDev(cl);
+//    return 0;
+//}
 
-int configs::setResp_loadChart_readyRead(tcpIntrfc *cl) {
-    tcpC->set_loadChart_ReadyReadSlot(cl);
-    //    else if(str == "loadDev") tcpC->setReadyReadSlot(cl->loadDev_readyRead);
-    //    else if(str == "") tcpC->setReadyReadSlot(cl->loadChart_readyRead);
-    return 0;
-}
+//int configs::setReadyRead_loadChart(tcpIntrfc *cl) {
+//    tcpC->set_loadChart_ReadyReadSlot(cl);
+//    return 0;
+//}
+

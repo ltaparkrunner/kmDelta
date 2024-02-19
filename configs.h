@@ -48,12 +48,14 @@ public:
     uint16_t version_proshivki;
     uint16_t alarmt;
     QString ethIP;
+    QString ethIP_extr;  // TODO: what for is this value?
 //    QString IP1;
     QString ethIP_new;
     QString ethMASK;
     QString ethMASK_new;
 
     QString ethPORT;
+    QString ethPORT_extr; // TODO: what for is this value?
     QString ethPORT_new;
 
     Data data[n_dat];
@@ -72,21 +74,27 @@ public:
     ~configs(){}
     int save_file_configs(QString filen = "config.ini");
     int load_file_configs(QString filen = "config.ini");
-    int save_eth_configs();
-    int load_eth_configs();
-    int save_view_configs();
-    int load_view_configs();
-    int setResp_loadDev_readyRead(tcpIntrfc *cl);
-    int setResp_saveDev_readyRead(tcpIntrfc *cl);
-    int setResp_loadChart_readyRead(tcpIntrfc *cl);
+
+    int save_eth_configs(tcpIntrfc *cl); // save params to device
+    int save_eth_configs_resp(); // respond after save params to device
+
+    int load_eth_configs(tcpIntrfc *cl); // send message to load params from device
+    int load_eth_configs_resp(); // respond after load params from device and parsing
+
+//    int save_view_configs(); // save params to view means output to view
+//    int load_view_configs(); // load params from view means save to variable cnfg
+
+    int setReadyRead_loadDev(tcpIntrfc *cl);
+//    int setReadyRead_saveDev(tcpIntrfc *cl);
+//    int setReadyRead_loadChart(tcpIntrfc *cl);
 //    parms cnfg;
 //    tcp_exch* te;
-    QList<QString>* fillList();
-    int fillCfg(QList<QString> &ls);
+    QList<QString>* fillList();         //  preparing list to save params to view means output to view
+    int fillCfg(QList<QString> &ls);    //  load params from view means save to cnfg variable
 
 private:
-    ret_t save_eth_configs_bArray();
-    ret_t load_eth_configs_bArray();
+    ret_t save_eth_configs_bArray();    // assembly message to save params to device
+    ret_t load_eth_configs_bArray();    // assembly message to respond params from device
     bool check_IP(uint8_t ip[], QString& ip_s);
     MbtcpClient* tcpC;
 public:

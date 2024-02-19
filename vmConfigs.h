@@ -32,8 +32,8 @@ public slots:
     void setParamsButt(QString ip_t, QString port_t);
     void getParamsButt(QString ip_t, QString port_t);
     void periodReq(/*QString ip_t, QString port_t*/);
-    void loadDevice_readyRead();
-    void saveDevice_readyRead();
+//    void loadDevice_readyRead();
+//    void saveDevice_readyRead();
 
 
     void load_File_Qml();
@@ -44,9 +44,9 @@ public slots:
     void load_Default_Qml(QList<QString> str);
     void commitFromQml(QString str);
 
-    void loadDev_readyRead() override ;
-    void saveDev_readyRead() override ;
-    void loadChart_readyRead() override ;
+    void loadDev_Respond() override;
+    void saveDev_Respond() override;
+    void loadChart_Respond() override;
 
 private:
     int count;

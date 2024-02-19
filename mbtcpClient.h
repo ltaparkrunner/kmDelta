@@ -27,8 +27,8 @@ public:
     quint16 getBlSz(){return blockSize;}
     int  getBAvl(){return tcpSocket->bytesAvailable();}
     QByteArray getAll(){return tcpSocket->readAll();}
-    int set_loadDev_ReadyReadSlot(tcpIntrfc *cl);
-    int set_saveDev_ReadyReadSlot(tcpIntrfc *cl);
+    int setReadyRead_loadDev(tcpIntrfc *cl);
+    int setReadyRead_saveDev(tcpIntrfc *cl);
     int set_loadChart_ReadyReadSlot(tcpIntrfc *cl);
     int setEventsSlot();
 public slots:

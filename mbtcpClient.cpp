@@ -95,18 +95,18 @@ int MbtcpClient::onChangeIpPort(QString ip, QString port){
     return 0;
 }
 
-int MbtcpClient::set_loadDev_ReadyReadSlot(tcpIntrfc *cl) {
-    connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::loadDev_readyRead);
+int MbtcpClient::setReadyRead_loadDev(tcpIntrfc *cl) {
+    connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::loadDev_Respond);
     return 0;
 }
 
-int MbtcpClient::set_saveDev_ReadyReadSlot(tcpIntrfc *cl) {
-    connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::saveDev_readyRead);
+int MbtcpClient::setReadyRead_saveDev(tcpIntrfc *cl) {
+    connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::saveDev_Respond);
     return 0;
 }
 
 int MbtcpClient::set_loadChart_ReadyReadSlot(tcpIntrfc *cl) {
-    connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::loadChart_readyRead);
+    connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::loadChart_Respond);
     return 0;
 }
 

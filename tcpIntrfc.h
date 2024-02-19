@@ -17,9 +17,9 @@ public:
 public slots:
     virtual void displayError(QAbstractSocket::SocketError socketError) = 0;    // Error message
     virtual void successConn() = 0;                                             // Success connection
-    virtual void loadDev_readyRead() = 0;
-    virtual void saveDev_readyRead() = 0;
-    virtual void loadChart_readyRead() = 0;
+    virtual void loadDev_Respond() = 0;
+    virtual void saveDev_Respond() = 0;
+    virtual void loadChart_Respond() = 0;
 //    virtual void parseMessage() = 0;
 //    virtual int getParamsResp() = 0;
 //    virtual int setParamsResp() = 0;
