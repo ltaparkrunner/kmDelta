@@ -14,13 +14,13 @@ parms::parms():
     ,timeout_alarm (2)
     ,version_proshivki (0)
     ,alarmt (4)
-    ,ethIP ("192.168.1.80")
+    ,tcpIP ("192.168.1.80")
 //    ,IP1 ("192.168.1.170")
-    ,ethIP_new ("192.168.1.170")
-    ,ethMASK ("255.255.0.0")
-    ,ethMASK_new ("255.255.0.0")
-    ,ethPORT ("502")
-    ,ethPORT_new ("503")
+    ,tcpIP_new ("192.168.1.170")
+    ,tcpMASK ("255.255.0.0")
+    ,tcpMASK_new ("255.255.0.0")
+    ,tcpPORT ("502")
+    ,tcpPORT_new ("503")
  //   ,data ({{0, -273.5}, {0, -2648.5}, {0, -711.5}, {0, -1910.5}, {0, -845.5}, {0, -1519.5}, {0, -1736.0}, {0, -1612.0}})
     ,data ({{0, -273}, {0, -2648}, {0, -711}, {0, -1910}, {0, -845}, {0, -1519}, {0, -1736}, {0, -1612}})
     ,mashtab (10)
@@ -42,10 +42,10 @@ int configs::save_file_configs(QString filen) {
     QTextStream wr(&cfile);
 //    using (StreamWriter wr = new StreamWriter(sf, false))
     {
-        wr << "IP-адрес ПТК КМ-Дельта:" + cnfg.ethIP << "\n";
-        wr << "Маска подсети:" + cnfg.ethMASK << "\n";
-        wr << "Удалённый IP:" + cnfg.ethIP << "\n";
-        wr << "Порт ПТК КМ-Дельта:" + cnfg.ethPORT << "\n";
+        wr << "IP-адрес ПТК КМ-Дельта:" + cnfg.tcpIP << "\n";
+        wr << "Маска подсети:" + cnfg.tcpMASK << "\n";
+        wr << "Удалённый IP:" + cnfg.tcpIP << "\n";
+        wr << "Порт ПТК КМ-Дельта:" + cnfg.tcpPORT << "\n";
 //        wr << "Порт программы:" + gl.SPORT << "\n";
         wr << "Задержка срабатывания сигнализации:" + QString::number(cnfg.timeout_alarm) << "\n";
         wr << "Масштаб отображения, с:" + QString::number(cnfg.mashtab) << "\n";
@@ -84,10 +84,10 @@ int configs::load_file_configs(QString filen) {
             return -1;
     QTextStream rd(&cfile);
     {
-        QString str = rd.readLine(); int ind = str.indexOf(':'); ind++; cnfg.ethIP = str.mid(ind, str.length() - ind);
-        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.ethMASK = str.mid(ind, str.length() - ind);
-        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.ethIP = str.mid(ind, str.length() - ind);
-        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.ethPORT = str.mid(ind, str.length() - ind);
+        QString str = rd.readLine(); int ind = str.indexOf(':'); ind++; cnfg.tcpIP = str.mid(ind, str.length() - ind);
+        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.tcpMASK = str.mid(ind, str.length() - ind);
+        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.tcpIP = str.mid(ind, str.length() - ind);
+        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.tcpPORT = str.mid(ind, str.length() - ind);
 //        str = rd.readLine(); ind = str.indexOf(':'); ind++; gl.SPORT = (str.mid(ind, str.length() - ind)).toInt();
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.timeout_alarm = (str.mid(ind, str.length() - ind)).toDouble();
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.mashtab = (str.mid(ind, str.length() - ind)).toDouble();
@@ -131,8 +131,8 @@ bool configs::check_IP(uint8_t ip[], QString& ip_s){
 }
 
 //bool configs::check_MASK(uint8_t ip[]){
-//    if (cnfg.ethIP.count('.') < 3) return false;
-//    auto i = cnfg.ethIP.split('.').begin();
+//    if (cnfg.tcpIP.count('.') < 3) return false;
+//    auto i = cnfg.tcpIP.split('.').begin();
 //    for(int i1 = 0; i1 < 4; i1++){
 //        uint8_t t1 = (*i).toShort();
 //        ip[i1] = t1;
@@ -140,7 +140,7 @@ bool configs::check_IP(uint8_t ip[], QString& ip_s){
 //    return true;
 //}
 
-ret_t configs::save_eth_configs_bArray() // save to device
+ret_t configs::save_tcp_configs_bArray() // save to device
 {
     const int pr = 10;
     QByteArray *bdata = new QByteArray(61 + pr + 1, 0);
@@ -178,15 +178,15 @@ ret_t configs::save_eth_configs_bArray() // save to device
         bdt[2 + pr] = static_cast<uchar>(time>>8);
 
         uint8_t ip[4];
-        if (!check_IP(ip, cnfg.ethIP)) { return {1, bdata}; }
+        if (!check_IP(ip, cnfg.tcpIP)) { return {1, bdata}; }
         for (i = 0; i < n_avar; i++) { bdt[i + 4 + pr] = ip[i]; }
         // maska
         //flag = string_to_ip(text_maska_new.Text, ref ip, 2);
-        if (!check_IP(ip, cnfg.ethMASK)) { return {1, bdata}; }
+        if (!check_IP(ip, cnfg.tcpMASK)) { return {1, bdata}; }
         for (i = 0; i < n_avar; i++) { bdt[i + 8 + pr] = ip[i]; }
 
         //int sp = Convert.ToInt32(text_sport_new.Text);
-        uint16_t dp = cnfg.ethPORT_new.toShort();
+        uint16_t dp = cnfg.tcpPORT_new.toShort();
         //bdata[17 + pr] = (byte)(sp & 0x00FF);
         //bdata[16 + pr] = (byte)((sp >> 8) & 0x00FF);
         bdt[19 + pr] = static_cast<uint8_t>(dp & 0x00FF);
@@ -242,9 +242,9 @@ ret_t configs::save_eth_configs_bArray() // save to device
     return {2, bdata};
 }
 
-int configs::save_eth_configs(MbtcpClient* tcpC, tcpIntrfc *cl) {   // save to device
+int configs::save_tcp_configs(MbtcpClient* tcpC, tcpIntrfc *cl) {   // save to device
 //    tcpC->setReadyRead_saveDev(cl);
-    ret_t rez = save_eth_configs_bArray();
+    ret_t rez = save_tcp_configs_bArray();
     if(rez.res < 0) return -1;
     else if(tcpC->sendToTcp(rez.bdata) > 0) {
         qDebug("success /n");
@@ -252,7 +252,7 @@ int configs::save_eth_configs(MbtcpClient* tcpC, tcpIntrfc *cl) {   // save to d
     }
     else return -2;
 }
-int configs::save_eth_configs_resp(MbtcpClient* tcpC) { // respond after save to device
+int configs::save_tcp_configs_resp(MbtcpClient* tcpC) { // respond after save to device
     QByteArray ba = tcpC->getAll();
     if (ba[1] == 'O' && ba[2] == 'K' && ba[3] == '!')  // successfully save to device
         return 0;
@@ -260,15 +260,15 @@ int configs::save_eth_configs_resp(MbtcpClient* tcpC) { // respond after save to
     else return -1;
 }
 
-ret_t configs::load_eth_configs_bArray(){ // message to respond params from device
+ret_t configs::load_tcp_configs_bArray(){ // message to respond params from device
     const char data[12] = {0x47, 0x42, 0,0,0,6,0x41,3,0,0x33,0,0};
     QByteArray *bdt = new QByteArray(data, 12);
     return {2,bdt};
 }
 
-int configs::load_eth_configs(MbtcpClient* tcpC, tcpIntrfc *cl) { // send message to load params from device
+int configs::load_tcp_configs(MbtcpClient* tcpC) { // send message to load params from device
 //    tcpC->setReadyRead_loadDev(cl);
-    ret_t rez = load_eth_configs_bArray();
+    ret_t rez = load_tcp_configs_bArray();
     if(rez.res < 0) return -1;
     else if(tcpC->sendToTcp(rez.bdata) > 0) {
         qDebug("success /n");
@@ -278,7 +278,7 @@ int configs::load_eth_configs(MbtcpClient* tcpC, tcpIntrfc *cl) { // send messag
     else return -2;
 }
 
-int configs::load_eth_configs_resp(MbtcpClient* tcpC){ // respond after load params from device and parsing
+int configs::load_tcp_configs_resp(MbtcpClient* tcpC){ // respond after load params from device and parsing
     QByteArray ba = tcpC->getAll();
     if(ba == nullptr) return -2;
     else  if (ba[0] != 'Q' || ba[0x3D] != 'G' || ba[0x3E] != 'B') return -1;
@@ -303,10 +303,10 @@ int configs::load_eth_configs_resp(MbtcpClient* tcpC){ // respond after load par
             j = i + 12; t_ip2[i] = ba[j];
             j = i + 16; t_ip3[i] = ba[j];
         }
-        cnfg.ethIP_extr = QString::number(t_ip2[0]) + "." + QString::number(t_ip2[1]) + "." + QString::number(t_ip2[2]) + "." + QString::number(t_ip2[3]);
-        cnfg.ethPORT_extr = (t_ip3[0] << 8) | (t_ip3[1]); cnfg.ethPORT = (t_ip3[2] << 8) | (t_ip3[3]);
-        cnfg.ethMASK = QString::number(maska[0]) + "." + QString::number(maska[1]) + "." + QString::number(maska[2]) + "." + QString::number(maska[3]);
-        cnfg.ethIP = QString::number(ipi[0]) + "." + QString::number(ipi[1]) + "." + QString::number(ipi[2]) + "." + QString::number(ipi[3]);
+        cnfg.tcpIP_extr = QString::number(t_ip2[0]) + "." + QString::number(t_ip2[1]) + "." + QString::number(t_ip2[2]) + "." + QString::number(t_ip2[3]);
+        cnfg.tcpPORT_extr = (t_ip3[0] << 8) | (t_ip3[1]); cnfg.tcpPORT = (t_ip3[2] << 8) | (t_ip3[3]);
+        cnfg.tcpMASK = QString::number(maska[0]) + "." + QString::number(maska[1]) + "." + QString::number(maska[2]) + "." + QString::number(maska[3]);
+        cnfg.tcpIP = QString::number(ipi[0]) + "." + QString::number(ipi[1]) + "." + QString::number(ipi[2]) + "." + QString::number(ipi[3]);
         for (int i = 0; i < 8; i++)
         {
             int j = i * 2; j = j + 20;
@@ -353,28 +353,28 @@ int configs::load_eth_configs_resp(MbtcpClient* tcpC){ // respond after load par
 
 QList<QString>* configs::fillList() {
     QList<QString> *ls = new QList<QString>();
-    ls->append(cnfg.ethIP);
-    ls->append(cnfg.ethIP_new);
-    ls->append(cnfg.ethMASK);
-    ls->append(cnfg.ethMASK_new);
-    ls->append(cnfg.ethPORT);
-    ls->append(cnfg.ethPORT_new);
+    ls->append(cnfg.tcpIP);
+    ls->append(cnfg.tcpIP_new);
+    ls->append(cnfg.tcpMASK);
+    ls->append(cnfg.tcpMASK_new);
+    ls->append(cnfg.tcpPORT);
+    ls->append(cnfg.tcpPORT_new);
     return ls;
 }
 
 int configs::fillCfg(QList<QString> &ls) {
-    cnfg.ethIP = ls[0];
-    cnfg.ethIP_new = ls[1];
-    cnfg.ethMASK = ls[2];
-    cnfg.ethMASK_new = ls[3];
-    cnfg.ethPORT = ls[4];
-    cnfg.ethPORT_new = ls[5];
+    cnfg.tcpIP = ls[0];
+    cnfg.tcpIP_new = ls[1];
+    cnfg.tcpMASK = ls[2];
+    cnfg.tcpMASK_new = ls[3];
+    cnfg.tcpPORT = ls[4];
+    cnfg.tcpPORT_new = ls[5];
     return 0;
 }
 
 int configs::setReadyRead_loadDev(MbtcpClient* tcpC, tcpIntrfc *cl) {
 //    tcpC->setReadyRead_loadDev(cl);
-    ret_t res = save_eth_configs_bArray();
+    ret_t res = save_tcp_configs_bArray();
     tcpC->sendToTcp(res.bdata);
 //    else if(str == "") tcpC->setReadyReadSlot(cl->loadChart_readyRead);
     return 0;

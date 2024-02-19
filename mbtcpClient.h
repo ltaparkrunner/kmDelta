@@ -23,6 +23,7 @@ public:
     explicit MbtcpClient(QObject *parent = nullptr);
 
     int connectTcp(QString ip_t, QString port_t);
+ //   bool isConnected();
     QString getErrString(){return tcpSocket->errorString();}
     quint16 getBlSz(){return blockSize;}
     int  getBAvl(){return tcpSocket->bytesAvailable();}
@@ -34,7 +35,7 @@ public:
 public slots:
 
     void printTcpResp();
-    int checkConnected();
+    bool checkConnected();
     int sendToTcp(QByteArray *bdata);
     int onChangeIpPort(QString ip, QString port);
 

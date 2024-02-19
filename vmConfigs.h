@@ -38,7 +38,7 @@ public slots:
 
     void load_File_Qml();
     void save_File_Qml(QList<QString> ls);
-    void load_Device_Qml();
+    int load_Device_Qml();
     void save_Device_Qml();
 //    void load_Default_Qml(QString str);
     void load_Default_Qml(QList<QString> str);

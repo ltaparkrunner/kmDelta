@@ -43,8 +43,8 @@ void vmConfigs::getParamsButt(QString ip_t, QString port_t) {
 //QVariant vmConfigs::getParamsButt() {
     QStringList *sl = new QStringList();
     //ip_n = "192.168.10.2";
-    sl->append(cs->cnfg.ethIP);
-    sl->append(cs->cnfg.ethPORT);
+    sl->append(cs->cnfg.tcpIP);
+    sl->append(cs->cnfg.tcpPORT);
     qDebug("called getParamsButt \n");
 //    return QVariant(*sl);
 }
@@ -74,16 +74,15 @@ void loadDev_readyRead2()
 {
 
 }
-void vmConfigs::load_Device_Qml()
+
+int vmConfigs::load_Device_Qml()
 {
     count++;
-    cs->load_eth_configs(tcpC, this);
- //   cs.setResp_readyRead(this, loadDev_readyRead);
-//    cs.setResp_loadDev_readyRead(this);
-    // QList<QString> *str_cs = cs.fillList();
-
-    // emit sendCurrIp(*str_cs);
-    // delete str_cs;
+    if(!(tcpC->checkConnected()))
+        if(tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT) < 0) return -1;
+    tcpC -> setReadyRead_loadDev(this);
+    if(cs->load_tcp_configs(tcpC) < 0) return -2;
+    return 0;
 }
 void vmConfigs::save_Device_Qml()
 {
@@ -112,10 +111,10 @@ void vmConfigs::load_Default_Qml(QList<QString> str)
 }
 void vmConfigs::commitFromQml(QString ls)
 {
-    QString temp = cs->cnfg.ethIP;
+    QString temp = cs->cnfg.tcpIP;
     ls.append("for");
 
-    cs->cnfg.ethIP = ls;
+    cs->cnfg.tcpIP = ls;
     emit sendCurrIp_2(ls);
  //   cs.load_file_configs();
  //   QList<QString> *str_cs = cs.fillList();
@@ -123,7 +122,7 @@ void vmConfigs::commitFromQml(QString ls)
 //    emit sendCurrIp(*str_cs);
 //    delete str_cs;
 
-    cs->cnfg.ethIP = temp;
+    cs->cnfg.tcpIP = temp;
     //messageDialog
 }
 
@@ -136,7 +135,7 @@ void vmConfigs::commitFromQml(QString ls)
 
 void vmConfigs::loadDev_Respond(){ // This is respond to readyread after return
     count++;
-//    cs->load_eth_configs(tcpC, this);
+//    cs->load_tcp_configs(tcpC, this);
 //    cs->setReadyRead_loadDev(tcpC, this);
 }
 

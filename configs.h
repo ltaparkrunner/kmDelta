@@ -47,16 +47,16 @@ public:
     uint16_t timeout_alarm;
     uint16_t version_proshivki;
     uint16_t alarmt;
-    QString ethIP;
-    QString ethIP_extr;  // TODO: what for is this value?
+    QString tcpIP;
+    QString tcpIP_extr;  // TODO: what for is this value?
 //    QString IP1;
-    QString ethIP_new;
-    QString ethMASK;
-    QString ethMASK_new;
+    QString tcpIP_new;
+    QString tcpMASK;
+    QString tcpMASK_new;
 
-    QString ethPORT;
-    QString ethPORT_extr; // TODO: what for is this value?
-    QString ethPORT_new;
+    QString tcpPORT;
+    QString tcpPORT_extr; // TODO: what for is this value?
+    QString tcpPORT_new;
 
     Data data[n_dat];
     int32_t mashtab;
@@ -70,21 +70,21 @@ class configs  //: public QObject
 {
     //Q_OBJECT
 public:
-    explicit configs(MbtcpClient* tcpe);
+    explicit configs();
     ~configs(){}
     int save_file_configs(QString filen = "config.ini");
     int load_file_configs(QString filen = "config.ini");
 
-    int save_eth_configs(tcpIntrfc *cl); // save params to device
-    int save_eth_configs_resp(); // respond after save params to device
+    int save_tcp_configs(MbtcpClient* tcpC, tcpIntrfc *cl); // save params to device
+    int save_tcp_configs_resp(MbtcpClient* tcpC); // respond after save params to device
 
-    int load_eth_configs(tcpIntrfc *cl); // send message to load params from device
-    int load_eth_configs_resp(); // respond after load params from device and parsing
+    int load_tcp_configs(MbtcpClient* tcpC); // send message to load params from device
+    int load_tcp_configs_resp(MbtcpClient* tcpC); // respond after load params from device and parsing
 
 //    int save_view_configs(); // save params to view means output to view
 //    int load_view_configs(); // load params from view means save to variable cnfg
 
-    int setReadyRead_loadDev(tcpIntrfc *cl);
+    int setReadyRead_loadDev(MbtcpClient* tcpC, tcpIntrfc *cl);
 //    int setReadyRead_saveDev(tcpIntrfc *cl);
 //    int setReadyRead_loadChart(tcpIntrfc *cl);
 //    parms cnfg;
@@ -93,10 +93,10 @@ public:
     int fillCfg(QList<QString> &ls);    //  load params from view means save to cnfg variable
 
 private:
-    ret_t save_eth_configs_bArray();    // assembly message to save params to device
-    ret_t load_eth_configs_bArray();    // assembly message to respond params from device
+    ret_t save_tcp_configs_bArray();    // assembly message to save params to device
+    ret_t load_tcp_configs_bArray();    // assembly message to respond params from device
     bool check_IP(uint8_t ip[], QString& ip_s);
-    MbtcpClient* tcpC;
+//    MbtcpClient* tcpC;
 public:
     parms cnfg;
 //    tcp_exch* te;

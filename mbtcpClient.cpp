@@ -34,13 +34,13 @@ MbtcpClient::MbtcpClient(/*tcpMan *tm,*/ QObject *parent)
 //     emit sendToMB(tr("Fortune Client"), "Success");
 // }
 
-int MbtcpClient::checkConnected(){
+bool MbtcpClient::checkConnected(){
     if(tcpSocket->state() == QAbstractSocket::ConnectedState) {
 //     emit sendToMB(tr("Fortune Client"), "Success");
-     return 0;
+     return true;
     }
 //    else  emit sendToMB(tr("Fortune Client"), "Can't connect");
-    return -1;
+    return false;
 }
 
 int MbtcpClient::connectTcp(QString ip_t, QString port_t)
@@ -80,7 +80,7 @@ int setReadyReadconn() {
 }
 
 int MbtcpClient::sendToTcp(QByteArray *bdata){
-    if(checkConnected() < 0){
+    if(!checkConnected()){
         return -1;
     }
 //    else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
