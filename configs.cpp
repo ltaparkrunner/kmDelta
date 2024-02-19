@@ -28,10 +28,10 @@ parms::parms():
     ,obnovlenie_proshivki (false)
 { }
 
-configs::configs(MbtcpClient* tcpe):
+configs::configs(/*MbtcpClient* tcpe*/):
 //    ,cnfg(0)
-    tcpC(tcpe)
-    ,cnfg(parms())
+//    tcpC(tcpe)
+    cnfg(parms())
 { }
 
 int configs::save_file_configs(QString filen) {
@@ -242,8 +242,8 @@ ret_t configs::save_eth_configs_bArray() // save to device
     return {2, bdata};
 }
 
-int configs::save_eth_configs(tcpIntrfc *cl) {   // save to device
-    tcpC->setReadyRead_saveDev(cl);
+int configs::save_eth_configs(MbtcpClient* tcpC, tcpIntrfc *cl) {   // save to device
+//    tcpC->setReadyRead_saveDev(cl);
     ret_t rez = save_eth_configs_bArray();
     if(rez.res < 0) return -1;
     else if(tcpC->sendToTcp(rez.bdata) > 0) {
@@ -252,7 +252,7 @@ int configs::save_eth_configs(tcpIntrfc *cl) {   // save to device
     }
     else return -2;
 }
-int configs::save_eth_configs_resp() { // respond after save to device
+int configs::save_eth_configs_resp(MbtcpClient* tcpC) { // respond after save to device
     QByteArray ba = tcpC->getAll();
     if (ba[1] == 'O' && ba[2] == 'K' && ba[3] == '!')  // successfully save to device
         return 0;
@@ -266,8 +266,8 @@ ret_t configs::load_eth_configs_bArray(){ // message to respond params from devi
     return {2,bdt};
 }
 
-int configs::load_eth_configs(tcpIntrfc *cl) { // send message to load params from device
-    tcpC->setReadyRead_loadDev(cl);
+int configs::load_eth_configs(MbtcpClient* tcpC, tcpIntrfc *cl) { // send message to load params from device
+//    tcpC->setReadyRead_loadDev(cl);
     ret_t rez = load_eth_configs_bArray();
     if(rez.res < 0) return -1;
     else if(tcpC->sendToTcp(rez.bdata) > 0) {
@@ -278,7 +278,7 @@ int configs::load_eth_configs(tcpIntrfc *cl) { // send message to load params fr
     else return -2;
 }
 
-int configs::load_eth_configs_resp(){ // respond after load params from device and parsing
+int configs::load_eth_configs_resp(MbtcpClient* tcpC){ // respond after load params from device and parsing
     QByteArray ba = tcpC->getAll();
     if(ba == nullptr) return -2;
     else  if (ba[0] != 'Q' || ba[0x3D] != 'G' || ba[0x3E] != 'B') return -1;
@@ -372,8 +372,8 @@ int configs::fillCfg(QList<QString> &ls) {
     return 0;
 }
 
-int configs::setReadyRead_loadDev(tcpIntrfc *cl) {
-    tcpC->setReadyRead_loadDev(cl);
+int configs::setReadyRead_loadDev(MbtcpClient* tcpC, tcpIntrfc *cl) {
+//    tcpC->setReadyRead_loadDev(cl);
     ret_t res = save_eth_configs_bArray();
     tcpC->sendToTcp(res.bdata);
 //    else if(str == "") tcpC->setReadyReadSlot(cl->loadChart_readyRead);

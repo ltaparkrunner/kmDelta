@@ -11,7 +11,7 @@ class vmConfigs : public tcpIntrfc
     Q_OBJECT
 
 public:
-    explicit vmConfigs(configs cs_, tcpIntrfc *parent = 0);
+    explicit vmConfigs(configs* cs_, MbtcpClient* tcpC_, tcpIntrfc *parent = 0);
     void displayError(QAbstractSocket::SocketError socketError) override;
     void successConn() override;
     configs getCs() const;
@@ -50,7 +50,8 @@ public slots:
 
 private:
     int count;
-    configs cs;
+    configs* cs;
+    MbtcpClient* tcpC;
 //    QVariant np;
 };
 

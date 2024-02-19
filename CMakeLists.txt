@@ -58,7 +58,7 @@ else()
 #          tcpIntrfc.h
            tcpIntrfc.h
 #          tcpIntrfc.h
-          tcpIntrfc.cpp
+#          tcpIntrfc.cpp
 #          tcpIntrfc.cpp
           configs.h configs.cpp
           vmConfigs.h vmConfigs.cpp

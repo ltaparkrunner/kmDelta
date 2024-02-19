@@ -9,9 +9,10 @@
 //}
 
 
-vmConfigs::vmConfigs(configs cs_, tcpIntrfc *parent):
+vmConfigs::vmConfigs(configs *cs_, MbtcpClient* tcpC_, tcpIntrfc *parent):
     tcpIntrfc(parent)
     ,cs(cs_)
+    ,tcpC(tcpC_)
 {
 //    connect(this, this->ParamsChanged, this, this->dbg_message);
 //    connect(this, this->ipChanged, this, this->dbg_message);
@@ -42,8 +43,8 @@ void vmConfigs::getParamsButt(QString ip_t, QString port_t) {
 //QVariant vmConfigs::getParamsButt() {
     QStringList *sl = new QStringList();
     //ip_n = "192.168.10.2";
-    sl->append(cs.cnfg.ethIP);
-    sl->append(cs.cnfg.ethPORT);
+    sl->append(cs->cnfg.ethIP);
+    sl->append(cs->cnfg.ethPORT);
     qDebug("called getParamsButt \n");
 //    return QVariant(*sl);
 }
@@ -55,8 +56,8 @@ void vmConfigs::periodReq(/*QString ip_t, QString port_t*/) {
 void vmConfigs::load_File_Qml()
 {
     count++;
-    if(cs.load_file_configs("config.ini") < 0) emit sendErrFileOpen("config.ini");
-    QList<QString> *str_cs = cs.fillList();
+    if(cs->load_file_configs("config.ini") < 0) emit sendErrFileOpen("config.ini");
+    QList<QString> *str_cs = cs->fillList();
 
     emit sendCurrIp(*str_cs);
     delete str_cs;
@@ -64,8 +65,8 @@ void vmConfigs::load_File_Qml()
 void vmConfigs::save_File_Qml(QList<QString> ls)
 {
     count++;
-    cs.fillCfg(ls);
-    if(cs.save_file_configs("config.ini") < 0) emit sendErrFileOpen("config.ini");
+    cs->fillCfg(ls);
+    if(cs->save_file_configs("config.ini") < 0) emit sendErrFileOpen("config.ini");
     else emit saveFileSucc("config.ini");
     return;
 }
@@ -76,7 +77,7 @@ void loadDev_readyRead2()
 void vmConfigs::load_Device_Qml()
 {
     count++;
-    cs.load_eth_configs(this);
+    cs->load_eth_configs(tcpC, this);
  //   cs.setResp_readyRead(this, loadDev_readyRead);
 //    cs.setResp_loadDev_readyRead(this);
     // QList<QString> *str_cs = cs.fillList();
@@ -87,8 +88,8 @@ void vmConfigs::load_Device_Qml()
 void vmConfigs::save_Device_Qml()
 {
     count++;
-    cs.load_file_configs();
-    QList<QString> *str_cs = cs.fillList();
+    cs->load_file_configs();
+    QList<QString> *str_cs = cs->fillList();
 
     emit sendCurrIp(*str_cs);
     delete str_cs;
@@ -103,18 +104,18 @@ void vmConfigs::load_Default_Qml(QList<QString> str)
 //    qDebug() << "load_Default_Qml debug:   " << str << "\n";
     qDebug() << "load_Default_Qml debug [0]:   " << str[0] << " [1]: " << str[1] << " [2]: " << str[2]<< " [3]: " << str[3] << "\n";
 
-    cs.load_file_configs();
-    QList<QString> *str_cs = cs.fillList();
+    cs->load_file_configs();
+    QList<QString> *str_cs = cs->fillList();
 
     emit sendCurrIp(*str_cs);
     delete str_cs;
 }
 void vmConfigs::commitFromQml(QString ls)
 {
-    QString temp = cs.cnfg.ethIP;
+    QString temp = cs->cnfg.ethIP;
     ls.append("for");
 
-    cs.cnfg.ethIP = ls;
+    cs->cnfg.ethIP = ls;
     emit sendCurrIp_2(ls);
  //   cs.load_file_configs();
  //   QList<QString> *str_cs = cs.fillList();
@@ -122,7 +123,7 @@ void vmConfigs::commitFromQml(QString ls)
 //    emit sendCurrIp(*str_cs);
 //    delete str_cs;
 
-    cs.cnfg.ethIP = temp;
+    cs->cnfg.ethIP = temp;
     //messageDialog
 }
 
@@ -135,8 +136,8 @@ void vmConfigs::commitFromQml(QString ls)
 
 void vmConfigs::loadDev_Respond(){ // This is respond to readyread after return
     count++;
-    cs.load_eth_configs(this);
-    cs.setReadyRead_loadDev(this);
+//    cs->load_eth_configs(tcpC, this);
+//    cs->setReadyRead_loadDev(tcpC, this);
 }
 
 void vmConfigs::saveDev_Respond(){

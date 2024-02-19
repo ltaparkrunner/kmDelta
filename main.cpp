@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
     QQuickView viewer;
 
     MbtcpClient mc;
-    configs cs(&mc);
-    vmConfigs vm(cs);
+    configs cs;// = new configs();
+    vmConfigs vm(&cs, &mc);
 
     QQmlContext *context = viewer.rootContext();
     context->setContextProperty("vmConfigs", &vm);
