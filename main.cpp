@@ -6,7 +6,7 @@
 #include <QtQml/QQmlContext>
 
 //#include "controlip.h"
-#include "vmConfigs.h"
+#include "vmConfigsChat.h"
 //#include "ipAddr.h"
 //#include "mbtcpClient.h"
 
@@ -17,12 +17,13 @@ int main(int argc, char *argv[])
 
     QQuickView viewer;
 
-    MbtcpClient mc;
+    MbtcpClient *mc;
     configs cs;// = new configs();
-    vmConfigs vm(&cs, &mc);
+    //vmConfigsChat vm(&cs, &mc);
+    vmConfigsChat vmCC(&cs, mc);
 
     QQmlContext *context = viewer.rootContext();
-    context->setContextProperty("vmConfigs", &vm);
+    context->setContextProperty("vmConfigsChat", &vmCC);
 
     // The following are needed to make examples run without having to install the module
     // in desktop environments.

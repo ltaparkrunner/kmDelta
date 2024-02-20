@@ -8,7 +8,7 @@ parms::parms():
     otnositelnoe_otobragenie( 0 )
     ,inversion_data(true)
     ,inversion_dt (false)
-    ,avariya({{1,420,560,1},{0,380,720,1},{0,0,0,0},{0,0,0,0}})
+    ,avariya({{1,1220,620,1},{0,1520,500,1},{0,0,0,0},{0,0,0,0}})
     ,porog_max (420)
     ,porog_min (560)
     ,timeout_alarm (2)
@@ -27,6 +27,68 @@ parms::parms():
     ,graph_memory (100)
     ,obnovlenie_proshivki (false)
 { }
+
+int parms::set_default() {
+    otnositelnoe_otobragenie = 0;
+    inversion_data = true;
+    inversion_dt = false;
+//    avariya = ({{1,420,560,1},{0,380,720,1},{0,0,0,0},{0,0,0,0}});
+    //avariya = {1,420,560,1}; //,{0,380,720,1},{0,0,0,0},{0,0,0,0}});
+    avariya[0].porog_max = 1220;
+    avariya[0].porog_min = 620;
+    avariya[0].kolvo_avariynih_datchikov = 1;
+    avariya[0].avariya1_predupregdenie0 = 0;
+
+    avariya[1].porog_max = 1520;
+    avariya[1].porog_min = 500;
+    avariya[1].kolvo_avariynih_datchikov = 1;
+    avariya[1].avariya1_predupregdenie0 = 1;
+
+    avariya[2].porog_max = 0;
+    avariya[2].porog_min = 0;
+    avariya[2].kolvo_avariynih_datchikov = 0;
+    avariya[2].avariya1_predupregdenie0 = 0;
+
+    avariya[3].porog_max = 0;
+    avariya[3].porog_min = 0;
+    avariya[3].kolvo_avariynih_datchikov = 0;
+    avariya[3].avariya1_predupregdenie0 = 0;
+
+    porog_max = 420;
+    porog_min = 560;
+    timeout_alarm = 2;
+    version_proshivki = 0;
+    alarmt = 4;
+    tcpIP = "192.168.1.80";
+//    ,IP1 ("192.168.1.170")
+    tcpIP_new = "192.168.1.170";
+    tcpMASK = "255.255.0.0";
+    tcpMASK_new = "255.255.0.0";
+    tcpPORT = "502";
+    tcpPORT_new = "503";
+ //   ,data ({{0, -273.5}, {0, -2648.5}, {0, -711.5}, {0, -1910.5}, {0, -845.5}, {0, -1519.5}, {0, -1736.0}, {0, -1612.0}})
+ //   data = ({{0, -273}, {0, -2648}, {0, -711}, {0, -1910}, {0, -845}, {0, -1519}, {0, -1736}, {0, -1612}});
+    data[0].absolutnoe = 0;
+    data[0].smeshenie = -273;
+    data[1].absolutnoe = 0;
+    data[1].smeshenie =  -2648;
+    data[2].absolutnoe = 0;
+    data[2].smeshenie = -711;
+    data[3].absolutnoe = 0;
+    data[3].smeshenie = -1910;
+    data[4].absolutnoe = 0;
+    data[4].smeshenie = -845;
+    data[5].absolutnoe = 0;
+    data[5].smeshenie = -1519;
+    data[6].absolutnoe = 0;
+    data[6].smeshenie = -1736;
+    data[7].absolutnoe = 0;
+    data[7].smeshenie = -1612;
+    mashtab = 10;
+    graph_memory = 100;
+    obnovlenie_proshivki = false;
+    return 0;
+}
 
 configs::configs(/*MbtcpClient* tcpe*/):
 //    ,cnfg(0)
@@ -242,7 +304,7 @@ ret_t configs::save_tcp_configs_bArray() // save to device
     return {2, bdata};
 }
 
-int configs::save_tcp_configs(MbtcpClient* tcpC, tcpIntrfc *cl) {   // save to device
+int configs::save_tcp_configs(MbtcpClient* tcpC) {   // save to device
 //    tcpC->setReadyRead_saveDev(cl);
     ret_t rez = save_tcp_configs_bArray();
     if(rez.res < 0) return -1;
@@ -372,6 +434,7 @@ int configs::fillCfg(QList<QString> &ls) {
     return 0;
 }
 
+/*
 int configs::setReadyRead_loadDev(MbtcpClient* tcpC, tcpIntrfc *cl) {
 //    tcpC->setReadyRead_loadDev(cl);
     ret_t res = save_tcp_configs_bArray();
@@ -379,7 +442,7 @@ int configs::setReadyRead_loadDev(MbtcpClient* tcpC, tcpIntrfc *cl) {
 //    else if(str == "") tcpC->setReadyReadSlot(cl->loadChart_readyRead);
     return 0;
 }
-
+*/
 //int configs::setReadyRead_saveDev(tcpIntrfc *cl) {
 //    tcpC->setReadyRead_saveDev(cl);
 //    return 0;

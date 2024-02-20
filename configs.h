@@ -64,6 +64,7 @@ public:
 
     bool obnovlenie_proshivki;
     parms();
+    int set_default();
 };
 
 class configs  //: public QObject
@@ -75,7 +76,7 @@ public:
     int save_file_configs(QString filen = "config.ini");
     int load_file_configs(QString filen = "config.ini");
 
-    int save_tcp_configs(MbtcpClient* tcpC, tcpIntrfc *cl); // save params to device
+    int save_tcp_configs(MbtcpClient* tcpC);    // save params to device
     int save_tcp_configs_resp(MbtcpClient* tcpC); // respond after save params to device
 
     int load_tcp_configs(MbtcpClient* tcpC); // send message to load params from device
@@ -84,7 +85,7 @@ public:
 //    int save_view_configs(); // save params to view means output to view
 //    int load_view_configs(); // load params from view means save to variable cnfg
 
-    int setReadyRead_loadDev(MbtcpClient* tcpC, tcpIntrfc *cl);
+//    int setReadyRead_loadDev(MbtcpClient* tcpC, tcpIntrfc *cl);
 //    int setReadyRead_saveDev(tcpIntrfc *cl);
 //    int setReadyRead_loadChart(tcpIntrfc *cl);
 //    parms cnfg;

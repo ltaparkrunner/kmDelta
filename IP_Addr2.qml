@@ -20,12 +20,12 @@ Rectangle {
         sList.push(ip.text)
         sList.push(mask.text);
         sList.push(port.text);
-        vmConfigs.load_Default_Qml(sList)
+        vmConfigsChat.load_Default_Qml(sList)
 //        return(sList);
     }
 
     Connections{
-        target: vmConfigs
+        target: vmConfigsChat
 //        function onSendToQml2(addrp, maskp, portp)
         onSendCurrIp:
         {
@@ -52,7 +52,7 @@ Rectangle {
                 height: 20
                 text: "Load_From_File"
                 onClicked: {
-                    vmConfigs.load_File_Qml()
+                    vmConfigsChat.load_File_Qml()
                     }
                 implicitWidth: 107
             }
@@ -70,7 +70,7 @@ Rectangle {
                     ls[1] =  ip_2.text;
                     ls[3] = mask_2.text;
                     ls[5] = port_2.text;
-                    vmConfigs.save_File_Qml(ls)
+                    vmConfigsChat.save_File_Qml(ls)
                 }
                 implicitWidth: 107
             }
@@ -82,7 +82,7 @@ Rectangle {
                 height: 20
                 text: "Load_From_Device"
                 onClicked: {
-                    vmConfigs.load_Device_Qml()
+                    vmConfigsChat.load_Device_Qml()
                     }
                 implicitWidth: 107
             }
@@ -92,7 +92,7 @@ Rectangle {
                 height: 20
                 text: "Save_To_Device"
                 onClicked: {
-                    vmConfigs.save_Device_Qml()
+                    vmConfigsChat.save_Device_Qml()
                     }
                 implicitWidth: 107
             }
@@ -106,7 +106,7 @@ Rectangle {
 //                String t =
 //                property var  str: ip.text
                 sendParams();
-//                vmConfigs.load_Default_Qml()
+//                vmConfigsChat.load_Default_Qml()
                 }
             implicitWidth: 220
         }
@@ -139,8 +139,8 @@ Rectangle {
                         color: "green"
                         anchors.fill: parent
                         id: ip
-                        text: /*vmConfigs.ip_n */ "forever"
-                        //Binding{ target: vmConfigs; property: "ip_n"; value: ip.text }
+                        text: /*vmConfigsChat.ip_n */ "forever"
+                        //Binding{ target: vmConfigsChat; property: "ip_n"; value: ip.text }
                     }
                 }
                 Rectangle{
@@ -213,7 +213,7 @@ Rectangle {
             height: 20
             text: "Установить"
             onClicked: {
-                vmConfigs.commitFromQml(ip.text)
+                vmConfigsChat.commitFromQml(ip.text)
             }
         }
     }

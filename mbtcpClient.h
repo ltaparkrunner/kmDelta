@@ -18,9 +18,8 @@ QT_END_NAMESPACE
 class MbtcpClient : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit MbtcpClient(QObject *parent = nullptr);
+    explicit MbtcpClient(tcpIntrfc *cl, QObject *parent = nullptr);
 
     int connectTcp(QString ip_t, QString port_t);
  //   bool isConnected();
@@ -30,7 +29,7 @@ public:
     QByteArray getAll(){return tcpSocket->readAll();}
     int setReadyRead_loadDev(tcpIntrfc *cl);
     int setReadyRead_saveDev(tcpIntrfc *cl);
-    int set_loadChart_ReadyReadSlot(tcpIntrfc *cl);
+    int setReadyRead_Chart(tcpIntrfc *cl);
     int setEventsSlot();
 public slots:
 

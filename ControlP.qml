@@ -9,7 +9,7 @@ Rectangle{
     color: 'blue'
 
     Connections {
-        target: vmConfigs // Указываем целевое соединение
+        target: vmConfigsChat // Указываем целевое соединение
         /* Объявляем и реализуем функцию, как параметр
          * объекта и с имененем похожим на название сигнала
          * Разница в том, что добавляем в начале on и далее пишем
@@ -41,7 +41,7 @@ ColumnLayout{
         id : connectButt
         text: "Connect"
         onClicked: {
-            vmConfigs.connectButt(ip_2.ip_t, ip_2.port_t)
+            vmConfigsChat.connectButt(ip_2.ip_t, ip_2.port_t)
             messageDialog.open()
         }
     }
@@ -49,7 +49,7 @@ ColumnLayout{
         id : sendMessButt
         text: "Request params"
         onClicked: {
-            vmConfigs.getParamsButt(ip_2.ip_t, ip_2.port_t)
+            vmConfigsChat.getParamsButt(ip_2.ip_t, ip_2.port_t)
         }
     }
     Text{
@@ -70,7 +70,7 @@ ColumnLayout{
             id : periodicRequestButt
             text: "Periodic request"
             onClicked: {
-                vmConfigs.periodReqButt(ip_2.ip_t, ip_2.port_t, 3000)
+                vmConfigsChat.periodReqButt(ip_2.ip_t, ip_2.port_t, 3000)
             }
         }
     }

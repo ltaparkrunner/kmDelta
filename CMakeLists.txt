@@ -61,7 +61,8 @@ else()
 #          tcpIntrfc.cpp
 #          tcpIntrfc.cpp
           configs.h configs.cpp
-          vmConfigs.h vmConfigs.cpp
+          vmConfigsChat.h vmConfigsChat.cpp
+          chat.h chat.cpp
         )
     endif()
 endif()
