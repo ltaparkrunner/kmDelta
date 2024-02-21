@@ -8,11 +8,11 @@
 //#include "messbox.h"
 
 //! [0]
-MbtcpClient::MbtcpClient(tcpIntrfc *cl, QObject *paren)
+MbtcpClient::MbtcpClient(tcpIntrfc *cl, QObject *parent)
     : tcpSocket(new QTcpSocket(this))
 //    , ip(new IpAddr(this))
 //    , tmr(new QTimer(this))
-//    , tcpm(nullptr)
+    , tcpm(cl)
     , cur_ip("192.168.1.170")
     , cur_port("502")
 {
@@ -21,11 +21,21 @@ MbtcpClient::MbtcpClient(tcpIntrfc *cl, QObject *paren)
 //        connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::periodReqResp);
 
         connect(tcpSocket, &QAbstractSocket::connected, cl, &tcpIntrfc::successConn);
-
+/*
         typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
+
         connect(tcpSocket, static_cast<QAbstractSocketErrorSignal>(&QAbstractSocket::error),
 //                this, &MbtcpClient::displayError);
-                  cl, &tcpIntrfc::displayError);
+                  tcpm, &tcpIntrfc::displayError);
+*/
+
+    typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
+    connect(tcpSocket, static_cast<QAbstractSocketErrorSignal>(&QAbstractSocket::error),
+//                this, &MbtcpClient::displayError);
+//                  tcpm, &tcpMan::displayError);
+        tcpm, &tcpIntrfc::displayError);
+
+//        connect(tcpSocket, &QAbstractSocket::error, tcpm, &tcpIntrfc::displayError);
 /*                  */
 //            tcpm, &tcpMan::periodReqResp);
 }
@@ -43,12 +53,16 @@ bool MbtcpClient::checkConnected(){
     return false;
 }
 
-int MbtcpClient::connectTcp(QString ip_t, QString port_t)
+int MbtcpClient::connectTcp(QString &ip_t, QString port_t)
 {
+//    connect(tcpSocket, &QAbstractSocket::error, tcpm, &tcpIntrfc::displayError);
+
+    qDebug() << "ip_t: " << ip_t << " port_t: " << port_t;
     tcpSocket->abort();
     tcpSocket->connectToHost(ip_t, port_t.toInt());
-    return 0;
+//    return 0;
 //    tmr.singleShot(1000, this, &MbtcpClient::checkConnected);
+    return 0;
 }
 
 void MbtcpClient::printTcpResp()
@@ -109,4 +123,3 @@ int MbtcpClient::setReadyRead_Chart(tcpIntrfc *cl) {
     connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::loadChart_Respond);
     return 0;
 }
-

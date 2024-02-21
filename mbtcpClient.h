@@ -21,9 +21,11 @@ class MbtcpClient : public QObject
 public:
     explicit MbtcpClient(tcpIntrfc *cl, QObject *parent = nullptr);
 
-    int connectTcp(QString ip_t, QString port_t);
+    int connectTcp(QString &ip_t, QString port_t);
  //   bool isConnected();
-    QString getErrString(){return tcpSocket->errorString();}
+    QString getErrString(){
+        return tcpSocket->errorString();
+    }
     quint16 getBlSz(){return blockSize;}
     int  getBAvl(){return tcpSocket->bytesAvailable();}
     QByteArray getAll(){return tcpSocket->readAll();}
@@ -39,7 +41,7 @@ public slots:
     int onChangeIpPort(QString ip, QString port);
 
 private:
-    QTcpSocket *tcpSocket;
+    QTcpSocket *tcpSocket = nullptr;
 
     tcpIntrfc *tcpm;
     quint16 blockSize;

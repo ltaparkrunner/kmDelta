@@ -13,21 +13,37 @@ vmConfigsChat::vmConfigsChat(configs *cs_, MbtcpClient* tcpC_, tcpIntrfc *parent
     tcpIntrfc(parent)
     ,cs(cs_)
     ,tcpC(tcpC_= new MbtcpClient(this))
+    ,pointTmr(new pointTimer(this))
 {
 //    connect(this, this->ParamsChanged, this, this->dbg_message);
 //    connect(this, this->ipChanged, this, this->dbg_message);
 }
 
-void vmConfigsChat::displayError(QAbstractSocket::SocketError socketError) {
-    tcpC -> getErrString();
+//void vmConfigsChat::displayError(QAbstractSocket::SocketError socketError) {
+void vmConfigsChat::displayError() {
+    pointTmr->stopTmr();
+    QString st = tcpC -> getErrString();
+    emit sendToMB("Eth", st);
 }
 
 void vmConfigsChat::successConn() {
+    pointTmr->stopTmr();
 
+    if(tcpC->checkConnected()) emit sendToMB("Eth", "Successfully connected to device over Ethernet");
+    else emit sendToMB("Eth", "Something strange");
 }
 
 void vmConfigsChat::connectButt(QString ip_t, QString port_t){
-    emit sendToQml(count);
+//    QString ip = cs->cnfg.tcpIP, port = cs->cnfg.tcpPORT;
+    tcpC -> connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT);
+//    tcpC -> connectTcp(ip, port);
+//    tcpC -> connectTcp(ip_t, port_t);
+    pointTmr->setTmr(1500,"Attempt to connect");
+    emit sendToMB("TCP", "Attempt to connect");
+//    pointTmr->tmr.setInterval(1500);
+//    connect(&pointTmr->tmr, &QTimer::timeout, this, &vmConfigsChat::tmrAddPoint);
+//    pointTmr->tmr.start();
+//    emit sendToQml(count);
 }
 
 int vmConfigsChat::periodReqButt(QString ip_t, QString port_t, int t_out){
@@ -147,3 +163,8 @@ int vmConfigsChat::loadChart_Respond(){
     return 0;
 }
 
+int vmConfigsChat::timeout_Respond() {
+    QString str = pointTmr->incriment();
+    emit sendToMB("Eth", str);
+    return 0;
+}

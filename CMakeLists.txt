@@ -63,6 +63,8 @@ else()
           configs.h configs.cpp
           vmConfigsChat.h vmConfigsChat.cpp
           chat.h chat.cpp
+          pointtimer.h pointtimer.cpp
+          pTmrIntrfc.h
         )
     endif()
 endif()
