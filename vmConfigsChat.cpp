@@ -142,7 +142,8 @@ void vmConfigsChat::commitFromQml(QString ls)
 }
 
 int vmConfigsChat::loadDev_Respond(){ // receive device's respond after send message to load params from device
-    if(cs ->load_tcp_configs_resp(tcpC) < 0) return -1;
+    if(cs ->load_tcp_configs_resp(tcpC) < 0)
+        return -1;
     QList<QString> *str_cs = cs->fillList();
 
     emit sendCurrIp(*str_cs);

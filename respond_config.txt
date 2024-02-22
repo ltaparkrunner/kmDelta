@@ -1,0 +1,129 @@
+Q\000\000\014À¨\001ªÿÿÿ\000\000\000\000\000\000\000\001ö\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000)\004\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000GB
+
+Q\000\000\014À¨\001ªÿÿÿ\000\000\000\000\000\000\000\001ö\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000)\004\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000GB
+
+	Locals		
+		ba	"Q\000\000\014À¨\001ªÿÿÿ\000\000\000\000\000\000\000\001ö\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000)\004\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000GB"	
+
+
+QByteArray
+				'Q' 	81    	0x51	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				    	12    	0x0c	char
+				    	-64/192	0xc0	char
+				'ﾨ' 	-88/168	0xa8	char
+				    	1    	0x01	char
+				'ﾪ' 	-86/170	0xaa	char
+				    	-1/255	0xff	char
+				    	-1/255	0xff	char
+				    	-1/255	0xff	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				    	1    	0x01	char
+				    	-10/246	0xf6	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				')' 	41    	0x29	char
+				    	4    	0x04	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'\0'	0    	0x00	char
+				'G' 	71    	0x47	char
+				'B' 	66    	0x42	char
+		tcpC	@0x555555aa23b0	MbtcpClient
+		this	@0x7fffffffe300	configs
+	Inspector		
+	Expressions		
+		cnfg	@0x7fffffffe300	parms
+			alarmt	4	uint16_t
+			avariya	@0x7fffffffe304	avar[4]
+			data	@0x7fffffffe378	Data[8]
+			graph_memory	100	int32_t
+			inversion_data	false	bool
+			inversion_dt	false	bool
+			mashtab	10	int32_t
+			obnovlenie_proshivki	true	bool
+			otnositelnoe_otobragenie	'\0'	0	0x00	uchar
+			porog_max	420	int
+			porog_min	560	int
+			tcpIP	"192.168.1.170"	QString
+			tcpIP_extr	"52.-64.-88.92"	QString
+			tcpIP_new	"192.168.1.170"	QString
+			tcpMASK	"255.255.0.0"	QString
+			tcpMASK_new	"255.255.0.0"	QString
+			tcpPORT	"502"	QString
+			tcpPORT_extr	"0"	QString
+			tcpPORT_new	"503"	QString
+			timeout_alarm	2	uint16_t
+			version_proshivki	0	uint16_t
+	Return Value		
+	Tooltip		
+		0	0	int
+		0x02	2	int
+		1	1	int
+		cnfg	@0x7fffffffe300	parms
+			alarmt	4	uint16_t
+			avariya	@0x7fffffffe304	avar[4]
+			data	@0x7fffffffe378	Data[8]
+			graph_memory	100	int32_t
+			inversion_data	false	bool
+			inversion_dt	false	bool
+			mashtab	10	int32_t
+			obnovlenie_proshivki	false	bool
+			otnositelnoe_otobragenie	'\0'	0	0x00	uchar
+			porog_max	420	int
+			porog_min	560	int
+			tcpIP	"48.92.48.48"	QString
+			tcpIP_extr	"52.-64.-88.92"	QString
+			tcpIP_new	"192.168.1.170"	QString
+			tcpMASK	"48.92.48.49"	QString
+			tcpMASK_new	"255.255.0.0"	QString
+			tcpPORT	"ª"	QString
+			tcpPORT_extr	"0"	QString
+			tcpPORT_new	"503"	QString
+			timeout_alarm	12336	uint16_t
+			version_proshivki	0	uint16_t
+		j	<no such value>	 
+		maska	<no such value>	 
+		timeout_alarm	<no such value>	 
+

@@ -342,8 +342,10 @@ int configs::load_tcp_configs(MbtcpClient* tcpC) { // send message to load param
 
 int configs::load_tcp_configs_resp(MbtcpClient* tcpC){ // respond after load params from device and parsing
     QByteArray ba = tcpC->getAll();
-    if(ba == nullptr) return -2;
-    else  if (ba[0] != 'Q' || ba[0x3D] != 'G' || ba[0x3E] != 'B') return -1;
+    if(ba == nullptr)
+        return -2;
+    else  if (ba[0] != 'Q' || ba[0x3D] != 'G' || ba[0x3E] != 'B')
+        return -1;
     else {
         if ((ba[1] & 0x01) != 0) { cnfg.otnositelnoe_otobragenie = true; } else { cnfg.otnositelnoe_otobragenie = false; }
         if ((ba[1] & 0x02) != 0) { cnfg.inversion_data = true; } else { cnfg.inversion_data = false; }
@@ -356,7 +358,7 @@ int configs::load_tcp_configs_resp(MbtcpClient* tcpC){ // respond after load par
         int timeout_alarm;
         timeout_alarm = ba[2]; timeout_alarm <<= 8; timeout_alarm |= ba[3];
         cnfg.timeout_alarm = (double)timeout_alarm;
-        int ipi[4], maska[4], t_ip2[4], t_ip3[4];
+        uint8_t ipi[4], maska[4], t_ip2[4], t_ip3[4];
 
         for (int i = 0; i < 4; i++)
         {
@@ -366,7 +368,7 @@ int configs::load_tcp_configs_resp(MbtcpClient* tcpC){ // respond after load par
             j = i + 16; t_ip3[i] = ba[j];
         }
         cnfg.tcpIP_extr = QString::number(t_ip2[0]) + "." + QString::number(t_ip2[1]) + "." + QString::number(t_ip2[2]) + "." + QString::number(t_ip2[3]);
-        cnfg.tcpPORT_extr = (t_ip3[0] << 8) | (t_ip3[1]); cnfg.tcpPORT = (t_ip3[2] << 8) | (t_ip3[3]);
+        cnfg.tcpPORT_extr = QString::number((t_ip3[0] << 8) | (t_ip3[1])); cnfg.tcpPORT = QString::number((t_ip3[2] << 8) | (t_ip3[3]));
         cnfg.tcpMASK = QString::number(maska[0]) + "." + QString::number(maska[1]) + "." + QString::number(maska[2]) + "." + QString::number(maska[3]);
         cnfg.tcpIP = QString::number(ipi[0]) + "." + QString::number(ipi[1]) + "." + QString::number(ipi[2]) + "." + QString::number(ipi[3]);
         for (int i = 0; i < 8; i++)
