@@ -1,6 +1,6 @@
 #include "ipAddr.h"
-#include <QQmlEngine>
-#include <QQmlComponent>
+//#include <QQmlEngine>
+//#include <QQmlComponent>
 
 IpAddr::IpAddr(QObject *parent) : QObject(parent)
   , ip_addr("192.168.1.170")

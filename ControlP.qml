@@ -1,7 +1,9 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.0
+//import QtQuick.Controls 1.0
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
-import QtQuick.Dialogs 1.1
+//import QtQuick.Dialogs 1.0
+import QtQuick.Dialogs  // TODO strange it works without version???
 
 Rectangle{
     id:c_ip2
@@ -24,7 +26,8 @@ Rectangle{
         id: messageDialog
         title: qsTr("May I have your attention, please?")
         text: qsTr("The document has been modified.")
-        standardButtons: StandardButton.Ok //| StandardButton.Cancel
+        //standardButtons: StandardButton.Ok //| StandardButton.Cancel
+        buttons: MessageDialog.Ok
     }
 
 ColumnLayout{

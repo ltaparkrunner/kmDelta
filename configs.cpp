@@ -8,7 +8,7 @@ parms::parms():
     otnositelnoe_otobragenie( 0 )
     ,inversion_data(true)
     ,inversion_dt (false)
-    ,avariya({{1,1220,620,1},{0,1520,500,1},{0,0,0,0},{0,0,0,0}})
+    ,avariya{{1,1220,620,1},{0,1520,500,1},{0,0,0,0},{0,0,0,0}}
     ,porog_max (420)
     ,porog_min (560)
     ,timeout_alarm (2)
@@ -22,7 +22,7 @@ parms::parms():
     ,tcpPORT ("502")
     ,tcpPORT_new ("503")
  //   ,data ({{0, -273.5}, {0, -2648.5}, {0, -711.5}, {0, -1910.5}, {0, -845.5}, {0, -1519.5}, {0, -1736.0}, {0, -1612.0}})
-    ,data ({{0, -273}, {0, -2648}, {0, -711}, {0, -1910}, {0, -845}, {0, -1519}, {0, -1736}, {0, -1612}})
+    ,data {{0, -273}, {0, -2648}, {0, -711}, {0, -1910}, {0, -845}, {0, -1519}, {0, -1736}, {0, -1612}}
     ,mashtab (10)
     ,graph_memory (100)
     ,obnovlenie_proshivki (false)
@@ -151,7 +151,7 @@ int configs::load_file_configs(QString filen) {
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.tcpIP = str.mid(ind, str.length() - ind);
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.tcpPORT = str.mid(ind, str.length() - ind);
 //        str = rd.readLine(); ind = str.indexOf(':'); ind++; gl.SPORT = (str.mid(ind, str.length() - ind)).toInt();
-        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.timeout_alarm = (str.mid(ind, str.length() - ind)).toDouble();
+        str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.timeout_alarm = (str.mid(ind, str.length() - ind)).toDouble();   // TODO: Use midRef or doesn't exist??
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.mashtab = (str.mid(ind, str.length() - ind)).toDouble();
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.otnositelnoe_otobragenie = (str.mid(ind, str.length() - ind) == QString("true"));
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.data[0].smeshenie = (str.mid(ind, str.length() - ind)).toDouble();
@@ -184,7 +184,7 @@ int configs::load_file_configs(QString filen) {
 
 bool configs::check_IP(uint8_t ip[], QString& ip_s){
     if (ip_s.count('.') < 3) return false;
-    auto i = ip_s.split('.').begin();
+    auto i = ip_s.split('.').begin();   // TODO: Don't call QList::begin() on temporary
     for(int i1 = 0; i1 < 4; i1++){
         uint8_t t1 = (*i).toShort();
         ip[i1] = t1;
@@ -286,7 +286,8 @@ ret_t configs::save_tcp_configs_bArray() // save to device
         }
         QByteArray crc = bdt; //[] = new byte[58 + pr];
 
-        uint32_t crc_f = crc32(crc, crc.length());
+        //uint32_t crc_f =
+            crc32(crc, crc.length());
 //        crc32(crc, crc.length());
         cnfg.version_proshivki = Crc16(crc, 58 + pr);
         ipr = cnfg.version_proshivki;

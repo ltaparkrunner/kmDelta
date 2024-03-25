@@ -1,5 +1,5 @@
 #include <QtNetwork>
-#include <QMessageBox>
+//#include <QMessageBox>
 #include <QDebug>
 #include "mbtcpClient.h"
 
@@ -29,11 +29,19 @@ MbtcpClient::MbtcpClient(tcpIntrfc *cl, QObject *parent)
                   tcpm, &tcpIntrfc::displayError);
 */
 
-    typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
-    connect(tcpSocket, static_cast<QAbstractSocketErrorSignal>(&QAbstractSocket::error),
+
+#if QT_VERSION >= 0x060000
+        connect(tcpSocket, &QAbstractSocket::errorOccurred,
+                tcpm, &tcpIntrfc::displayError);
+#elif QT_VERSION >= 0x050000
+        typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
+        connect(tcpSocket, static_cast<QAbstractSocketErrorSignal>(&QAbstractSocket::error),
+            tcpm, &tcpIntrfc::displayError);
+#endif
+
 //                this, &MbtcpClient::displayError);
 //                  tcpm, &tcpMan::displayError);
-        tcpm, &tcpIntrfc::displayError);
+
 
 //        connect(tcpSocket, &QAbstractSocket::error, tcpm, &tcpIntrfc::displayError);
 /*                  */
