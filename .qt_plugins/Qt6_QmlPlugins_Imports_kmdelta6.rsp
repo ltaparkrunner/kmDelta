@@ -1,9 +1,0 @@
--rootPath
-/home/alex/wrk/myproj/Qt/kmDlt_6/not_w/git_kmd/kmDelta
--cmake-output
--output-file
-/home/alex/wrk/myproj/Qt/kmDlt_6/not_w/git_kmd/kmDelta/.qt_plugins/Qt6_QmlPlugins_Imports_kmdelta6.cmake
--importPath
-/home/alex/wrk/myproj/Qt/kmDlt_6/not_w/git_kmd/kmDelta
--importPath
-/home/alex/wrk/myproj/Qt/rPi/qt-raspi/qml
