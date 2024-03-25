@@ -42,3 +42,9 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 CMakeLists.txt.user*
+*.cmake
+kmdelta6
+kmdelta6_autogen/
+.qt/
+qt_plugins/
+
