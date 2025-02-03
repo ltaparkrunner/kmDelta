@@ -3,7 +3,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 //import QtQuick.Dialogs 1.0
-import QtQuick.Dialogs  // TODO strange it works without version???
+import QtQuick.Dialogs //2.0       // TODO strange it works without version???
 
 Rectangle{
     id:c_ip2
@@ -17,8 +17,8 @@ Rectangle{
          * Разница в том, что добавляем в начале on и далее пишем
          * с заглавной буквы
          * */
-//        function onSendToQml(count) {
-          onSendToQml: {
+        function onSendToQml(count) {
+//          onSendToQml: {
             bottomText1.text = count // Устанавливаем счётчик в текстовый лейбл
         }
     }
@@ -45,7 +45,7 @@ ColumnLayout{
         text: "Connect"
         onClicked: {
             vmConfigsChat.connectButt(ip_2.ip_t, ip_2.port_t)
-            messageDialog.open()
+//            messageDialog.open()
         }
     }
     Button{

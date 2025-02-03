@@ -96,6 +96,15 @@ configs::configs(/*MbtcpClient* tcpe*/):
     cnfg(parms())
 { }
 
+configs::configs(QString fn):
+    //    ,cnfg(0)
+    //    tcpC(tcpe)
+    cnfg(parms())
+{
+    if(this -> load_file_configs(fn) != 0)
+        ;   // TODO: send message that couldn't open file
+}
+
 int configs::save_file_configs(QString filen) {
 
     QFile cfile(filen);
@@ -147,9 +156,13 @@ int configs::load_file_configs(QString filen) {
     QTextStream rd(&cfile);
     {
         QString str = rd.readLine(); int ind = str.indexOf(':'); ind++; cnfg.tcpIP = str.mid(ind, str.length() - ind);
+		cnfg.tcpIP_new = cnfg.tcpIP;
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.tcpMASK = str.mid(ind, str.length() - ind);
+		cnfg.tcpMASK_new = cnfg.tcpMASK;
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.tcpIP = str.mid(ind, str.length() - ind);
+		cnfg.tcpIP_new = cnfg.tcpIP;
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.tcpPORT = str.mid(ind, str.length() - ind);
+		cnfg.tcpPORT_new = cnfg.tcpPORT;
 //        str = rd.readLine(); ind = str.indexOf(':'); ind++; gl.SPORT = (str.mid(ind, str.length() - ind)).toInt();
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.timeout_alarm = (str.mid(ind, str.length() - ind)).toDouble();   // TODO: Use midRef or doesn't exist??
         str = rd.readLine(); ind = str.indexOf(':'); ind++; cnfg.mashtab = (str.mid(ind, str.length() - ind)).toDouble();

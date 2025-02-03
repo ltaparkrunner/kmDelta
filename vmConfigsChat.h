@@ -29,6 +29,7 @@ signals:
     void sendCurrIp_2(const QString &ls);
     void sendErrFileOpen(const QString &title);
     void saveFileSucc(const QString &title);
+    void openFileSucc(const QString &title, const QString &text);
 
 public slots:
     void connectButt(QString ip_t, QString port_t);
@@ -44,9 +45,11 @@ public slots:
     void save_File_Qml(QList<QString> ls);  // Save_To_File
     int load_Device_Qml();                  // send message to load params from device
     int save_Device_Qml();                 // save params to device
+    int rectCompleted_Qml();
 //    void load_Default_Qml(QString str);
     void load_Default_Qml(QList<QString> str);
     void commitFromQml(QString str);
+    void expired_Respond();
 
     int loadDev_Respond() override;    // receive device's respond after send message to load params from device
     int saveDev_Respond() override;    // receive device's respond after send message tosave params to device
@@ -65,6 +68,7 @@ private:
     chat* cht;
 //    QString strPointTmr;
 //    QVariant np;
+    void sendMess();
 };
 
 #endif // MVCONFIGSCHAT_H

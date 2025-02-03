@@ -22,6 +22,7 @@ public:
     explicit MbtcpClient(tcpIntrfc *cl, QObject *parent = nullptr);
 
     int connectTcp(QString &ip_t, QString port_t);
+    int disconnectTcp();
  //   bool isConnected();
     QString getErrString(){
         return tcpSocket->errorString();

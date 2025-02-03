@@ -17,8 +17,8 @@ Rectangle{
          * Разница в том, что добавляем в начале on и далее пишем
          * с заглавной буквы
          * */
-//        function onSendToQml(count) {
-        onSendToChat: {
+        function onSendToChat(abs){
+//        onSendToChat: {
 //            bottomText1.text = count // Устанавливаем счётчик в текстовый лейбл
 //            f1.values = [abs[0],10,10,10,10,10]
             f1.values = [abs[0], abs[1], abs[2], abs[3], abs[4], abs[5]]

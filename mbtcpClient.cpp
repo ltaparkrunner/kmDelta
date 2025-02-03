@@ -73,6 +73,12 @@ int MbtcpClient::connectTcp(QString &ip_t, QString port_t)
     return 0;
 }
 
+int MbtcpClient::disconnectTcp() {
+    qDebug() << "ip_t: " << tcpSocket->localAddress().toString() << "  disconnect";
+    tcpSocket->disconnect();
+    return 0;
+}
+
 void MbtcpClient::printTcpResp()
 {
     if (blockSize == 0) {

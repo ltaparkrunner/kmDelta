@@ -17,8 +17,8 @@ Rectangle{
          * Разница в том, что добавляем в начале on и далее пишем
          * с заглавной буквы
          * */
-//        function onSendToQml(count) {
-          onSendToMB: {
+        function onSendToMB(title, text) {
+//          onSendToMB: {
             bottomText3.text = title // Устанавливаем счётчик в текстовый лейбл
             bottomText4.text = text // Устанавливаем счётчик в текстовый лейбл
         }

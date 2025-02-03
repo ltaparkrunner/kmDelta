@@ -1,5 +1,6 @@
 #include "vmConfigsChat.h"
-
+#include <QtTest/QTest>
+#include <QMessageBox>
 //void vmConfigsChat::dbg_message(QVariant n){
 //    qDebug("called ParamsChanged \n");
 //}
@@ -13,24 +14,28 @@ vmConfigsChat::vmConfigsChat(configs *cs_, MbtcpClient* tcpC_, tcpIntrfc *parent
     tcpIntrfc(parent)
     ,cs(cs_)
     ,tcpC(tcpC_= new MbtcpClient(this))
-    ,pointTmr(new pointTimer(this))
+    ,pointTmr(new pointTimer())
 {
 //    connect(this, this->ParamsChanged, this, this->dbg_message);
 //    connect(this, this->ipChanged, this, this->dbg_message);
+    connect(pointTmr->getTmrPtr(), &QTimer::timeout, this, &tcpIntrfc::timeout_Respond );
+    connect(pointTmr, &pointTimer::expired, this, &vmConfigsChat::expired_Respond);
+    // connect(tcpSocket, &QAbstractSocket::errorOccurred,
+    //         tcpm, &tcpIntrfc::displayError);
 }
 
 //void vmConfigsChat::displayError(QAbstractSocket::SocketError socketError) {
 void vmConfigsChat::displayError() {
     pointTmr->stopTmr();
     QString st = tcpC -> getErrString();
-    emit sendToMB("Eth", st);
+    emit sendToMB("Eth_1", st);
 }
 
 void vmConfigsChat::successConn() {
     pointTmr->stopTmr();
 
-    if(tcpC->checkConnected()) emit sendToMB("Eth", "Successfully connected to device over Ethernet");
-    else emit sendToMB("Eth", "Something strange");
+    if(tcpC->checkConnected()) emit sendToMB("Eth_2", "Successfully connected to device over Ethernet");
+    else emit sendToMB("Eth_3", "Something strange");
 }
 
 void vmConfigsChat::connectButt(QString ip_t, QString port_t){
@@ -87,6 +92,27 @@ void vmConfigsChat::load_File_Qml()
     emit sendCurrIp(*str_cs);
     delete str_cs;
 }
+
+int vmConfigsChat::rectCompleted_Qml(){
+    if(cs->load_file_configs("config.ini") < 0) emit sendErrFileOpen("config.ini");
+//    else emit openFileSucc("Can't open config.ini", "failure");
+    QList<QString> *str_cs = cs->fillList();
+
+    emit sendCurrIp(*str_cs);
+    delete str_cs;
+//    QTest::qWait(5000);
+//    emit openFileSucc("Can't open config.ini", "failure");
+    QMessageBox msgBox;
+    msgBox.setText("The document has been modified.");
+    msgBox.setInformativeText("Do you want to save your changes?");
+    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Save);
+    int ret = msgBox.exec();
+
+    QTimer::singleShot(50, this, &vmConfigsChat::sendMess);
+    return ret;
+}
+
 void vmConfigsChat::save_File_Qml(QList<QString> ls)
 {
     count++;
@@ -153,7 +179,7 @@ int vmConfigsChat::loadDev_Respond(){ // receive device's respond after send mes
 
 int vmConfigsChat::saveDev_Respond(){  // receive device's respond after send message tosave params to device
     if(cs ->save_tcp_configs_resp(tcpC) < 0) return -1;
-    emit sendToMB("Eth", "Successfully saved");
+    emit sendToMB("Eth_4", "Successfully saved");
     return 0;
 }
 
@@ -166,6 +192,16 @@ int vmConfigsChat::loadChart_Respond(){
 
 int vmConfigsChat::timeout_Respond() {
     QString str = pointTmr->incriment();
-    emit sendToMB("Eth", str);
+    emit sendToMB("Eth_5", str);
     return 0;
+}
+
+void vmConfigsChat::sendMess(){
+    emit openFileSucc("Can't open config.ini", "failure");
+}
+
+void vmConfigsChat::expired_Respond(){
+    tcpC->disconnectTcp();
+    pointTmr->stopTmr();
+    emit sendToMB("Eth_6", "Error:  Connection timed out.");
 }

@@ -2,8 +2,8 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtCharts 2.0
 //import QtQuick.Controls 1.0
-import QtQuick.Controls 2.0
-
+import QtQuick.Controls 2.0     //1.0 //2.0
+import QtQuick.Dialogs  //2.0     //1.2
 
 Rectangle {
     id: ip_contain
@@ -27,8 +27,8 @@ Rectangle {
 
     Connections{
         target: vmConfigsChat
-//        function onSendToQml2(addrp, maskp, portp)
-        onSendCurrIp:
+        function onSendCurrIp(ls)
+//        onSendCurrIp:
         {
            ip.text = ls[0];   //addrp;
            mask.text = ls[2]; //maskp;
@@ -37,7 +37,8 @@ Rectangle {
            mask_2.text = ls[3];
            port_2.text = ls[5];
         }
-        onSendCurrIp_2:
+        function onSendCurrIp_2(ls)
+//        onSendCurrIp_2:
         {
             ip.text = ls;
         }

@@ -17,10 +17,11 @@ int main(int argc, char *argv[])
 
     QQuickView viewer;
 
-    MbtcpClient *mc;
-    configs cs;// = new configs();
+    MbtcpClient *mc = nullptr;
+    configs cs("config.ini");// = new configs();
     //vmConfigsChat vm(&cs, &mc);
     vmConfigsChat vmCC(&cs, mc);
+
 
     QQmlContext *context = viewer.rootContext();
     context->setContextProperty("vmConfigsChat", &vmCC);

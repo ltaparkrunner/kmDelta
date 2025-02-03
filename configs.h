@@ -72,6 +72,7 @@ class configs  //: public QObject
     //Q_OBJECT
 public:
     explicit configs();
+    explicit configs(QString fn);
     ~configs(){}
     int save_file_configs(QString filen = "config.ini");
     int load_file_configs(QString filen = "config.ini");

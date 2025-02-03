@@ -1,15 +1,20 @@
+import QtQuick.Controls.Windows
+import QtQuick.Controls.Material
+
 import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtCharts 2.0
 //import QtQuick.Controls 1.0
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.0     //1.0//2.0
+import QtQuick.Dialogs //2.0     //1.2
 
-
+//import QtQuick.Controls.Basic   // auto
 Item {
     id: main1
     width: 640
     height: 480
     visible: true
+//    background:
 //    property int ip_w: Math.max(c_ip.t1.width, t2.width, t3.width) + rect_2 *2
 
     Connections {
@@ -17,9 +22,14 @@ Item {
 //            onSendToDialog: {
 //                messageDialog.show(title)
 //            }
+        function onOpenFileSucc(text, title){
+//        onOpenFileSucc:{
+//            messageDialog2.setText(text)
+//            messageDialog2.text = text
+            messageDialog2.text = text
+            messageDialog2.open()
         }
-
-//    signal qmlSignal(msg: string)
+    }
     ColumnLayout{
         spacing: 2
         anchors.fill: parent
@@ -81,5 +91,16 @@ Item {
 //            Layout.preferredHeight: parent.height/3
             //Layout.fillHeight: true
         }
+    }
+    MessageDialog{
+
+        id: messageDialog2
+        title: qsTr("May I have your attention, please?")
+        text: qsTr("The document has been modified.")
+//        width: 300
+    }
+    Component.onCompleted: {
+        vmConfigsChat.rectCompleted_Qml()
+//        messageDialog2.open()
     }
 }
