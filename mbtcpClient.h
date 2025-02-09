@@ -4,7 +4,7 @@
 #include <QDataStream>
 #include <QTcpSocket>
 #include <QtQuick/QQuickView>
-#include <QTimer>
+//#include <QTimer>
 //#include <string>
 #include <QString>
 
@@ -34,10 +34,12 @@ public:
     int setReadyRead_saveDev(tcpIntrfc *cl);
     int setReadyRead_Chart(tcpIntrfc *cl);
     int setEventsSlot();
+    bool isConnected();
+    QTcpSocket *getTcpSocket();
 public slots:
 
     void printTcpResp();
-    bool checkConnected();
+
     int sendToTcp(QByteArray *bdata);
     int onChangeIpPort(QString ip, QString port);
 

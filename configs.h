@@ -37,7 +37,7 @@ struct parms// : public QObject
 {
 //    Q_OBJECT
 public:
-    uchar otnositelnoe_otobragenie;
+    bool otnositelnoe_otobragenie;
     bool inversion_data;
     bool inversion_dt;
     avar  avariya[n_avar];
@@ -77,7 +77,7 @@ public:
     int save_file_configs(QString filen = "config.ini");
     int load_file_configs(QString filen = "config.ini");
 
-    int save_tcp_configs(MbtcpClient* tcpC);    // save params to device
+//    int save_tcp_configs(MbtcpClient* tcpC);    // save params to device
     int save_tcp_configs_resp(MbtcpClient* tcpC); // respond after save params to device
 
     int load_tcp_configs(MbtcpClient* tcpC); // send message to load params from device
@@ -93,9 +93,11 @@ public:
 //    tcp_exch* te;
     QList<QString>* fillList();         //  preparing list to save params to view means output to view
     int fillCfg(QList<QString> &ls);    //  load params from view means save to cnfg variable
+    int fill_buf(QByteArray &buf, int pos);
+    int parse_tcp_resp(QByteArray &buf);
 
 private:
-    ret_t save_tcp_configs_bArray();    // assembly message to save params to device
+        // assembly message to save params to device
     ret_t load_tcp_configs_bArray();    // assembly message to respond params from device
     bool check_IP(uint8_t ip[], QString& ip_s);
 //    MbtcpClient* tcpC;

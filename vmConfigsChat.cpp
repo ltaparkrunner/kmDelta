@@ -15,11 +15,15 @@ vmConfigsChat::vmConfigsChat(configs *cs_, MbtcpClient* tcpC_, tcpIntrfc *parent
     ,cs(cs_)
     ,tcpC(tcpC_= new MbtcpClient(this))
     ,pointTmr(new pointTimer())
+    ,msg_type(nomsg)
+//    ,w_buf(QByteArray(ba_len, 0))
 {
 //    connect(this, this->ParamsChanged, this, this->dbg_message);
 //    connect(this, this->ipChanged, this, this->dbg_message);
     connect(pointTmr->getTmrPtr(), &QTimer::timeout, this, &tcpIntrfc::timeout_Respond );
     connect(pointTmr, &pointTimer::expired, this, &vmConfigsChat::expired_Respond);
+//    connect(tcpC->getTcpSocket(), &QIODevice::readyRead, this, &vmConfigsChat::tcpDevRespond);
+    connect(tcpC->getTcpSocket(), &QTcpSocket::readyRead, this, &vmConfigsChat::tcpDevRespond);
     // connect(tcpSocket, &QAbstractSocket::errorOccurred,
     //         tcpm, &tcpIntrfc::displayError);
 }
@@ -34,7 +38,7 @@ void vmConfigsChat::displayError() {
 void vmConfigsChat::successConn() {
     pointTmr->stopTmr();
 
-    if(tcpC->checkConnected()) emit sendToMB("Eth_2", "Successfully connected to device over Ethernet");
+    if(tcpC->isConnected()) emit sendToMB("Eth_2", "Successfully connected to device over Ethernet");
     else emit sendToMB("Eth_3", "Something strange");
 }
 
@@ -53,7 +57,7 @@ void vmConfigsChat::connectButt(QString ip_t, QString port_t){
 
 int vmConfigsChat::periodReqButt(QString ip_t, QString port_t, int t_out){
     //
-    if(!(tcpC->checkConnected()))
+    if(!(tcpC->isConnected()))
         if(tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT) < 0) return -1;
     tcpC -> setReadyRead_Chart(this);
 
@@ -129,7 +133,7 @@ void loadDev_readyRead2()
 int vmConfigsChat::load_Device_Qml()    // send message to load params from device
 {
     count++;
-    if(!(tcpC->checkConnected()))
+    if(!(tcpC->isConnected()))
         if(tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT) < 0) return -1;
     tcpC -> setReadyRead_loadDev(this);
     if(cs -> load_tcp_configs(tcpC) < 0) return -2;
@@ -139,10 +143,10 @@ int vmConfigsChat::load_Device_Qml()    // send message to load params from devi
 int vmConfigsChat::save_Device_Qml()    // save params to device
 {
     count++;
-    if(!(tcpC->checkConnected()))
+    if(!(tcpC->isConnected()))
         if(tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT) < 0) return -1;
     tcpC -> setReadyRead_saveDev(this);
-    if(cs -> save_tcp_configs(tcpC) < 0) return -2;
+//    if(cs -> save_tcp_configs(tcpC) < 0) return -2;
     return 0;
 }
 
@@ -184,9 +188,9 @@ int vmConfigsChat::saveDev_Respond(){  // receive device's respond after send me
 }
 
 int vmConfigsChat::loadChart_Respond(){
-    QList<qint32>* li = cht->get_tcp_chatdata_resp(tcpC);
-    emit sendToChat(*li);
-    delete li;
+    // QList<qint32>* li = cht->get_tcp_chatdata_resp(tcpC);
+    // emit sendToChat(*li);
+    // delete li;
     return 0;
 }
 
@@ -205,3 +209,219 @@ void vmConfigsChat::expired_Respond(){
     pointTmr->stopTmr();
     emit sendToMB("Eth_6", "Error:  Connection timed out.");
 }
+
+send_t  vmConfigsChat::getParamsTransmit() {
+    const int getParams_buf_len = 11;
+    QByteArray w_buf(getParams_buf_len,0);
+    w_buf[0] = 'G';//Convert.ToByte('G');//Идификатор транзакции
+    w_buf[1] = 'B';//Идификатор транзакции
+    w_buf[2] = 0x00;//Идификатор протокола
+    w_buf[3] = 0x00;//Идификатор протокола
+    w_buf[4] = 0;//Длина
+    w_buf[5] = 6;//Длина
+    w_buf[6] = 'A';//Адрес
+    w_buf[7] = 0x03;//Функциональный код
+    w_buf[8] = 0;//Адрес первого регистра
+    w_buf[9] = 0x33;//Адрес первого регистра
+    w_buf[10] = 0;
+
+    if(!tcpC->isConnected()) {
+        tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT);
+        delay(2000);
+        if(!tcpC->isConnected()) {
+            msg_type = getParamsErr;
+            return getParamsErr;
+        }
+    }
+    if(tcpC->sendToTcp(&w_buf) == w_buf.length()) {
+        msg_type = getParams;
+        return getParams;
+    }
+    msg_type = getParamsErr;
+    return getParamsErr;
+}
+
+int vmConfigsChat::tcpDevRespond(/*QByteArray r_buf*/){
+    QByteArray r_buf = tcpC->getAll();
+    switch(msg_type){
+    case getParams:
+        if(cs->parse_tcp_resp(r_buf) == 0) {
+            cs->save_file_configs();
+            QList<QString> *str_cs = cs->fillList();
+            emit sendCurrIp(*str_cs);
+        }
+        break;
+    case getSensors:
+    {
+        QList<qint32> sens = cht->parse_tcp_resp(r_buf);
+        emit sendToChat(sens);
+    }
+        break;
+    case setParams:
+        if(r_buf[1] == 'O' && r_buf[2] == 'K' && r_buf[3] == '!')
+            emit sendToMB("Eth_7", "Params were set successfully");
+        else emit sendToMB("Eth_8", "Params haven't beet set");
+        break;
+    case setRTC:
+        if(r_buf[0] == 1 && r_buf[1] == 1 && r_buf[2] == 0 && r_buf[3] == 0 &&
+           r_buf[4] == 0 && r_buf[5] == 0xD && r_buf[6] == 0x10 && r_buf[7] == 0 &&
+           r_buf[8] == 0 && r_buf[9] == 8 && r_buf[10] == 0 && r_buf[11] == 3)
+            emit sendToMB("Eth_9", "Date, Time were set successfully");
+        else emit sendToMB("Eth_10", "Date, Time haven't beet set");
+        break;
+    default:
+        emit sendToMB("Eth_11", "Wrong TCP respond.");
+        return -1;
+    }
+
+    return 0;
+}
+
+send_t vmConfigsChat::launchPollTmr(){
+    if(!tcpC->isConnected()) {
+        tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT);
+        delay(2000);
+        if(!tcpC->isConnected()) {
+            msg_type = connectErr;
+            return connectErr;
+        }
+    }
+    QObject::connect(&probePollTmr, &QTimer::timeout, this, &vmConfigsChat::periodReq);
+    probePollTmr.setInterval(300);
+    probePollTmr.start();
+    periodReq();
+
+    return pollTmrStart;
+}
+
+send_t vmConfigsChat::getSensorsTransmit(){
+    const int getSensors_buf_len = 12;
+    QByteArray w_buf(getSensors_buf_len,0);
+    w_buf[0] = 1;//Convert.ToByte('G');//Идификатор транзакции
+    w_buf[1] = 1;//Идификатор транзакции
+    w_buf[2] = 0;//Идификатор протокола
+    w_buf[3] = 0;//Идификатор протокола
+    w_buf[4] = 0;//Длина
+    w_buf[5] = 6;//Длина
+    w_buf[6] = 33;//Адрес
+    w_buf[7] = 3;//Функциональный код
+    w_buf[8] = 0;//Адрес первого регистра
+    w_buf[9] = 0;//Адрес первого регистра
+    w_buf[10] = 0;
+    w_buf[11] = 16;
+
+    if(!tcpC->isConnected()) {
+        tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT);
+        delay(2000);
+        if(!tcpC->isConnected()) {
+            msg_type = connectErr;
+            return connectErr;
+        }
+    }
+    if(tcpC->sendToTcp(&w_buf) == w_buf.length()) {
+        msg_type = getSensors;
+        return getSensors;
+    }
+    msg_type = getSensorsErr;
+    return getSensorsErr;
+}
+
+send_t vmConfigsChat::setParamsTransmit(){
+    const int param_buf_len = 72;
+    QByteArray w_buf(param_buf_len,0);
+    w_buf[0] = 'G';   //Идификатор транзакции
+    w_buf[1] = 'B';   //Идификатор транзакции
+    w_buf[2] = 0;     //Идификатор протокола
+    w_buf[3] = 0;     //Идификатор протокола
+    w_buf[4] = 0;     //Длина
+    w_buf[5] = 0x3E;  //Длина
+    w_buf[6] = 'A';   //Адрес
+    w_buf[7] = 0x10;  //Функциональный код
+    w_buf[8] = 0;     //Адрес первого регистра
+    w_buf[9] = 0x33;  //Адрес первого регистра
+    w_buf[10] = 0;
+
+    cs->fill_buf(w_buf, 10);
+    if(!tcpC->isConnected()) {
+        tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT);
+        delay(2000);
+        if(!tcpC->isConnected()) {
+            msg_type = connectErr;
+            return connectErr;
+        }
+    }
+    if(tcpC->sendToTcp(&w_buf) == w_buf.length()) {
+        msg_type = setParams;
+        return setParams;
+    }
+    msg_type = setParamsErr;
+    return setParamsErr;
+}
+
+send_t vmConfigsChat::setRTCTransmit(){
+    const int RTC_mess_len = 19;
+    QByteArray w_buf(RTC_mess_len,0);
+    QDateTime now = QDateTime::currentDateTime();
+    QDate D = now.date();
+    QTime T = now.time();
+    int temp, temp2; //xf = Convert.ToInt16(xv);     //MessageBox.Show("0x"+GBV.Minute.ToString() + "  " + GBV.Minute.ToString());
+    w_buf[0] = 1;//Идификатор транзакции
+    w_buf[1] = 1;//Идификатор транзакции
+    w_buf[2] = 0;//Идификатор протокола
+    w_buf[3] = 0;//Идификатор протокола
+    w_buf[4] = 0;//Длина
+    w_buf[5] = 0xD;//Длина сообщения
+    w_buf[7] = 0x10;//Функциональный код
+    w_buf[8] = 0;
+    w_buf[9] = 0x8;//Адрес первого регистра Lo байт
+    w_buf[10] = 0;
+    w_buf[11] = 0x3;//Количество регистров Lo байт
+    w_buf[12] = (2 * w_buf[11]);
+    temp2 = T.second();
+    temp = temp2 / 10;
+    w_buf[13] = (temp << 4) + temp2 - temp * 10;
+    temp2 = T.minute();
+    temp = temp2 / 10;
+    w_buf[14] = (temp << 4) + temp2 - temp * 10;
+    temp2 = T.hour();
+    temp = temp2 / 10;
+    w_buf[15] = (temp << 4) + temp2 - temp * 10;
+    temp2 = D.day();
+    temp = temp2 / 10;
+    w_buf[16] = (temp << 4) + temp2 - temp * 10;
+    temp2 = D.month();
+    temp = temp2 / 10;
+    w_buf[17] = (temp << 4) + temp2 - temp * 10 + (D.dayOfWeek()<<5);
+    temp2 = D.year() - 2000;
+    temp = temp2 / 10;
+    w_buf[18] = (temp << 4) + temp2 - temp * 10;
+
+    if(!tcpC->isConnected()) {
+        tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT);
+        delay(2000);
+        if(!tcpC->isConnected()) {
+            msg_type = connectErr;
+            return connectErr;
+        }
+    }
+    if(tcpC->sendToTcp(&w_buf) == w_buf.length()) {
+        msg_type = setRTC;
+        return setRTC;
+    }
+    msg_type = setRTCErr;
+    return setRTCErr;
+}
+
+void vmConfigsChat::delay(uint t)
+{
+    QTime dieTime= QTime::currentTime().addMSecs(t);
+    while (QTime::currentTime() < dieTime)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+}
+
+// int vmConfigsChat::sensorsResp(QByteArray r_buf){
+//     QList<qint32> sens = cht->get_tcp_chatdata_resp(r_buf);
+//     emit sendToChat(sens);
+//     return 0;
+// }
+

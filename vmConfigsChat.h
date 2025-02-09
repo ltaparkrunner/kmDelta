@@ -9,6 +9,21 @@
 #include "pointtimer.h"
 //#include "pTmrIntrfc.h"
 
+//#define ba_len 128;
+enum send_t{
+    nomsg,
+    getParams,
+    getSensors,
+    setParams,
+    setRTC,
+    pollTmrStart,
+    getParamsErr = -1,
+    getSensorsErr = -2,
+    setParamsErr = -3,
+    setRTCErr = -4,
+    connectErr = -5
+};
+
 class vmConfigsChat : public tcpIntrfc//, public pTmrIntrfc
 {
     Q_OBJECT
@@ -66,9 +81,20 @@ private:
 //   QTimer pointTmr;
     pointTimer* pointTmr;
     chat* cht;
+    send_t msg_type;
+//    QByteArray w_buf;
 //    QString strPointTmr;
 //    QVariant np;
     void sendMess();
+    send_t getParamsTransmit();
+    int tcpDevRespond();
+    send_t launchPollTmr();
+    send_t getSensorsTransmit();
+    send_t setParamsTransmit();
+    send_t setRTCTransmit();
+    void delay(uint);
+    int sensorsResp(QByteArray r_buf);
+
 };
 
 #endif // MVCONFIGSCHAT_H

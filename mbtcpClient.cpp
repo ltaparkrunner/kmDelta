@@ -52,7 +52,7 @@ MbtcpClient::MbtcpClient(tcpIntrfc *cl, QObject *parent)
 //     emit sendToMB(tr("Fortune Client"), "Success");
 // }
 
-bool MbtcpClient::checkConnected(){
+bool MbtcpClient::isConnected(){
     if(tcpSocket->state() == QAbstractSocket::ConnectedState) {
 //     emit sendToMB(tr("Fortune Client"), "Success");
      return true;
@@ -108,7 +108,7 @@ int setReadyReadconn() {
 }
 
 int MbtcpClient::sendToTcp(QByteArray *bdata){
-    if(!checkConnected()){
+    if(!isConnected()){
         return -1;
     }
 //    else emit sendToMB(tr("Fortune Client"), tr("Sucessfully connected"));
@@ -136,4 +136,8 @@ int MbtcpClient::setReadyRead_saveDev(tcpIntrfc *cl) {
 int MbtcpClient::setReadyRead_Chart(tcpIntrfc *cl) {
     connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::loadChart_Respond);
     return 0;
+}
+
+QTcpSocket *MbtcpClient::getTcpSocket(){
+    return tcpSocket;
 }

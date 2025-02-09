@@ -1,15 +1,8 @@
 #ifndef CHAT_H
 #define CHAT_H
 
-#include <QTimer>
 #include "mbtcpClient.h"
 #include "configs.h"
-// передать время
-
-//struct ret_t{
-//    int res;
-//    QByteArray *bdata;
-//};
 
 const int n_glh = 4;
 const int n_vl = 8;
@@ -18,7 +11,7 @@ struct glitch
     bool alarm;
     uint16_t value;
 };
-struct value
+struct val
 {
     int32_t absolutnoe;
     int32_t smeshenie;
@@ -27,7 +20,7 @@ struct value
 struct probe
 {
     glitch glh[n_glh];
-    value vl[n_vl];
+    val vl[n_vl];
 };
 
 struct label_vniim {
@@ -41,7 +34,7 @@ class chat // : public QObject
 public:
     explicit chat();
     int get_tcp_chatdata(MbtcpClient* tcpC); // send message to load params from device
-    QList<qint32>* get_tcp_chatdata_resp(MbtcpClient* tcpC); // respond after load params from device and parsing
+    QList<qint32>& parse_tcp_resp(QByteArray &buf); // respond after load params from device and parsing
 
 private:
     ret_t get_tcp_chatdata_bArray();

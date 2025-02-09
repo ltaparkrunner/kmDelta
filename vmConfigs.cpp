@@ -78,7 +78,7 @@ void loadDev_readyRead2()
 int vmConfigs::load_Device_Qml()
 {
     count++;
-    if(!(tcpC->checkConnected()))
+    if(!(tcpC->isConnected()))
         if(tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT) < 0) return -1;
     tcpC -> setReadyRead_loadDev(this);
     if(cs->load_tcp_configs(tcpC) < 0) return -2;
