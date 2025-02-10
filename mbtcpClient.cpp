@@ -20,7 +20,7 @@ MbtcpClient::MbtcpClient(tcpIntrfc *cl, QObject *parent)
 //        connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::parseMessage);
 //        connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::periodReqResp);
 
-        connect(tcpSocket, &QAbstractSocket::connected, cl, &tcpIntrfc::successConn);
+//        connect(tcpSocket, &QAbstractSocket::connected, cl, &tcpIntrfc::successConn);
 /*
         typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
 
@@ -75,7 +75,7 @@ int MbtcpClient::connectTcp(QString &ip_t, QString port_t)
 
 int MbtcpClient::disconnectTcp() {
     qDebug() << "ip_t: " << tcpSocket->localAddress().toString() << "  disconnect";
-    tcpSocket->disconnect();
+    tcpSocket->disconnectFromHost();
     return 0;
 }
 

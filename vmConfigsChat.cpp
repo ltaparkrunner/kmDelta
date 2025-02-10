@@ -15,7 +15,9 @@ vmConfigsChat::vmConfigsChat(configs *cs_, MbtcpClient* tcpC_, tcpIntrfc *parent
     ,cs(cs_)
     ,tcpC(tcpC_= new MbtcpClient(this))
     ,pointTmr(new pointTimer())
+    ,cht(new chat())
     ,msg_type(nomsg)
+    ,conn_dir(idle)
 //    ,w_buf(QByteArray(ba_len, 0))
 {
 //    connect(this, this->ParamsChanged, this, this->dbg_message);
@@ -24,6 +26,8 @@ vmConfigsChat::vmConfigsChat(configs *cs_, MbtcpClient* tcpC_, tcpIntrfc *parent
     connect(pointTmr, &pointTimer::expired, this, &vmConfigsChat::expired_Respond);
 //    connect(tcpC->getTcpSocket(), &QIODevice::readyRead, this, &vmConfigsChat::tcpDevRespond);
     connect(tcpC->getTcpSocket(), &QTcpSocket::readyRead, this, &vmConfigsChat::tcpDevRespond);
+    connect(tcpC->getTcpSocket(), &QAbstractSocket::connected, this, &vmConfigsChat::successConn);
+    connect(tcpC->getTcpSocket(), &QAbstractSocket::disconnected, this, &vmConfigsChat::successDisconn);
     // connect(tcpSocket, &QAbstractSocket::errorOccurred,
     //         tcpm, &tcpIntrfc::displayError);
 }
@@ -37,50 +41,77 @@ void vmConfigsChat::displayError() {
 
 void vmConfigsChat::successConn() {
     pointTmr->stopTmr();
-
+    conn_dir = idle;
     if(tcpC->isConnected()) emit sendToMB("Eth_2", "Successfully connected to device over Ethernet");
     else emit sendToMB("Eth_3", "Something strange");
 }
 
-void vmConfigsChat::connectButt(QString ip_t, QString port_t){
+void vmConfigsChat::successDisconn() {
+    pointTmr->stopTmr();
+    conn_dir = idle;
+    if(!tcpC->isConnected()) emit sendToMB("Eth_14", "Successfully disconnected to device");
+    else emit sendToMB("Eth_15", "Something strange");
+}
+
+int vmConfigsChat::connectButt(QString ip_t, QString port_t){
 //    QString ip = cs->cnfg.tcpIP, port = cs->cnfg.tcpPORT;
-    tcpC -> connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT);
+    if(!(tcpC->isConnected())){
+        if(tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT) < 0) return -1;
+//    tcpC -> connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT);
 //    tcpC -> connectTcp(ip, port);
 //    tcpC -> connectTcp(ip_t, port_t);
-    pointTmr->setTmr(1500,"Attempt to connect");
-    emit sendToMB("TCP", "Attempt to connect");
+        conn_dir = connecting;
+        pointTmr->setTmr(1500,"Attempt to connect", connecting);
+        emit sendToMB("TCP", "Attempt to connect");
+    }
+    else emit sendToMB("TCP", "Already connected");
 //    pointTmr->tmr.setInterval(1500);
 //    connect(&pointTmr->tmr, &QTimer::timeout, this, &vmConfigsChat::tmrAddPoint);
 //    pointTmr->tmr.start();
 //    emit sendToQml(count);
+    return 0;
 }
 
+int vmConfigsChat::disconnectButt(QString ip_t, QString port_t){
+//    QString ip = cs->cnfg.tcpIP, port = cs->cnfg.tcpPORT;
+    tcpC -> disconnectTcp();
+    conn_dir = disconnecting;
+    pointTmr->setTmr(1500,"Attempt to disconnect", disconnecting);
+    emit sendToMB("TCP", "Attempt to disconnect");
+    return 0;
+}
 int vmConfigsChat::periodReqButt(QString ip_t, QString port_t, int t_out){
     //
     if(!(tcpC->isConnected()))
         if(tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT) < 0) return -1;
     tcpC -> setReadyRead_Chart(this);
 
-    QObject::connect(&probePollTmr, &QTimer::timeout, this, &vmConfigsChat::periodReq);
+//    QObject::connect(&probePollTmr, &QTimer::timeout, this, &vmConfigsChat::periodReq);
+    QObject::connect(&probePollTmr, &QTimer::timeout, this, &vmConfigsChat::getSensorsTransmit);
     probePollTmr.setInterval(300);
     probePollTmr.start();
-    periodReq();
+//    periodReq();
+    getSensorsTransmit();
     return 0;
 }
 
+int vmConfigsChat::stopReqButt(QString ip_t, QString port_t, int t_out){
+    if(tcpC->isConnected())     tcpC -> disconnectTcp();
+    probePollTmr.stop();
+    return 0;
+}
+
+int vmConfigsChat::setTimeButt(QString ip_t, QString port_t, int t_out){
+    setRTCTransmit();
+    return 0;
+}
 void vmConfigsChat::setParamsButt(QString ip_t, QString port_t) {
-//void vmConfigsChat::setParamsButt(QVariant n) {
+    setParamsTransmit();
     qDebug("called setParamsButt \n");
 }
 
 void vmConfigsChat::getParamsButt(QString ip_t, QString port_t) {
-//QVariant vmConfigsChat::getParamsButt() {
-    QStringList *sl = new QStringList();
-    //ip_n = "192.168.10.2";
-    sl->append(cs->cnfg.tcpIP);
-    sl->append(cs->cnfg.tcpPORT);
-    qDebug("called getParamsButt \n");
-//    return QVariant(*sl);
+    getParamsTransmit();
 }
 
 void vmConfigsChat::periodReq(/*QString ip_t, QString port_t*/) {
@@ -195,6 +226,24 @@ int vmConfigsChat::loadChart_Respond(){
 }
 
 int vmConfigsChat::timeout_Respond() {
+    if(conn_dir == connecting && tcpC->isConnected()){
+        emit sendToMB("Eth_17", "Successfully connected to device");
+        pointTmr->stopTmr();
+        conn_dir = idle;
+        return 0;
+    }
+    else     if(conn_dir == disconnecting && (!tcpC->isConnected())){
+        emit sendToMB("Eth_18", "Successfully disconnected to device");
+        pointTmr->stopTmr();
+        conn_dir = idle;
+        return 0;
+    }
+    else if(conn_dir == idle){
+        emit sendToMB("Eth_19", "Something strange with timer");
+        pointTmr->stopTmr();
+        return 0;
+    }
+
     QString str = pointTmr->incriment();
     emit sendToMB("Eth_5", str);
     return 0;
@@ -243,8 +292,10 @@ send_t  vmConfigsChat::getParamsTransmit() {
 
 int vmConfigsChat::tcpDevRespond(/*QByteArray r_buf*/){
     QByteArray r_buf = tcpC->getAll();
+    qDebug() << "r_buf.length: " << r_buf.length() << " msg_type: " << msg_type << "/n";
     switch(msg_type){
     case getParams:
+        qDebug() << "getParams " << " r_buf.length: " << r_buf.length() << "/n";
         if(cs->parse_tcp_resp(r_buf) == 0) {
             cs->save_file_configs();
             QList<QString> *str_cs = cs->fillList();
@@ -252,24 +303,29 @@ int vmConfigsChat::tcpDevRespond(/*QByteArray r_buf*/){
         }
         break;
     case getSensors:
+        qDebug() << "getSensors " << "r_buf.length: " << r_buf.length() << "/n";
     {
         QList<qint32> sens = cht->parse_tcp_resp(r_buf);
         emit sendToChat(sens);
     }
         break;
     case setParams:
+        qDebug() << "setParams " << " r_buf.length: " << r_buf.length() << "/n";
         if(r_buf[1] == 'O' && r_buf[2] == 'K' && r_buf[3] == '!')
             emit sendToMB("Eth_7", "Params were set successfully");
         else emit sendToMB("Eth_8", "Params haven't beet set");
         break;
     case setRTC:
-        if(r_buf[0] == 1 && r_buf[1] == 1 && r_buf[2] == 0 && r_buf[3] == 0 &&
-           r_buf[4] == 0 && r_buf[5] == 0xD && r_buf[6] == 0x10 && r_buf[7] == 0 &&
-           r_buf[8] == 0 && r_buf[9] == 8 && r_buf[10] == 0 && r_buf[11] == 3)
+        qDebug() << "setRTC" << " r_buf.length: " << r_buf.length() << "/n";
+        if(  1 == r_buf[0] && 1 == r_buf[1] && 0 == r_buf[2] && 0 == r_buf[3] &&
+           0 == r_buf[4] && 6 == r_buf[5] && 0x10 == r_buf[6] && 0 == r_buf[7] &&
+           0 == r_buf[8] && 8 == r_buf[9] && 0 == r_buf[10]  && 3 == r_buf[11]){
             emit sendToMB("Eth_9", "Date, Time were set successfully");
+        }
         else emit sendToMB("Eth_10", "Date, Time haven't beet set");
         break;
     default:
+        qDebug() << "default " << "r_buf.length: " << r_buf.length() << "/n";
         emit sendToMB("Eth_11", "Wrong TCP respond.");
         return -1;
     }

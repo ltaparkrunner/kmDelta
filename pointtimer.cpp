@@ -4,11 +4,13 @@ pointTimer::pointTimer(QObject *parent):
     tmr(new QTimer(this))
     ,   str(new QString())
     , attempts(0)
+    , dir(idle)
 {
 //    connect(tmr, &QTimer::timeout, vmCC, &tcpIntrfc::timeout_Respond );
 }
 
-void pointTimer::setTmr(int i, QString s) {
+void pointTimer::setTmr(int i, QString s, dir_t d) {
+    dir = d;
     tmr->setInterval(i);
     tmr->start();
     *str = s;
@@ -16,9 +18,10 @@ void pointTimer::setTmr(int i, QString s) {
 
 const QString&  pointTimer::incriment() {
     *str = *str + '.';
-    if(attempts <= 120) attempts++;
+    if(attempts <= 122) attempts++;
     else
         emit expired();
+    if(attempts > 120) emit expired();
     return *str;
 }
 
@@ -27,7 +30,7 @@ void pointTimer::stopTmr() {
 }
 
 bool pointTimer::isExpired(){
-    if(attempts > 120) {
+    if(attempts > 124) {
         this -> stopTmr();
         return true;
     }
@@ -36,4 +39,8 @@ bool pointTimer::isExpired(){
 
 const QTimer* pointTimer::getTmrPtr(){
     return tmr;
+}
+
+dir_t pointTimer::get_dir(){
+    return dir;
 }

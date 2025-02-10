@@ -33,6 +33,7 @@ public:
 //    void displayError(QAbstractSocket::SocketError socketError) override;
     void displayError() override;
     void successConn() override;
+    void successDisconn();
     configs getCs() const;
 //    ~vmConfigsChat();
 signals:
@@ -47,8 +48,11 @@ signals:
     void openFileSucc(const QString &title, const QString &text);
 
 public slots:
-    void connectButt(QString ip_t, QString port_t);
+    int connectButt(QString ip_t, QString port_t);
+    int disconnectButt(QString ip_t, QString port_t);
     int periodReqButt(QString ip_t, QString port_t, int t_out);
+    int stopReqButt(QString ip_t, QString port_t, int t_out);
+    int setTimeButt(QString ip_t, QString port_t, int t_out);
     void setParamsButt(QString ip_t, QString port_t);
     void getParamsButt(QString ip_t, QString port_t);
     void periodReq(/*QString ip_t, QString port_t*/);
@@ -82,6 +86,7 @@ private:
     pointTimer* pointTmr;
     chat* cht;
     send_t msg_type;
+    dir_t conn_dir;
 //    QByteArray w_buf;
 //    QString strPointTmr;
 //    QVariant np;

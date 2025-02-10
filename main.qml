@@ -1,18 +1,18 @@
-import QtQuick.Controls.Windows
-import QtQuick.Controls.Material
+//import QtQuick.Controls.Windows
+//import QtQuick.Controls.Material
 
 import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtCharts 2.0
 //import QtQuick.Controls 1.0
 import QtQuick.Controls 2.0     //1.0//2.0
-import QtQuick.Dialogs //2.0     //1.2
+import QtQuick.Dialogs 1.2//2.0     //1.2
 
 //import QtQuick.Controls.Basic   // auto
 Item {
     id: main1
     width: 640
-    height: 480
+    height: 580
     visible: true
 //    background:
 //    property int ip_w: Math.max(c_ip.t1.width, t2.width, t3.width) + rect_2 *2

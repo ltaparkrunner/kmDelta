@@ -198,9 +198,9 @@ int configs::load_file_configs(QString filen) {
 
 bool configs::check_IP(uint8_t ip[], QString& ip_s){
     if (ip_s.count('.') < 3) return false;
-    auto i = ip_s.split('.').begin();   // TODO: Don't call QList::begin() on temporary
+    auto i = ip_s.split('.')/*.begin()*/;   // TODO: Don't call QList::begin() on temporary
     for(int i1 = 0; i1 < 4; i1++){
-        uint8_t t1 = (*i).toShort();
+        uint8_t t1 = i[i1].toShort();
         ip[i1] = t1;
     }
     return true;
@@ -328,7 +328,7 @@ int configs::load_tcp_configs(MbtcpClient* tcpC) { // send message to load param
     ret_t rez = load_tcp_configs_bArray();
     if(rez.res < 0) return -1;
     else if(tcpC->sendToTcp(rez.bdata) > 0) {
-        qDebug("success /n");
+        qDebug("load_tcp_configs   success /n");
         // тут разбор и запись в configs -> parms
         return 0;
     }
@@ -383,17 +383,22 @@ int configs::parse_tcp_resp(QByteArray &buf){ // respond after load params from 
         int sm = 42;
         for (int i = 0; i < 4; i++)
         {
-            int16_t porog = buf[sm]; sm++;
-            porog = (int16_t)((porog << 8) | buf[sm]); sm++;
-            cnfg.avariya[i].porog_max = porog;
-            porog = buf[sm]; sm++;
-            porog = (int16_t)((porog << 8) | buf[sm]); sm++;
-            cnfg.avariya[i].porog_min = porog;
+//            int16_t porog = buf[sm]; sm++;
+//            porog = (buf[sm] & 0x00ff) | (porog << 8) ; sm++;
+            cnfg.avariya[i].porog_max = (buf[sm+1] & 0x00ff) | (buf[sm] << 8);
+            sm += 2;
+//            porog = buf[sm]; sm++;
+//            porog = (buf[sm] & 0x00ff) | (porog << 8); sm++;
+            cnfg.avariya[i].porog_min = (buf[sm+1] & 0x00ff) | (buf[sm] << 8);
+            sm += 2;
         }
-        cnfg.porog_max = buf[36]; cnfg.porog_max = (int16_t)((cnfg.porog_max << 8) + buf[37]);
-        cnfg.porog_min = buf[38]; cnfg.porog_min = (int16_t)((cnfg.porog_min << 8) + buf[39]);
-        cnfg.version_proshivki = buf[58]; cnfg.version_proshivki = (int16_t)(cnfg.version_proshivki << 8);
-        cnfg.version_proshivki = (int16_t)(cnfg.version_proshivki | buf[59]);
+        /*cnfg.porog_max = ; */
+        cnfg.porog_max = (int16_t)((buf[36] << 8) + (0x00ff & buf[37]));
+        /*cnfg.porog_min = buf[38];*/
+        cnfg.porog_min = (int16_t)((buf[38] << 8) + (0x00ff & buf[39]));
+        //cnfg.version_proshivki = buf[58];
+        //cnfg.version_proshivki = (int16_t)(buf[58] << 8);
+        cnfg.version_proshivki = (int16_t)((buf[58] << 8) | (0x00ff & buf[59]));
 //        MessageBox.Show("Новые параметры получены");
 
         cnfg.obnovlenie_proshivki = true;

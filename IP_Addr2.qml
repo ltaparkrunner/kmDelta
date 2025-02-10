@@ -3,13 +3,13 @@ import QtQuick.Layouts 1.0
 import QtCharts 2.0
 //import QtQuick.Controls 1.0
 import QtQuick.Controls 2.0     //1.0 //2.0
-import QtQuick.Dialogs  //2.0     //1.2
+import QtQuick.Dialogs  1.2 //2.0     //1.2
 
 Rectangle {
     id: ip_contain
-    width: 270
+    width: 272
     //height: 200
-    property int ht: 230
+    property int ht: 270
     property string ip_t: ip.text
     property string port_t: port.text
 //    property int ip_w: Math.max(t1.width, t2.width, t3.width) + rect_2 *2
@@ -209,13 +209,26 @@ Rectangle {
                 }
             }
         }
-        Button{
-            id : butt_Commit
-            width: 100
-            height: 20
-            text: "Установить"
-            onClicked: {
-                vmConfigsChat.commitFromQml(ip.text)
+        RowLayout{
+            Button{
+                id : sendMessButt
+                text: "Request params"
+                onClicked: {
+                    vmConfigsChat.getParamsButt(ip_2.ip_t, ip_2.port_t)
+                }
+                implicitWidth: 107
+            }
+            Button{
+                id : butt_Commit
+                width: 100
+                height: 20
+                text: "Set params"
+                onClicked: {
+                   vmConfigsChat.setParamsButt(ip_2.ip_t, ip_2.port_t)
+    //                vmConfigsChat.commitFromQml(ip.text)
+                }
+                implicitWidth: 107
+    //            implicitHeight: 20
             }
         }
     }
