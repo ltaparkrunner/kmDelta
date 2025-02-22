@@ -6,5 +6,10 @@
         <file>ControlP.qml</file>
         <file>IP_Addr.qml</file>
         <file>IP_Addr2.qml</file>
+        <file>Charttextview.qml</file>
+        <file>Double_rect.qml</file>
+        <file>Double_rect2.qml</file>
+        <file>Double_rect3.qml</file>
+        <file>Double_rect4.qml</file>
     </qresource>
 </RCC>

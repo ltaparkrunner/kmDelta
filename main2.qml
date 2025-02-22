@@ -1,21 +1,20 @@
 //import QtQuick.Controls.Windows
 //import QtQuick.Controls.Material
 
-import QtQuick 2.0
+import QtQuick 2.4
 import QtQuick.Layouts 1.0
 import QtCharts 2.0
 //import QtQuick.Controls 1.0
-import QtQuick.Controls 2.0     //1.0//2.0
-import QtQuick.Dialogs //1.2//2.0     //1.2
+import QtQuick.Controls 1.4     //1.0//2.0
+import QtQuick.Dialogs 1.2//2.0     //1.2
+import QtQuick.Window 2.15
+import QtQuick.Controls 2.15
 
-//import QtQuick.Controls.Basic   // auto
-Item {
+ApplicationWindow{
     id: main1
-    width: 1200
-    height: 580
+    width: 960
+    height: 640
     visible: true
-
-//    property int ph
 //    background:
 //    property int ip_w: Math.max(c_ip.t1.width, t2.width, t3.width) + rect_2 *2
 
@@ -32,46 +31,69 @@ Item {
             messageDialog2.open()
         }
     }
+
+    menuBar:
+       MenuBar{
+        Menu {
+            title: qsTr("File")
+
+            MenuItem {
+                text: qsTr("Connect")
+                onTriggered: Qt.quit();
+            }
+            MenuItem {
+                text: qsTr("Disconnect")
+                onTriggered: Qt.quit();
+            }
+            MenuItem {
+                text: qsTr("Exit")
+                onTriggered: Qt.quit();
+            }
+        }
+        Menu {
+            title: qsTr("Properities")
+
+            MenuItem {
+                text: qsTr("Connect")
+                onTriggered: Qt.quit();
+            }
+            MenuItem {
+                text: qsTr("Disconnect")
+                onTriggered: Qt.quit();
+            }
+            MenuItem {
+                text: qsTr("Exit")
+                onTriggered: Qt.quit();
+            }
+        }
+
+        Menu {
+            title: qsTr("About the program")
+
+            MenuItem {
+                text: qsTr("Exit")
+                onTriggered: Qt.quit();
+            }
+        }
+    }
+
     ColumnLayout{
         spacing: 2
         anchors.fill: parent
+
         Rectangle {
             Layout.alignment: Qt.AlignCenter
-            color: "red"
+            color: "white"
 //            Layout.preferredWidth: 40
             Layout.fillWidth: true
             Layout.fillHeight: true
             RowLayout{
                 spacing: 2
                 anchors.fill: parent
-/*
-                Rectangle {
-                    Layout.alignment: Qt.AlignRight
-                    color: "yellow"
-        //            Layout.preferredWidth: 40
+
+                ChatW{
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                }
-*/
-/*
-                Rectangle {
-                    Layout.alignment: Qt.AlignLeft
-                    color: "blue"
-        //            Layout.preferredWidth: 40
-                    Layout.preferredWidth: parent.width/3
-                    Layout.fillHeight: true
-                }
-*/
-                // ChatW{
-                //     Layout.fillWidth: true
-                //     Layout.fillHeight: true
-                // }
-//                Charttextview{
-                Double_rect4{
-                    id: chartw
-                        Layout.fillWidth: true
-                        Layout.fillHeight: true//totrue(height)
-
                 }
 
                 ControlP{
@@ -82,11 +104,6 @@ Item {
                     //Layout.fillWidth: true
                     Layout.fillHeight: true
                 }
-                // onHeightChanged: {
-                //     console.log("ScaleChanged height:", height);
-                //     chartw.redraw()
-                // }
-//
             }
         }
 /*
@@ -115,11 +132,7 @@ Item {
     }
     Component.onCompleted: {
         vmConfigsChat.rectCompleted_Qml()
+//        menu.open()
 //        messageDialog2.open()
-    }
-    function totrue(x){
-        console.log("height)", x);
-//        console.log("parent.height)", y);
-        return true;
     }
 }

@@ -3,7 +3,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 //import QtQuick.Dialogs 1.0
-import QtQuick.Dialogs 1.2  //2.0       // TODO strange it works without version???
+import QtQuick.Dialogs //1.2  //2.0       // TODO strange it works without version???
 
 Rectangle{
     id:c_ip2
