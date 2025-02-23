@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.0
 import QtCharts 2.0
 //import QtQuick.Controls 1.0
 import QtQuick.Controls 2.0     //1.0//2.0
-import QtQuick.Dialogs 1.2//2.0     //1.2
+import QtQuick.Dialogs //2.0     //1.2
 
 //import QtQuick.Controls.Basic   // auto
 Item {
