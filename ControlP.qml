@@ -6,10 +6,18 @@ import QtQuick.Layouts 1.0
 import QtQuick.Dialogs //2.0       // TODO strange it works without version???
 
 Rectangle{
+    readonly property font myFont: ({
+            family: "Helvetica",
+//            pointSize: 20,
+            pixelSize: 17,
+            bold: false //true
+        })
+    readonly property int butth: 50
+    readonly property int spch: 20
     id:c_ip2
     width: ip_2.width
-    color: 'blue'
-
+    //color: 'white'
+    Layout.margins: 10
     Connections {
         target: vmConfigsChat // Указываем целевое соединение
         /* Объявляем и реализуем функцию, как параметр
@@ -31,80 +39,107 @@ Rectangle{
     }
 
 ColumnLayout{
-    spacing: 3
+    spacing: spch
+//    anchors.horizontalCenter: parent.horizontalCenter
     Text{
+        Layout.alignment: Qt.AlignHCenter
         id: uppText
-        text: 'Com1'
+        text: 'Device Date Time'
+        font: myFont
     }
-    Button{
-        id : butt1
-        text: "Choose COM"
-        implicitWidth: 107
+//    Button{
+//        id : butt1
+//        text: "Choose COM"
+//        implicitWidth: 107
+//    }
+    RowLayout{
+//        anchors.horizontalCenter: parent.horizontalCenter
+        Layout.alignment: Qt.AlignHCenter
+        spacing: 10
+//        Layout.margins: 10
+        Text{
+            id: bottomText1
+            text: '00:00:00'
+            font: myFont
+        }
+        Text{
+            id: bottomText2
+            text: '00'
+            font: myFont
+        }
     }
     RowLayout{
+        spacing: 10
+//        anchors.horizontalCenter: parent.horizontalCenter
+        Layout.alignment: Qt.AlignHCenter
         Button{
             id : connectButt
-            width : 220
+//            width : 220
             text: "Connect"
+            font: myFont
             onClicked: {
                 vmConfigsChat.connectButt(ip_2.ip_t, ip_2.port_t)
     //            messageDialog.open()
             }
-            implicitWidth: 107
+            implicitWidth: 172
+            implicitHeight: butth
         }
         Button{
             id : disconnectButt
-            width : 220
+//            width : 220
             text: "Disconnect"
+            font: myFont
             onClicked: {
                 vmConfigsChat.disconnectButt(ip_2.ip_t, ip_2.port_t)
     //            messageDialog.open()
             }
-            implicitWidth: 107
+            implicitWidth: 172
+            implicitHeight: butth
         }
     }
-    Text{
-        id: bottomText1
-        text: '00:00:00'
-    }
-    Text{
-        id: bottomText2
-        text: '00'
-    }
+
      IP_Addr2{
         id: ip_2
         color: parent.parent.color
         Layout.preferredHeight: ip_2.ht
-        implicitHeight: 207
+//        implicitHeight: 400     //217
     }
     RowLayout{
+        spacing: 10
+//        Layout.margins: 10
+//        anchors.horizontalCenter: parent.horizontalCenter
+        Layout.alignment: Qt.AlignHCenter
         Button{
             id : periodicRequestButt
-            width : 220
             text: "Periodic request"
+            font: myFont
             onClicked: {
                 vmConfigsChat.periodReqButt(ip_2.ip_t, ip_2.port_t, 3000)
             }
-            implicitWidth: 107
+            implicitWidth: 172
+            implicitHeight: butth
         }
         Button{
             id : stopRequestButt
-            width : 220
             text: "Stop request"
+            font: myFont
             onClicked: {
                 vmConfigsChat.stopReqButt(ip_2.ip_t, ip_2.port_t, 3000)
             }
-            implicitWidth: 107
+            implicitWidth: 172
+            implicitHeight: butth
         }
     }
     Button{
+        Layout.alignment: Qt.AlignHCenter
         id : setTimeButt
-        width : 220
         text: "Set Date Time"
+        font: myFont
         onClicked: {
             vmConfigsChat.setTimeButt(ip_2.ip_t, ip_2.port_t, 3000)
         }
-        implicitWidth: 220
+        implicitWidth: 354
+        implicitHeight: butth
     }
     }
 }

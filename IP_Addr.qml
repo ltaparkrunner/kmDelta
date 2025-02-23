@@ -15,7 +15,7 @@ Rectangle {
            port.text = ip_port;    //portp;
         }
     }
-
+    readonly property int butth: 30
     Binding{ target: vmConfigs; property: "np_p"; value: {ip; mask}}
     Binding{ target: vmConfigs; property: "ip_n"; value: ip }
 
@@ -25,7 +25,7 @@ Rectangle {
         Button{
             id : butt_ip
             width: 100
-            height: 20
+            height: butth
             text: "Load_IP"
             onClicked: {
                 ipAddr.receiveFromQml()
@@ -52,11 +52,11 @@ Rectangle {
                 text: qsTr("IP-адрес")
             }
             Rectangle{
-                height: 20
+                height: butth
                 width: 100
-                color: "yellow"
+//                color: "yellow"
                 TextInput{
-                    color: "green"
+//                    color: "green"
                     anchors.fill: parent
                     id: ip
                     text: "forever"
@@ -71,11 +71,11 @@ Rectangle {
                 text: qsTr("IP-адрес")
             }
             Rectangle{
-                height: 20
+                height: butth
                 width: 100
-                color: "yellow"
+//                color: "yellow"
                 TextInput{
-                    color: "green"
+//                    color: "green"
                     anchors.fill: parent
                     id: mask
                     text: "forever"
@@ -92,11 +92,11 @@ Rectangle {
             }
             Rectangle{
                 //anchors.leftMargin: 5
-                height: 20
+                height: butth
                 width: 100
-                color: "yellow"
+//                color: "yellow"
                 TextInput{
-                    color: "green"
+//                    color: "green"
                     anchors.fill: parent
                     id: port
                     text: "forever"
@@ -106,7 +106,7 @@ Rectangle {
         Button{
             id : butt_Commit
             width: 100
-            height: 20
+            height: butth
             text: "Установить"
             onClicked: {
                 ipAddr.commitFromQml(ip.text)

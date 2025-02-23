@@ -5,18 +5,33 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.0
 import QtCharts 2.0
 //import QtQuick.Controls 1.0
-import QtQuick.Controls 2.0     //1.0//2.0
+import QtQuick.Controls //2.0     //1.0//2.0
 import QtQuick.Dialogs //2.0     //1.2
 
 //import QtQuick.Controls.Basic   // auto
-Item {
+ApplicationWindow{
+//Item {
+    readonly property font myTitleFont: ({
+            family: "Helvetica",
+//            pointSize: 20,
+            pixelSize: 25,
+            bold: false//true
+        })
     id: main1
-    width: 640
-    height: 580
+    width: 1260
+    height: 940
     visible: true
+    title : "Chart Window"
+    font: myTitleFont
 //    background:
 //    property int ip_w: Math.max(c_ip.t1.width, t2.width, t3.width) + rect_2 *2
-
+    readonly property int spch: 20
+    readonly property font myFontMenu: ({
+            family: "Helvetica",
+//            pointSize: 20,
+            pixelSize: 17,
+//            bold: true
+        })
     Connections {
             target: vmConfigsChat // Указываем целевое соединение
 //            onSendToDialog: {
@@ -30,36 +45,73 @@ Item {
             messageDialog2.open()
         }
     }
+
+    menuBar:
+       MenuBar{
+        font: myFontMenu
+        Menu {
+            title: qsTr("File")
+            font: parent.font
+            MenuItem {
+                text: qsTr("Connect")
+                font: myFontMenu
+                onTriggered: Qt.quit();
+            }
+            MenuItem {
+                text: qsTr("Disconnect")
+                font: myFontMenu
+                onTriggered: Qt.quit();
+            }
+            MenuItem {
+                text: qsTr("Exit")
+                font: myFontMenu
+                onTriggered: Qt.quit();
+            }
+        }
+        Menu {
+            title: qsTr("Properities")
+            font: parent.font
+            MenuItem {
+                text: qsTr("Connect")
+                font: myFontMenu
+                onTriggered: Qt.quit();
+            }
+            MenuItem {
+                text: qsTr("Disconnect")
+                font: myFontMenu
+                onTriggered: Qt.quit();
+            }
+            MenuItem {
+                text: qsTr("Exit")
+                font: myFontMenu
+                onTriggered: Qt.quit();
+            }
+        }
+
+        Menu {
+            title: qsTr("About the program")
+            font: parent.font
+            MenuItem {
+                text: qsTr("Exit")
+                font: myFontMenu
+                onTriggered: Qt.quit();
+            }
+        }
+    }
+
     ColumnLayout{
-        spacing: 2
+        spacing: spch
         anchors.fill: parent
         Rectangle {
             Layout.alignment: Qt.AlignCenter
-            color: "red"
+            color: "white"
 //            Layout.preferredWidth: 40
             Layout.fillWidth: true
             Layout.fillHeight: true
             RowLayout{
                 spacing: 2
                 anchors.fill: parent
-/*
-                Rectangle {
-                    Layout.alignment: Qt.AlignRight
-                    color: "yellow"
-        //            Layout.preferredWidth: 40
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                }
-*/
-/*
-                Rectangle {
-                    Layout.alignment: Qt.AlignLeft
-                    color: "blue"
-        //            Layout.preferredWidth: 40
-                    Layout.preferredWidth: parent.width/3
-                    Layout.fillHeight: true
-                }
-*/
+
                 ChatW{
                     Layout.fillWidth: true
                     Layout.fillHeight: true

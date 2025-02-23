@@ -16,7 +16,7 @@ message("QT_VERSION_MAJOR= ${QT_VERSION_MAJOR}" )
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Charts Network Test)
 
 set(PROJECT_SOURCES
-        main.cpp
+#        main.cpp
         qml.qrc
 #        controlip.h
 #        controlip.cpp
@@ -46,6 +46,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
             chat.h chat.cpp
             pointtimer.h pointtimer.cpp
             pTmrIntrfc.h
+            main2.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET kmdelta6 APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

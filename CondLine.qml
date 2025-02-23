@@ -8,8 +8,14 @@ Rectangle{
     //x:
     //y: upp1.bottom
     //bottom: main1.bottom
-    height:70
-    color: 'green'
+    height:80
+    //color: 'green'
+    readonly property font myFont: ({
+            family: "Helvetica",
+//            pointSize: 20,
+            pixelSize: 20,
+            bold: false //true
+        })
     Connections {
         target: vmConfigsChat // Указываем целевое соединение
         /* Объявляем и реализуем функцию, как параметр
@@ -28,11 +34,13 @@ Rectangle{
         x: 10;
         y: 10
         text: '00:00:00'
+        font: myFont
     }
     Text{
         id: bottomText4
         x: bottomText3.x;
         y: bottomText3.y + bottomText3.height + 10
         text: '00'
+        font: myFont
     }
 }
