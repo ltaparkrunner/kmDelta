@@ -14,20 +14,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Charts Network Test)
 message("QT_VERSION_MAJOR= ${QT_VERSION_MAJOR}" )
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Charts Network Test)
-
+set(src_dir "src/")
+set(inc_dir "inc/")
 set(PROJECT_SOURCES
-        main2.cpp
-        qml.qrc
+    ${src_dir}main2.cpp
+        qml/qml.qrc
 #        controlip.h
 #        controlip.cpp
-        ipAddr.h
-        ipAddr.cpp
-        mbtcpClient.h
-        mbtcpClient.cpp
+        ${inc_dir}ipAddr.h
+        ${src_dir}ipAddr.cpp
+        ${inc_dir}mbtcpClient.h
+        ${src_dir}mbtcpClient.cpp
 #        tcp_req.h
 #        tcp_req.cpp
-        crc32.h
-        crc32.cpp
+        ${inc_dir}crc32.h
+        ${src_dir}crc32.cpp
 #        tcpman.h
 #        tcpman.cpp
 #        tcp_exch.h
@@ -40,12 +41,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(kmdelta6
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-            tcpIntrfc.h
-            configs.h configs.cpp
-            vmConfigsChat.h vmConfigsChat.cpp
-            chat.h chat.cpp
-            pointtimer.h pointtimer.cpp
-            pTmrIntrfc.h
+            ${inc_dir}tcpIntrfc.h
+            ${inc_dir}configs.h ${src_dir}configs.cpp
+            ${inc_dir}vmConfigsChat.h ${src_dir}vmConfigsChat.cpp
+            ${inc_dir}chat.h ${src_dir}chat.cpp
+            ${inc_dir}pointtimer.h ${src_dir}pointtimer.cpp
+            ${inc_dir}pTmrIntrfc.h
 #            main2.cpp
     )
 # Define target properties for Android with Qt 6 as:
@@ -63,15 +64,15 @@ else()
         add_executable(kmdelta6
           ${PROJECT_SOURCES}
 #          tcpIntrfc.h
-           tcpIntrfc.h
+           ${inc_dir}tcpIntrfc.h
 #          tcpIntrfc.h
 #          tcpIntrfc.cpp
 #          tcpIntrfc.cpp
-          configs.h configs.cpp
-          vmConfigsChat.h vmConfigsChat.cpp
-          chat.h chat.cpp
-          pointtimer.h pointtimer.cpp
-          pTmrIntrfc.h
+          ${inc_dir}configs.h ${src_dir}configs.cpp
+          ${inc_dir}vmConfigsChat.h ${src_dir}vmConfigsChat.cpp
+          ${inc_dir}chat.h ${src_dir}chat.cpp
+          ${inc_dir}pointtimer.h ${src_dir}pointtimer.cpp
+          ${inc_dir}pTmrIntrfc.h
         )
     endif()
 endif()
@@ -80,7 +81,7 @@ target_compile_definitions(kmdelta6
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(kmdelta6
   PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick  Qt${QT_VERSION_MAJOR}::Charts Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Test)
-
+target_include_directories(kmdelta6 PUBLIC "inc")
 set_target_properties(kmdelta6 PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}

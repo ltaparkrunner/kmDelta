@@ -84,7 +84,7 @@ ColumnLayout{
             text: qsTr("Соединить")
 //            font: myFont
             onClicked: {
-                vmConfigsChat.connectButt(ip_2.ip_t, ip_2.port_t)
+//                vmConfigsChat.connectButt(ip_2.ip_t, ip_2.port_t)
     //            messageDialog.open()
                 sendButt(1)
             }
@@ -124,7 +124,8 @@ ColumnLayout{
             text: "Опрос датчиков"
 //            font: myFont
             onClicked: {
-                vmConfigsChat.periodReqButt(ip_2.ip_t, ip_2.port_t, 3000)
+//                vmConfigsChat.periodReqButt(ip_2.ip_t, ip_2.port_t, 3000)
+                sendButt(3)
             }
             implicitWidth: 172
             implicitHeight: butth
@@ -135,7 +136,8 @@ ColumnLayout{
             text: "Остановить опрос датчиков"
 //            font: myFont
             onClicked: {
-                vmConfigsChat.stopReqButt(ip_2.ip_t, ip_2.port_t, 3000)
+//                vmConfigsChat.stopReqButt(ip_2.ip_t, ip_2.port_t, 3000)
+                sendButt(4)
             }
             implicitWidth: 172
             implicitHeight: butth
