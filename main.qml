@@ -22,16 +22,15 @@ ApplicationWindow{
     height: 940
     visible: true
     title : "Chart Window"
-    font: myTitleFont
-//    background:
-//    property int ip_w: Math.max(c_ip.t1.width, t2.width, t3.width) + rect_2 *2
-    readonly property int spch: 20
-    readonly property font myFontMenu: ({
-            family: "Helvetica",
-//            pointSize: 20,
-            pixelSize: 17,
-//            bold: true
-        })
+
+    readonly property int menuh: 35
+    readonly property int spch: 10
+//    readonly property font myFontMenu: ({
+//            family: "Helvetica",
+////            pointSize: 20,
+//            pixelSize: 17,
+////            bold: true
+//        })
     Connections {
             target: vmConfigsChat // Указываем целевое соединение
 //            onSendToDialog: {
@@ -48,53 +47,94 @@ ApplicationWindow{
 
     menuBar:
        MenuBar{
-        font: myFontMenu
+//        font: myFontMenu
+          contentHeight: 30
+//          height: 30
         Menu {
-            title: qsTr("File")
+            title: {qsTr("Файл")}
             font: parent.font
+            height: menuh * 3 + 14
             MenuItem {
-                text: qsTr("Connect")
-                font: myFontMenu
+                //text: qsTr("Connect")
+                text: qsTr("Соединить")
+//                font: myFontMenu
                 onTriggered: Qt.quit();
+                height: menuh
             }
             MenuItem {
-                text: qsTr("Disconnect")
-                font: myFontMenu
+//                text: qsTr("Disconnect")
+                text: qsTr("Разъединить")
+//                font: myFontMenu
                 onTriggered: Qt.quit();
+                height: menuh
             }
+            MenuSeparator{}
             MenuItem {
-                text: qsTr("Exit")
-                font: myFontMenu
+//                text: qsTr("Exit")
+                text: qsTr("Выход")
+//                font: myFontMenu
                 onTriggered: Qt.quit();
+                height: menuh
             }
         }
         Menu {
-            title: qsTr("Properities")
+//            title: qsTr("Properities")
+            title: qsTr("Настройки")
             font: parent.font
+            height: menuh * 6 + 2
             MenuItem {
-                text: qsTr("Connect")
-                font: myFontMenu
+//                text: qsTr("Load_From_File")
+                text: qsTr("Загрузить из файла")
+//                font: myFontMenu
                 onTriggered: Qt.quit();
+                height: menuh
             }
             MenuItem {
-                text: qsTr("Disconnect")
-                font: myFontMenu
+//                text: qsTr("Save_To_File")
+                text: qsTr("Сохранить настройки в файл")
+//                font: myFontMenu
                 onTriggered: Qt.quit();
+                height: menuh
             }
             MenuItem {
-                text: qsTr("Exit")
-                font: myFontMenu
+//                text: qsTr("Load_From_Device")
+                text: qsTr("Загрузить из устройства")
+//                font: myFontMenu
                 onTriggered: Qt.quit();
+                height: menuh
+            }
+            MenuItem {
+//                text: qsTr("Save_To_Device")
+                  text: qsTr("Записать в устройство")
+//                font: myFontMenu
+                onTriggered: Qt.quit();
+                height: menuh
+            }
+            MenuItem {
+//                text: qsTr("Load_Defaults")
+                text: qsTr("Загрузить параметры по умолчанию в программу")
+//                font: myFontMenu
+                onTriggered: Qt.quit();
+                height: menuh
+            }
+            MenuItem {
+//               text: qsTr("Set_Date_Time")
+                text: qsTr("Установить Дату и Время")
+//                font: myFontMenu
+                onTriggered: Qt.quit();
+                height: menuh
             }
         }
 
         Menu {
-            title: qsTr("About the program")
-            font: parent.font
+ //           title: qsTr("About " + main1.title)
+            title: qsTr("О программе")
+            height: menuh + 2
             MenuItem {
-                text: qsTr("Exit")
-                font: myFontMenu
-                onTriggered: Qt.quit();
+                text: qsTr("О программе")
+//                font: myFontMenu
+                onTriggered: aboutDialog.open();
+                height: menuh
             }
         }
     }
@@ -151,6 +191,18 @@ ApplicationWindow{
         text: qsTr("The document has been modified.")
 //        width: 300
     }
+    MessageDialog{
+        id: aboutDialog
+        title: qsTr("О программе \"Chart Window\"")
+        text: qsTr( "\"Chart Window\" \n \
+        (c) ОАО \"Авангард\"\n \
+   Санкт-Петербург, Кондратьевский пр., д.72,\n\
+                   \n\
+      Разработчики: \n\
+        Игнатьев В.С. \n\
+        Мордвинцев А.Л.")
+    }
+
     Component.onCompleted: {
         vmConfigsChat.rectCompleted_Qml()
 //        messageDialog2.open()

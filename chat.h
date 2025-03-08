@@ -35,11 +35,13 @@ public:
     explicit chat();
     int get_tcp_chatdata(MbtcpClient* tcpC); // send message to load params from device
     QList<qint32>& parse_tcp_resp(QByteArray &buf); // respond after load params from device and parsing
-
+    QString& getDate(){return dev_date;}
+    QString& getTime(){return dev_time;}
 private:
     ret_t get_tcp_chatdata_bArray();
     probe prb;
-    QString T_Date;
+    QString dev_time;
+    QString dev_date;
     int minute;
     QString status_control;
     label_vniim lvm;

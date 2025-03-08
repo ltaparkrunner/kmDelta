@@ -9,19 +9,29 @@ Rectangle {
     id: ip_contain
     width: 384
     //height: 200
-    property int ht: 500
+    property int ht: 400    //310//500
     property string ip_t: ip.text
     property string port_t: port.text
 //    property int ip_w: Math.max(t1.width, t2.width, t3.width) + rect_2 *2
 //    height: 2000
-    readonly property int butth: 50
+    readonly property int butth: 40//50
     readonly property int tinph: 25
-    readonly property font myFont: ({
-            family: "Helvetica",
-//            pointSize: 20,
-            pixelSize: 17,
-            bold: false     //true
-        })
+    readonly property int spch:  20  //10     // 5     //10
+
+//    readonly property font myFont: ({
+//            family: "Helvetica",
+////            pointSize: 20,
+//            pixelSize: 17,
+//            bold: false     //true
+//        })
+    function getParams(ls){
+        ls[0] = ip.text;   //addrp;
+        ls[2] = mask.text; //maskp;
+        ls[4] = port.text;    //portp;
+        ls[1] =  ip_2.text;
+        ls[3] = mask_2.text;
+        ls[5] = port_2.text;
+    }
 
     function sendParams(){
         var sList = [" Forever For "];
@@ -29,7 +39,7 @@ Rectangle {
         sList.push(ip.text)
         sList.push(mask.text);
         sList.push(port.text);
-        vmConfigsChat.load_Default_Qml(sList)
+        vmConfigsChat.loadDefaultButt(sList)
 //        return(sList);
     }
 
@@ -52,9 +62,9 @@ Rectangle {
         }
     }
     ColumnLayout{
-        spacing: 20
+        spacing: spch
         Layout.rightMargin: 20
-        Layout.topMargin: 10
+//        Layout.topMargin: 10
         anchors.fill: parent
 
         RowLayout{
@@ -63,27 +73,31 @@ Rectangle {
 //            Layout.margins: parent.Layout.margins
             Button{
                 id : butt_load_file
-                text: "Load_From_File"
-                font: myFont
+//                text: "Load_From_File"
+                text: "Загрузить из файла"
+//                font: myFont
                 onClicked: {
-                    vmConfigsChat.load_File_Qml()
-                    }
+//                    vmConfigsChat.loadFileButt()
+                    sendButt(8)
+                }
                 implicitHeight: butth
                 implicitWidth: 172
             }
             Button{
                 id : butt_save_file
-                text: "Save_To_File"
-                font : myFont
+//                text: "Save_To_File"
+                text: "Сохранить настройки в файл"
+//                font : myFont
                 onClicked: {
-                    var ls = [];
-                    ls[0] = ip.text;   //addrp;
-                    ls[2] = mask.text; //maskp;
-                    ls[4] = port.text;    //portp;
-                    ls[1] =  ip_2.text;
-                    ls[3] = mask_2.text;
-                    ls[5] = port_2.text;
-                    vmConfigsChat.save_File_Qml(ls)
+//                    var ls = [];
+//                    ls[0] = ip.text;   //addrp;
+//                    ls[2] = mask.text; //maskp;
+//                    ls[4] = port.text;    //portp;
+//                    ls[1] =  ip_2.text;
+//                    ls[3] = mask_2.text;
+//                    ls[5] = port_2.text;
+//                    vmConfigsChat.saveFileButt(ls)
+                    sendButt(9)
                 }
                 implicitHeight: butth
                 implicitWidth: 172
@@ -91,14 +105,17 @@ Rectangle {
         }
         RowLayout{
             Layout.alignment: Qt.AlignHCenter
-                        spacing: 10
+            spacing: 10
             Button{
                 id : butt_load_device
                 height: butth
-                text: "Load_From_Device"
-                font : myFont
+//                text: "Load_From_Device"
+                text: "Загрузить из устройства"
+//                font : myFont
                 onClicked: {
-                    vmConfigsChat.load_Device_Qml()
+//                    vmConfigsChat.loadDeviceButt()
+//                    sendParams()
+                      sendButt(7)
                     }
                 implicitWidth: 172
                 implicitHeight: butth
@@ -106,11 +123,21 @@ Rectangle {
             Button{
                 id : butt_save_device
                 height: butth
-                text: "Save_To_Device"
-                font : myFont
+//                 text: "Save_To_Device"
+                text: "Записать в устройство"
+//                font : myFont
                 onClicked: {
-                    vmConfigsChat.save_Device_Qml()
-                    }
+//                        var ls = [];
+//                        ls[0] = ip.text;   //addrp;
+//                        ls[2] = mask.text; //maskp;
+//                        ls[4] = port.text;    //portp;
+//                        ls[1] =  ip_2.text;
+//                        ls[3] = mask_2.text;
+//                        ls[5] = port_2.text;
+////                        vmConfigsChat.saveDeviceButt(ls)
+//                        vmConfigsChat.pushedButt(ls, 6)
+                    sendButt(6)
+                }
                 implicitWidth: 172
                 implicitHeight: butth
             }
@@ -120,13 +147,11 @@ Rectangle {
             id : butt_default
 //            width: 640
             height: butth
-            text: "Load_Defaults"
-            font : myFont
+//            text: "Load_Defaults"
+            text: "Загрузить параметры по умолчанию в программу"
             onClicked: {
-//                String t =
-//                property var  str: ip.text
-                sendParams();
-//                vmConfigsChat.load_Default_Qml()
+//                sendButt(7);
+                sendButt(12)
                 }
             implicitWidth: 354
             implicitHeight: butth
@@ -134,36 +159,53 @@ Rectangle {
 
         RowLayout{
             Layout.alignment: Qt.AlignHCenter
-            spacing: 5
+//            spacing: 5
             ColumnLayout{
-                spacing: 8
-                Layout.alignment: Qt.AlignBottom
+                spacing: spch
+                Layout.alignment: Qt.AlignTop
                 Rectangle{
                     height: tinph
                     width: 100
+//                    border{color: "black"}
                 }
-                Text {
-                    id: t1
-                    text: qsTr("IP-адрес")
-                    font : myFont
+                Rectangle{
+                    height: tinph
+                    width: 100
+                    Text {
+                        id: t1
+                        text: qsTr("IP-адрес")
+    //                    font : myFont
+                    }
                 }
-                Text {
-                    id: t2
-                    text: qsTr("IP-маска")
-                    font : myFont
+                Rectangle{
+                    height: tinph
+                    width: 100
+                    Text {
+                        id: t2
+                        text: qsTr("IP-маска")
+    //                    font : myFont
+                    }
                 }
-                Text {
-                    id: t3
-                    text: qsTr("порт")
-                    font : myFont
+                Rectangle{
+                    height: tinph
+                    width: 100
+                    Text {
+                        id: t3
+                        text: qsTr("порт")
+    //                    font : myFont
+                    }
                 }
             }
             ColumnLayout{
-                spacing: 10
-                Text {
-//                    Layout.leftMargin: 30
-                    text: qsTr("текущие")
-                    font : myFont
+                spacing: spch
+                Rectangle{
+                    height: tinph - 10
+                    width: 130
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: qsTr("текущие")
+    //                    font : myFont
+                    }
                 }
                 Rectangle{
                     id: rect_2
@@ -174,6 +216,7 @@ Rectangle {
 //                    color: "yellow"
                     TextInput{
                         horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                         anchors.fill: parent
                         id: ip
                         text: /*vmConfigsChat.ip_n */ "forever"
@@ -188,7 +231,7 @@ Rectangle {
                     border{color: "black"}
                     TextInput{
                         horizontalAlignment: Text.AlignHCenter
-//                        color: "green"
+                        verticalAlignment: Text.AlignVCenter
                         anchors.fill: parent
                         id: mask
                         text: "forever"
@@ -203,7 +246,7 @@ Rectangle {
                     border{color: "black"}
                     TextInput{
                         horizontalAlignment: Text.AlignHCenter
-//                        color: "green"
+                        verticalAlignment: Text.AlignVCenter
                         anchors.fill: parent
                         id: port
                         text: "forever"
@@ -212,10 +255,14 @@ Rectangle {
                 }
             }
             ColumnLayout{
-                spacing: 10
-                Text {
-                    text: qsTr("установить ")
-                    font : myFont
+                spacing: spch
+                Rectangle{
+                    height: tinph - 10
+                    width: 130
+                        Text {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: qsTr("установить ")
+                        }
                 }
                 Rectangle{
                     height: tinph
@@ -224,7 +271,7 @@ Rectangle {
                     border{color: "black"}
                     TextInput{
                         horizontalAlignment: Text.AlignHCenter
-//                        color: "green"
+                        verticalAlignment: Text.AlignVCenter
                         anchors.fill: parent
                         id: ip_2
                         text: "forever"
@@ -238,7 +285,7 @@ Rectangle {
                     border{color: "black"}
                     TextInput{
                         horizontalAlignment: Text.AlignHCenter
-//                        color: "green"
+                        verticalAlignment: Text.AlignVCenter
                         anchors.fill: parent
                         id: mask_2
                         text: "forever"
@@ -253,7 +300,7 @@ Rectangle {
                     border{color: "black"}
                     TextInput{
                         horizontalAlignment: Text.AlignHCenter
-//                        color: "green"
+                        verticalAlignment: Text.AlignVCenter
                         anchors.fill: parent
                         id: port_2
                         text: "forever"
@@ -269,11 +316,13 @@ Rectangle {
 //            leftMargin: 10
 //            rightMargin: 10
             Button{
-                id : sendMessButt
-                text: "Request params"
-                font : myFont
+                id : sendMesgButt
+//                text: "Request params"
+                text: "Считать параметры с устройства"
+//                font : myFont
                 onClicked: {
-                    vmConfigsChat.getParamsButt(ip_2.ip_t, ip_2.port_t)
+//                    vmConfigsChat.getParamsButt(ip_t, port_t)
+                    sendButt(7)
                 }
                 implicitWidth: 172
                 implicitHeight: butth
@@ -282,16 +331,36 @@ Rectangle {
                 id : butt_Commit
                 width: 100
                 height: butth
-                text: "Set params"
-                font : myFont
+//                text: "Set params"
+                text: "Установить параметры на устройство"
+//                font : myFont
                 onClicked: {
-                   vmConfigsChat.setParamsButt(ip_2.ip_t, ip_2.port_t)
-    //                vmConfigsChat.commitFromQml(ip.text)
+                    sendButt(6)
+//                    var ls = [];
+//                    ls[0] = ip.text;   //addrp;
+//                    ls[2] = mask.text; //maskp;
+//                    ls[4] = port.text;    //portp;
+//                    ls[1] =  ip_2.text;
+//                    ls[3] = mask_2.text;
+//                    ls[5] = port_2.text;
+////                    vmConfigsChat.setParamsButt(ls)
+//                    vmConfigsChat.pushedButt(ls, 6)
                 }
                 implicitWidth: 172
                 implicitHeight: butth
     //            implicitHeight: 20
             }
         }
+    }
+    function sendButt(n){
+        var ls = [];
+        ls[0] = ip.text;   //addrp;
+        ls[2] = mask.text; //maskp;
+        ls[4] = port.text;    //portp;
+        ls[1] =  ip_2.text;
+        ls[3] = mask_2.text;
+        ls[5] = port_2.text;
+//                    vmConfigsChat.setParamsButt(ls)
+        vmConfigsChat.pushedButt(ls, n)
     }
 }

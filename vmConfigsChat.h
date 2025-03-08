@@ -23,6 +23,30 @@ enum send_t{
     setRTCErr = -4,
     connectErr = -5
 };
+enum conn_t{
+    unknown,
+    disconn,
+    success_conn,
+    success_disconn,
+    refused_conn,
+    error_conn
+};
+const int buttAmount = 13;
+enum pushedButt_t {
+    noneB,
+    connectB,
+    disconnectB,
+    periodReqB,
+    stopReqB,
+    setTimeB,
+    setParamsB,
+    getParamsB,
+    loadFileB,
+    saveFileB,
+    loadDeviceB,
+    saveDeviceB,
+    loadDefaultB
+};
 
 class vmConfigsChat : public tcpIntrfc//, public pTmrIntrfc
 {
@@ -40,6 +64,7 @@ signals:
     void sendToMB(const QString &title, const QString &text);
     void sendToQml(qint16 count);
     void sendToChat(QList<qint32> abs);
+    void sendTimeDate(const QString &d, const QString &t);
     void sendToDialog(const QString &title);
     void sendCurrIp(QList<QString> ls);
     void sendCurrIp_2(const QString &ls);
@@ -48,26 +73,25 @@ signals:
     void openFileSucc(const QString &title, const QString &text);
 
 public slots:
-    int connectButt(QString ip_t, QString port_t);
-    int disconnectButt(QString ip_t, QString port_t);
-    int periodReqButt(QString ip_t, QString port_t, int t_out);
+    int connectButt();
+    int disconnectButt(/*QString ip_t, QString port_t*/);
+    int periodReqButt();
     int stopReqButt(QString ip_t, QString port_t, int t_out);
-    int setTimeButt(QString ip_t, QString port_t, int t_out);
-    void setParamsButt(QString ip_t, QString port_t);
-    void getParamsButt(QString ip_t, QString port_t);
+    int setTimeButt(/*QString ip_t, QString port_t, int t_out*/);
+    void setParamsButt(/*QList<QString> ls*/);
+    void getParamsButt(/*QString ip_t, QString port_t*/);
     void periodReq(/*QString ip_t, QString port_t*/);
-//    void loadDevice_readyRead();
-//    void saveDevice_readyRead();
+
+    void pushedButt(QList<QString> ls, qint32 buttNum);
 
 
-    void load_File_Qml();                   // Load_From_File
-    void save_File_Qml(QList<QString> ls);  // Save_To_File
-    int load_Device_Qml();                  // send message to load params from device
-    int save_Device_Qml();                 // save params to device
+    void loadFileButt();                   // Load_From_File
+    void saveFileButt(/*QList<QString> ls*/);  // Save_To_File
+    int loadDeviceButt();                  // send message to load params from device
+    int saveDeviceButt();                 // save params to device
     int rectCompleted_Qml();
-//    void load_Default_Qml(QString str);
-    void load_Default_Qml(QList<QString> str);
-    void commitFromQml(QString str);
+    void loadDefaultButt(/*QList<QString> str*/);
+//    void commitFromQml(QString str);
     void expired_Respond();
 
     int loadDev_Respond() override;    // receive device's respond after send message to load params from device
@@ -87,10 +111,12 @@ private:
     chat* cht;
     send_t msg_type;
     dir_t conn_dir;
+    conn_t conn_c;
+    pushedButt_t butt;
 //    QByteArray w_buf;
 //    QString strPointTmr;
 //    QVariant np;
-    void sendMess();
+    void sendMesg();
     send_t getParamsTransmit();
     int tcpDevRespond();
     send_t launchPollTmr();
@@ -99,7 +125,7 @@ private:
     send_t setRTCTransmit();
     void delay(uint);
     int sensorsResp(QByteArray r_buf);
-
+    int butt_proc();
 };
 
 #endif // MVCONFIGSCHAT_H

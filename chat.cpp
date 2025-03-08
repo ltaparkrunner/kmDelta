@@ -2,7 +2,9 @@
 
 chat::chat():
     prb({ {{false, 500}, {false, 500}, {false, 500}, {false, 500}} , {{0, -273}, {0, -2648}, {0, -711}, {0, -1910}, {0, -845}, {0, -1519}, {0, -1736}, {0, -1612}}} )
-  , T_Date("")
+//  , T_Date("")
+  , dev_date("")
+  , dev_time("")
   , minute(0)
   , status_control ("")
   , lvm ({false, ""})
@@ -61,7 +63,9 @@ QList<qint32>& chat::parse_tcp_resp(QByteArray &buf) {
             x[h] = QString::number(buf[25 + h], 16);
             if (x[h].length() == 1) x[h] = "0" + x[h];
         }
-        T_Date = x[2] + ":" + x[1] + ":" + x[0] + " " + x[3] + "." + x[4] + ".20" + QString::number(buf[30], 16);
+        dev_time = x[2] + ":" + x[1] + ":" + x[0];
+        dev_date = x[3] + "." + x[4] + ".20" + QString::number(buf[30], 16);
+//        T_Date = x[2] + ":" + x[1] + ":" + x[0] + " " + x[3] + "." + x[4] + ".20" + QString::number(buf[30], 16);
     }
 
     minute = (buf[35] << 8) + buf[36];

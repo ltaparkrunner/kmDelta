@@ -12,10 +12,10 @@ Rectangle{
             pixelSize: 17,
             bold: false //true
         })
-    readonly property int butth: 50
+    readonly property int butth: 40
     readonly property int spch: 20
     id:c_ip2
-    width: ip_2.width
+    width: ipAddr_2.width
     //color: 'white'
     Layout.margins: 10
     Connections {
@@ -28,6 +28,10 @@ Rectangle{
         function onSendToQml(count) {
 //          onSendToQml: {
             bottomText1.text = count // Устанавливаем счётчик в текстовый лейбл
+        }
+        function onSendTimeDate(d, t) {
+            bottomText1.text = d;
+            bottomText2.text = t;
         }
     }
     MessageDialog{
@@ -44,8 +48,9 @@ ColumnLayout{
     Text{
         Layout.alignment: Qt.AlignHCenter
         id: uppText
-        text: 'Device Date Time'
-        font: myFont
+//        text: 'Device Date Time'
+        text: 'Дата, Время Устройства'
+//        font: myFont
     }
 //    Button{
 //        id : butt1
@@ -60,12 +65,12 @@ ColumnLayout{
         Text{
             id: bottomText1
             text: '00:00:00'
-            font: myFont
+//            font: myFont
         }
         Text{
             id: bottomText2
             text: '00'
-            font: myFont
+//            font: myFont
         }
     }
     RowLayout{
@@ -75,11 +80,13 @@ ColumnLayout{
         Button{
             id : connectButt
 //            width : 220
-            text: "Connect"
-            font: myFont
+//            text: "Connect"
+            text: qsTr("Соединить")
+//            font: myFont
             onClicked: {
                 vmConfigsChat.connectButt(ip_2.ip_t, ip_2.port_t)
     //            messageDialog.open()
+                sendButt(1)
             }
             implicitWidth: 172
             implicitHeight: butth
@@ -87,10 +94,12 @@ ColumnLayout{
         Button{
             id : disconnectButt
 //            width : 220
-            text: "Disconnect"
-            font: myFont
+//            text: "Disconnect"
+            text: qsTr("Разъединить")
+//            font: myFont
             onClicked: {
-                vmConfigsChat.disconnectButt(ip_2.ip_t, ip_2.port_t)
+                sendButt(2)
+//                vmConfigsChat.disconnectButt(ipAddr_2.ip_t, ipAddr_2.port_t)
     //            messageDialog.open()
             }
             implicitWidth: 172
@@ -99,9 +108,9 @@ ColumnLayout{
     }
 
      IP_Addr2{
-        id: ip_2
+        id: ipAddr_2
         color: parent.parent.color
-        Layout.preferredHeight: ip_2.ht
+        Layout.preferredHeight: ipAddr_2.ht
 //        implicitHeight: 400     //217
     }
     RowLayout{
@@ -111,8 +120,9 @@ ColumnLayout{
         Layout.alignment: Qt.AlignHCenter
         Button{
             id : periodicRequestButt
-            text: "Periodic request"
-            font: myFont
+//            text: "Periodic request"
+            text: "Опрос датчиков"
+//            font: myFont
             onClicked: {
                 vmConfigsChat.periodReqButt(ip_2.ip_t, ip_2.port_t, 3000)
             }
@@ -121,8 +131,9 @@ ColumnLayout{
         }
         Button{
             id : stopRequestButt
-            text: "Stop request"
-            font: myFont
+//            text: "Stop request"
+            text: "Остановить опрос датчиков"
+//            font: myFont
             onClicked: {
                 vmConfigsChat.stopReqButt(ip_2.ip_t, ip_2.port_t, 3000)
             }
@@ -133,13 +144,20 @@ ColumnLayout{
     Button{
         Layout.alignment: Qt.AlignHCenter
         id : setTimeButt
-        text: "Set Date Time"
-        font: myFont
+//        text: "Set Date Time"
+        text: qsTr("Установить Дату и Время")
+//        font: myFont
         onClicked: {
-            vmConfigsChat.setTimeButt(ip_2.ip_t, ip_2.port_t, 3000)
+            sendButt(5)
+//            vmConfigsChat.setTimeButt(ipAddr_2.ip_t, ipAddr_2.port_t, 3000)
         }
         implicitWidth: 354
         implicitHeight: butth
     }
     }
+    function sendButt(n){
+        var ls = [];
+        ipAddr_2.getParams(ls)
+        vmConfigsChat.pushedButt(ls, n)
+}
 }

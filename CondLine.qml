@@ -34,13 +34,13 @@ Rectangle{
         x: 10;
         y: 10
         text: '00:00:00'
-        font: myFont
+//        font: myFont
     }
     Text{
         id: bottomText4
         x: bottomText3.x;
         y: bottomText3.y + bottomText3.height + 10
         text: '00'
-        font: myFont
+//        font: myFont
     }
 }

@@ -92,8 +92,9 @@ public:
 //    parms cnfg;
 //    tcp_exch* te;
     QList<QString>* fillList();         //  preparing list to save params to view means output to view
-    int fillCfg(QList<QString> &ls);    //  load params from view means save to cnfg variable
+    int fillCompareCfg(QList<QString> &ls);    //  load params from view means save to cnfg variable
     int fill_buf(QByteArray &buf, int pos);
+    int updateIP(void);
     int parse_tcp_resp(QByteArray &buf);
 
 private:

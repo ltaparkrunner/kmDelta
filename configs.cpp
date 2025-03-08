@@ -228,25 +228,25 @@ int configs::fill_buf(QByteArray &buf, int pos) // save to device
     if (cnfg.avariya[1].avariya1_predupregdenie0 == 1) { tbdata += 0x20; }
     if (cnfg.avariya[2].avariya1_predupregdenie0 == 1) { tbdata += 0x40; }
     if (cnfg.avariya[3].avariya1_predupregdenie0 == 1) { tbdata += 0x80; }
-    buf[1 + pos] = tbdata;
+    buf[pos] = tbdata;
     uint16_t time = cnfg.timeout_alarm;
-    buf[3 + pos] = static_cast<uchar>(time); //time = Convert.ToUInt16(time >> 8);
-    buf[2 + pos] = static_cast<uchar>(time>>8);
+    buf[2 + pos] = static_cast<uchar>(time); //time = Convert.ToUInt16(time >> 8);
+    buf[1 + pos] = static_cast<uchar>(time>>8);
 
     uint8_t ip[4];
-    if (!check_IP(ip, cnfg.tcpIP)) { return 1; }
-    for (i = 0; i < n_avar; i++) { buf[i + 4 + pos] = ip[i]; }
+    if (!check_IP(ip, cnfg.tcpIP_new)) { return 1; }
+    for (i = 0; i < n_avar; i++) { buf[i + 3 + pos] = ip[i]; }
     // maska
     //flag = string_to_ip(text_maska_new.Text, ref ip, 2);
-    if (!check_IP(ip, cnfg.tcpMASK)) { return 1; }
-    for (i = 0; i < n_avar; i++) { buf[i + 8 + pos] = ip[i]; }
+    if (!check_IP(ip, cnfg.tcpMASK_new)) { return 1; }
+    for (i = 0; i < n_avar; i++) { buf[i + 7 + pos] = ip[i]; }
 
     //int sp = Convert.ToInt32(text_sport_new.Text);
     uint16_t dp = cnfg.tcpPORT_new.toShort();
     //bdata[17 + pr] = (byte)(sp & 0x00FF);
     //bdata[16 + pr] = (byte)((sp >> 8) & 0x00FF);
-    buf[19 + pos] = static_cast<uint8_t>(dp & 0x00FF);
-    buf[18 + pos] = static_cast<uint8_t>((dp >> 8) & 0x00FF);
+    buf[18 + pos] = static_cast<uint8_t>(dp & 0x00FF);
+    buf[17 + pos] = static_cast<uint8_t>((dp >> 8) & 0x00FF);
 
     int smechenie = 20;
     for (i = 0; i < n_dat; i++)
@@ -257,18 +257,18 @@ int configs::fill_buf(QByteArray &buf, int pos) // save to device
         buf[smechenie + pos] = static_cast<uint8_t>(idd & 0x00FF); smechenie++;
     }
     int ipr = cnfg.porog_max;
-    buf[37 + pos] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
-    buf[36 + pos] = static_cast<uint8_t>(ipr & 0x00FF);
+    buf[36 + pos] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
+    buf[35 + pos] = static_cast<uint8_t>(ipr & 0x00FF);
 
     ipr = cnfg.porog_min;
-    buf[39 + pos] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
-    buf[38 + pos] = static_cast<uint8_t>(ipr & 0x00FF);
+    buf[38 + pos] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
+    buf[37 + pos] = static_cast<uint8_t>(ipr & 0x00FF);
 
 
-    buf[40 + pos] = static_cast<uint8_t>((((cnfg.avariya[0].kolvo_avariynih_datchikov << 4) & 0xF0) | (cnfg.avariya[1].kolvo_avariynih_datchikov & 0x0F)));
-    buf[41 + pos] = static_cast<uint8_t>((((cnfg.avariya[2].kolvo_avariynih_datchikov << 4) & 0xF0) | (cnfg.avariya[3].kolvo_avariynih_datchikov & 0x0F)));
+    buf[39 + pos] = static_cast<uint8_t>((((cnfg.avariya[0].kolvo_avariynih_datchikov << 4) & 0xF0) | (cnfg.avariya[1].kolvo_avariynih_datchikov & 0x0F)));
+    buf[40 + pos] = static_cast<uint8_t>((((cnfg.avariya[2].kolvo_avariynih_datchikov << 4) & 0xF0) | (cnfg.avariya[3].kolvo_avariynih_datchikov & 0x0F)));
 
-    smechenie = 42;
+    smechenie = 41;
     for (i = 0; i < n_avar; i++)
     {
         int idd = cnfg.avariya[i].porog_max;
@@ -285,13 +285,13 @@ int configs::fill_buf(QByteArray &buf, int pos) // save to device
 //        crc32(crc, crc.length());
     cnfg.version_proshivki = Crc16(crc, 58 + pos);
     ipr = cnfg.version_proshivki;
-    buf[59 + pos] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
-    buf[58 + pos] = static_cast<uint8_t>(ipr & 0x00FF);
+    buf[58 + pos] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
+    buf[57 + pos] = static_cast<uint8_t>(ipr & 0x00FF);
 
     // ////////////////////////////////////////
     ipr = cnfg.alarmt;
-    buf[60 + pos] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
-    buf[61 + pos] = static_cast<uint8_t>(ipr & 0x00FF);
+    buf[59 + pos] = static_cast<uint8_t>(ipr & 0x00FF); ipr = ipr >> 8;
+    buf[60 + pos] = static_cast<uint8_t>(ipr & 0x00FF);
 
     // ////////////////////////////////////////
     return 0;
@@ -426,13 +426,30 @@ QList<QString>* configs::fillList() {
     return ls;
 }
 
-int configs::fillCfg(QList<QString> &ls) {
-    cnfg.tcpIP = ls[0];
+int configs::fillCompareCfg(QList<QString> &ls) {
+    int ret = 0;
+    if(cnfg.tcpIP != ls[0]){
+        cnfg.tcpIP = ls[0];
+        ret = 1;
+    }
     cnfg.tcpIP_new = ls[1];
-    cnfg.tcpMASK = ls[2];
+    if(cnfg.tcpMASK != ls[2]){
+        cnfg.tcpMASK = ls[2];
+        ret = 1;
+    }
     cnfg.tcpMASK_new = ls[3];
-    cnfg.tcpPORT = ls[4];
+    if(cnfg.tcpPORT != ls[4]){
+        cnfg.tcpPORT = ls[4];
+        ret = 1;
+    }
     cnfg.tcpPORT_new = ls[5];
+    return ret;
+}
+
+int configs::updateIP(void) {
+    cnfg.tcpIP = cnfg.tcpIP_new;
+    cnfg.tcpMASK = cnfg.tcpMASK_new;
+    cnfg.tcpPORT = cnfg.tcpPORT_new;
     return 0;
 }
 
