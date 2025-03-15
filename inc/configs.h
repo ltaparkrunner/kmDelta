@@ -55,7 +55,7 @@ public:
     QString tcpMASK_new;
 
     QString tcpPORT;
-    QString tcpPORT_extr; // TODO: what for is this value?
+    QString tcpPORT_extr; // TODO: what is this value for?
     QString tcpPORT_new;
 
     Data data[n_dat];

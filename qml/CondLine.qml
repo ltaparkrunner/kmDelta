@@ -1,13 +1,7 @@
 import QtQuick 2.0
 
 Rectangle{
-    //Layout.maximumHeight: 480//parent.height
-    //Layout.maximumWidth: 640//parent.width
-    //width: main1.width
-    //height: main1.height/2
-    //x:
-    //y: upp1.bottom
-    //bottom: main1.bottom
+
     height:80
     //color: 'green'
     readonly property font myFont: ({

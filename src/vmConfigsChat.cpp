@@ -1,14 +1,6 @@
 #include "vmConfigsChat.h"
 #include <QtTest/QTest>
 #include <QMessageBox>
-//void vmConfigsChat::dbg_message(QVariant n){
-//    qDebug("called ParamsChanged \n");
-//}
-
-//void vmConfigsChat::dbg_message2(QString n){
-//    qDebug("called IpChanged \n");
-//}
-
 
 vmConfigsChat::vmConfigsChat(configs *cs_, MbtcpClient* tcpC_, tcpIntrfc *parent):
     tcpIntrfc(parent)
@@ -74,36 +66,8 @@ void vmConfigsChat::successDisconn() {
             break;
         default: break;
     }
-//    else emit sendToMB("TCP", "Already connected");
-//    pointTmr->tmr.setInterval(1500);
-//    connect(&pointTmr->tmr, &QTimer::timeout, this, &vmConfigsChat::tmrAddPoint);
-//    pointTmr->tmr.start();
-//    emit sendToQml(count);
-//    return 0;
+
 }
-
-// int vmConfigsChat::disconnectButt(QString ip_t, QString port_t){
-// //    QString ip = cs->cnfg.tcpIP, port = cs->cnfg.tcpPORT;
-//     tcpC -> disconnectTcp();
-//     conn_dir = disconnecting;
-//     pointTmr->setTmr(1500,"Attempt to disconnect", disconnecting);
-//     emit sendToMB("TCP", "Attempt to disconnect");
-//     return 0;
-// }
-// int vmConfigsChat::periodReqButt(QString ip_t, QString port_t, int t_out){
-//     //
-//     if(!(tcpC->isConnected()))
-//         if(tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT) < 0) return -1;
-//     tcpC -> setReadyRead_Chart(this);
-
-// //    QObject::connect(&probePollTmr, &QTimer::timeout, this, &vmConfigsChat::periodReq);
-//     QObject::connect(&probePollTmr, &QTimer::timeout, this, &vmConfigsChat::getSensorsTransmit);
-//     probePollTmr.setInterval(300);
-//     probePollTmr.start();
-// //    periodReq();
-//     getSensorsTransmit();
-//     return 0;
-// }
 
 int vmConfigsChat::stopReqButt(QString ip_t, QString port_t, int t_out){
     if(tcpC->isConnected())     tcpC -> disconnectTcp();
@@ -111,32 +75,9 @@ int vmConfigsChat::stopReqButt(QString ip_t, QString port_t, int t_out){
     return 0;
 }
 
-// int vmConfigsChat::setTimeButt(QString ip_t, QString port_t, int t_out){
-//     setRTCTransmit();
-//     return 0;
-// }
-// void vmConfigsChat::setParamsButt(QString ip_t, QString port_t) {
-//     setParamsTransmit();
-//     qDebug("called setParamsButt \n");
-// }
-
-// void vmConfigsChat::getParamsButt(QString ip_t, QString port_t) {
-//     getParamsTransmit();
-// }
-
 void vmConfigsChat::periodReq(/*QString ip_t, QString port_t*/) {
     cht->get_tcp_chatdata(tcpC);
 }
-
-// void vmConfigsChat::load_File_Qml()
-// {
-//     count++;
-//     if(cs->load_file_configs("config.ini") < 0) emit sendErrFileOpen("config.ini");
-//     QList<QString> *str_cs = cs->fillList();
-
-//     emit sendCurrIp(*str_cs);
-//     delete str_cs;
-// }
 
 int vmConfigsChat::rectCompleted_Qml(){
     if(cs->load_file_configs("config.ini") < 0) emit sendErrFileOpen("config.ini");
@@ -158,16 +99,8 @@ int vmConfigsChat::rectCompleted_Qml(){
     return 0;       //ret;
 }
 
-// void vmConfigsChat::save_File_Qml(QList<QString> ls)
-// {
-//     count++;
-//     cs->fillCfg(ls);
-//     if(cs->save_file_configs("config.ini") < 0) emit sendErrFileOpen("config.ini");
-//     else emit saveFileSucc("config.ini");
-//     return;
-// }
-// void loadDev_readyRead2()
-// {
+//void loadDev_readyRead2()
+//{
 
 // }
 
@@ -190,27 +123,6 @@ int vmConfigsChat::saveDeviceButt()    // save params to device
 //    if(cs -> save_tcp_configs(tcpC) < 0) return -2;
     return 0;
 }
-
-// void vmConfigsChat::load_Default_Qml(QList<QString> str)
-// {
-//     count++;
-//     qDebug() << "load_Default_Qml debug [0]:   " << str[0] << " [1]: " << str[1] << " [2]: " << str[2]<< " [3]: " << str[3] << "\n";
-
-//     cs->cnfg.set_default();
-//     QList<QString> *str_cs = cs->fillList();
-
-//     emit sendCurrIp(*str_cs);
-//     delete str_cs;
-// }
-// void vmConfigsChat::commitFromQml(QString ls)
-// {
-//     QString temp = cs->cnfg.tcpIP;
-//     ls.append("for");
-
-//     cs->cnfg.tcpIP = ls;
-//     emit sendCurrIp_2(ls);
-//     cs->cnfg.tcpIP = temp;
-// }
 
 int vmConfigsChat::loadDev_Respond(){ // receive device's respond after send message to load params from device
     if(cs ->load_tcp_configs_resp(tcpC) < 0)
@@ -264,8 +176,8 @@ void vmConfigsChat::sendMesg(){
 }
 
 void vmConfigsChat::expired_Respond(){
-    tcpC->disconnectTcp();
     pointTmr->stopTmr();
+    tcpC->disconnectTcp();
     emit sendToMB("Eth_6", "Error:  Connection timed out.");
 }
 
@@ -331,6 +243,7 @@ int vmConfigsChat::tcpDevRespond(/*QByteArray r_buf*/){
         if(r_buf[1] == 'O' && r_buf[2] == 'K' && r_buf[3] == '!')
             emit sendToMB("Eth_7", "Params were set successfully");
         else emit sendToMB("Eth_8", "Params haven't beet set");
+        pointTmr->stopTmr();
         tcpC->disconnectTcp();
         cs -> updateIP();
         QList<QString> *str_cs = cs->fillList();
@@ -342,7 +255,7 @@ int vmConfigsChat::tcpDevRespond(/*QByteArray r_buf*/){
     case setRTC:
         qDebug() << "setRTC" << " r_buf.length: " << r_buf.length() << "/n";
         if(  1 == r_buf[0] && 1 == r_buf[1] && 0 == r_buf[2] && 0 == r_buf[3] &&
-           0 == r_buf[4] && 6 == r_buf[5] && 0x10 == r_buf[6] && 0 == r_buf[7] &&
+           0 == r_buf[4] && 6 == r_buf[5] && 0 == r_buf[6] && 0x10 == r_buf[7] &&
            0 == r_buf[8] && 8 == r_buf[9] && 0 == r_buf[10]  && 3 == r_buf[11]){
             emit sendToMB("Eth_9", "Date, Time were set successfully");
         }
@@ -398,7 +311,10 @@ send_t vmConfigsChat::getSensorsTransmit(){
             return connectErr;
         }
     }
-    if(tcpC->sendToTcp(&w_buf) == w_buf.length()) {
+    int trasm = tcpC->sendToTcp(&w_buf);
+    qDebug() << "getSensorsTransmit()   w_buf.length: " << w_buf.length() << "  transmitted: " << trasm <<  "/n";
+//    if(tcpC->sendToTcp(&w_buf) == w_buf.length()) {
+    if(trasm == w_buf.length()) {
         msg_type = getSensors;
         return getSensors;
     }
@@ -514,6 +430,7 @@ void vmConfigsChat::pushedButt(QList<QString> ls, qint32 buttNum) {
         case saveDeviceB:
             if((cs->fillCompareCfg(ls) != 0) || (!tcpC->isConnected()))  {
                 if(tcpC->isConnected()) {
+                    pointTmr->stopTmr();
                     tcpC->disconnectTcp();
                     return;
                 }
@@ -524,6 +441,7 @@ void vmConfigsChat::pushedButt(QList<QString> ls, qint32 buttNum) {
             break;
         case disconnectB:
             if(tcpC->isConnected()) {
+                pointTmr->stopTmr();
                 tcpC->disconnectTcp();
                 return;
             }

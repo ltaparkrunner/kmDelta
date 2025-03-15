@@ -23,7 +23,7 @@ int chat::get_tcp_chatdata(MbtcpClient* tcpC){
     ret_t rez = get_tcp_chatdata_bArray();
     if(rez.res < 0) return -1;
     else if(tcpC->sendToTcp(rez.bdata) > 0) {
-        qDebug("get_tcp_chatdata success /n");
+        qDebug() << "get_tcp_chatdata success   bdata.length: " << rez.bdata->length()<<   "/n";
         // тут разбор и запись в configs -> parms
         return 0;
     }

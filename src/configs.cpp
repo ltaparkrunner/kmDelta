@@ -297,18 +297,6 @@ int configs::fill_buf(QByteArray &buf, int pos) // save to device
     return 0;
 }
 
-
-// int configs::save_tcp_configs(MbtcpClient* tcpC) {   // save to device
-// //    tcpC->setReadyRead_saveDev(cl);
-//     ret_t rez = save_tcp_configs_bArray();
-//     if(rez.res < 0) return -1;
-//     else if(tcpC->sendToTcp(rez.bdata) > 0) {
-//         qDebug("success /n");
-//         return 0;
-//     }
-//     else return -2;
-// }
-
 int configs::save_tcp_configs_resp(MbtcpClient* tcpC) { // respond after save to device
     QByteArray ba = tcpC->getAll();
     if (ba[1] == 'O' && ba[2] == 'K' && ba[3] == '!')  // successfully save to device
@@ -452,7 +440,6 @@ int configs::updateIP(void) {
     cnfg.tcpPORT = cnfg.tcpPORT_new;
     return 0;
 }
-
 /*
 int configs::setReadyRead_loadDev(MbtcpClient* tcpC, tcpIntrfc *cl) {
 //    tcpC->setReadyRead_loadDev(cl);
