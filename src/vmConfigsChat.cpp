@@ -22,6 +22,7 @@ vmConfigsChat::vmConfigsChat(configs *cs_, MbtcpClient* tcpC_, tcpIntrfc *parent
     connect(tcpC->getTcpSocket(), &QTcpSocket::readyRead, this, &vmConfigsChat::tcpDevRespond);
     connect(tcpC->getTcpSocket(), &QAbstractSocket::connected, this, &vmConfigsChat::successConn);
     connect(tcpC->getTcpSocket(), &QAbstractSocket::disconnected, this, &vmConfigsChat::successDisconn);
+    connect(&probePollTmr, &QTimer::timeout, this, &vmConfigsChat::getSensorsTransmit);
     // connect(tcpSocket, &QAbstractSocket::errorOccurred,
     //         tcpm, &tcpIntrfc::displayError);
 }
@@ -289,19 +290,21 @@ send_t vmConfigsChat::launchPollTmr(){
 
 send_t vmConfigsChat::getSensorsTransmit(){
     const int getSensors_buf_len = 12;
-    QByteArray w_buf(getSensors_buf_len,0);
-    w_buf[0] = 1;//Convert.ToByte('G');//Идификатор транзакции
-    w_buf[1] = 1;//Идификатор транзакции
-    w_buf[2] = 0;//Идификатор протокола
-    w_buf[3] = 0;//Идификатор протокола
-    w_buf[4] = 0;//Длина
-    w_buf[5] = 6;//Длина
-    w_buf[6] = 33;//Адрес
-    w_buf[7] = 3;//Функциональный код
-    w_buf[8] = 0;//Адрес первого регистра
-    w_buf[9] = 0;//Адрес первого регистра
-    w_buf[10] = 0;
-    w_buf[11] = 16;
+    char d[getSensors_buf_len] ={1, 1, 0, 0, 0, 6, 33, 3, 0, 0, 0, 16};
+//    QByteArray w_buf(getSensors_buf_len, );
+    QByteArray w_buf(d, getSensors_buf_len);
+    // w_buf[0] = 1;//Convert.ToByte('G');//Идификатор транзакции
+    // w_buf[1] = 1;//Идификатор транзакции
+    // w_buf[2] = 0;//Идификатор протокола
+    // w_buf[3] = 0;//Идификатор протокола
+    // w_buf[4] = 0;//Длина
+    // w_buf[5] = 6;//Длина
+    // w_buf[6] = 33;//Адрес
+    // w_buf[7] = 3;//Функциональный код
+    // w_buf[8] = 0;//Адрес первого регистра
+    // w_buf[9] = 0;//Адрес первого регистра
+    // w_buf[10] = 0;
+    // w_buf[11] = 16;
 
     if(!tcpC->isConnected()) {
         tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT);
@@ -473,7 +476,7 @@ int vmConfigsChat::butt_proc(){
 
 int vmConfigsChat::periodReqButt(){
     tcpC -> setReadyRead_Chart(this);
-    QObject::connect(&probePollTmr, &QTimer::timeout, this, &vmConfigsChat::getSensorsTransmit);
+//    QObject::connect(&probePollTmr, &QTimer::timeout, this, &vmConfigsChat::getSensorsTransmit);
     probePollTmr.setInterval(300);
     probePollTmr.start();
     emit sendToMB("TCP", "Poll sensors");
