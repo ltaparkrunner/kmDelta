@@ -64,12 +64,12 @@ ColumnLayout{
 //        Layout.margins: 10
         Text{
             id: bottomText1
-            text: '00:00:00'
+            text: '01-01-2000'
 //            font: myFont
         }
         Text{
             id: bottomText2
-            text: '00'
+            text: '01:01:01'
 //            font: myFont
         }
     }

@@ -27,14 +27,14 @@ Rectangle{
         id: bottomText3
         x: 10;
         y: 10
-        text: '00:00:00'
+        text: 'Источник сообщений'
 //        font: myFont
     }
     Text{
         id: bottomText4
         x: bottomText3.x;
         y: bottomText3.y + bottomText3.height + 10
-        text: '00'
+        text: 'Сообщение'
 //        font: myFont
     }
 }

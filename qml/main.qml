@@ -21,7 +21,7 @@ ApplicationWindow{
     width: 1260
     height: 940
     visible: true
-    title : "Chart Window"
+    title : "Обмен с устройствои"
 
     readonly property int menuh: 35
     readonly property int spch: 10

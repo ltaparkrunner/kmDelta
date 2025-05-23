@@ -1,3 +1,0 @@
-https://Alex141994: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@github.com/Alex141994/LoRaWanNodeSTM32.git/
-
-git push https://Alex141994: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@github.com/Alex141994/kmDelta.git
