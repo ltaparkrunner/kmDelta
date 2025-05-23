@@ -1,20 +1,20 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
-
-import QtQuick.Dialogs        // TODO strange it works without version???
+import QtQuick.Dialogs 1.2       // TODO strange it works without version???
 
 Rectangle{
-    readonly property font myFont: ({
-            family: "Helvetica",
-            pixelSize: 14,
-            bold: false //true
-        })
+//    readonly property font myFont: ({
+//            family: "Helvetica",
+////            pointSize: 20,
+//            pixelSize: 17,
+//            bold: false //true
+//        })
+    readonly property font myFont:("Helvetica")
     readonly property int butth: 40
     readonly property int spch: 7
     id:c_ip2
     width: ipAddr_2.width
-    //color: 'white'
     Layout.margins: 10
     Connections {
         target: vmConfigsChat
@@ -38,7 +38,6 @@ ColumnLayout{
         Layout.alignment: Qt.AlignHCenter
         id: uppText
         text: 'Дата, Время Устройства'
-        font: myFont
     }
     RowLayout{
         Layout.alignment: Qt.AlignHCenter
@@ -46,12 +45,10 @@ ColumnLayout{
         Text{
             id: bottomText1
             text: '01-01-2000'
-            font: myFont
         }
         Text{
             id: bottomText2
             text: '01:01:01'
-            font: myFont
         }
     }
     RowLayout{
@@ -60,9 +57,7 @@ ColumnLayout{
         Button{
             id : connectButt
             text: qsTr("Соединить")
-            font: myFont
             onClicked: {
-
                 sendButt(1)
             }
             implicitWidth: 172
@@ -71,7 +66,6 @@ ColumnLayout{
         Button{
             id : disconnectButt
             text: qsTr("Разъединить")
-            font: myFont
             onClicked: {
                 sendButt(2)
             }
@@ -80,7 +74,7 @@ ColumnLayout{
         }
     }
 
-     IP_Addr2{
+     IP_Addr_5{
         id: ipAddr_2
         color: parent.parent.color
         Layout.preferredHeight: ipAddr_2.ht
@@ -91,7 +85,6 @@ ColumnLayout{
         Button{
             id : periodicRequestButt
             text: "Опрос датчиков"
-            font: myFont
             onClicked: {
                 sendButt(3)
             }
@@ -100,8 +93,7 @@ ColumnLayout{
         }
         Button{
             id : stopRequestButt
-            text: "Остановить опрос" //" датчиков"
-            font: myFont
+            text: "Остановить опрос датчиков"
             onClicked: {
                 sendButt(4)
             }
@@ -113,7 +105,6 @@ ColumnLayout{
         Layout.alignment: Qt.AlignHCenter
         id : setTimeButt
         text: qsTr("Установить Дату и Время")
-        font: myFont
         onClicked: {
             sendButt(5)
         }

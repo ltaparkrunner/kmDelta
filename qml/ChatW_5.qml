@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtCharts 2.1
-import QtQuick.Layouts
+import QtQuick.Layouts 1.2
 
 Rectangle{
     property var abs: [270, 0, 200, 350, 0, 0, 1200, 0];
@@ -21,16 +21,8 @@ Rectangle{
             tx7.text = abs[7] = -16384 ? "нет\nсвязи" : abs[7]
         }
     }
-
-    readonly property font myFont: ({
-            family: "Helvetica",
-//            pointSize: 20,
-            pixelSize: 20,
-            bold: false//true
-        })
     ChartView {
         title: "Stacked Bar series"
-        titleFont: myFont
         anchors.fill: parent
         legend.alignment: Qt.AlignBottom
         antialiasing: true
@@ -42,11 +34,9 @@ Rectangle{
             axisX: BarCategoryAxis {id:ax;
                 categories: ["01", "02", "03", "04", "05", "06", "07", "08" ] }
             BarSet {
-//                labelFont : myFont
                 id:f1; values: [abs[0], abs[1], abs[2], abs[3], abs[4], abs[5], abs[6], abs[7]] }
 
             axisY: ValueAxis{
-//                labelsFont : myFont
                 id: axis_Y
                 min: 0
                 max: 1000

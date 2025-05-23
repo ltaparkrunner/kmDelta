@@ -11,31 +11,43 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#set(QT_DIR "~/Qt/6_5_2/qtbase/lib/cmake/Qt6/")
+#set(QT6_DIR "/home/alex/Qt/6_5_2/qtbase/lib/cmake/Qt6/")
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Charts Network Test)
 message("QT_VERSION_MAJOR= ${QT_VERSION_MAJOR}" )
+if(QT_VERSION_MAJOR EQUAL 6)
+    set(QT_DIR "~/Qt/6_5_2/qtbase/lib/cmake/Qt6/")
+    set(QT6_DIR "/home/alex/Qt/6_5_2/qtbase/lib/cmake/Qt6/")
+endif()
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Charts Network Test)
 set(src_dir "src/")
 set(inc_dir "inc/")
-set(PROJECT_SOURCES
-    ${src_dir}main2.cpp
-        qml/qml.qrc
-#        controlip.h
-#        controlip.cpp
-        ${inc_dir}ipAddr.h
-        ${src_dir}ipAddr.cpp
-        ${inc_dir}mbtcpClient.h
-        ${src_dir}mbtcpClient.cpp
-#        tcp_req.h
-#        tcp_req.cpp
-        ${inc_dir}crc32.h
-        ${src_dir}crc32.cpp
-#        tcpman.h
-#        tcpman.cpp
-#        tcp_exch.h
-#        tcp_exch.cpp
-#        messbox.h
-#        messbox.cpp
-)
+if(QT_VERSION_MAJOR EQUAL 6)
+    set(PROJECT_SOURCES
+        ${src_dir}main2.cpp
+            qml/qml.qrc
+            ${inc_dir}ipAddr.h
+            ${src_dir}ipAddr.cpp
+            ${inc_dir}mbtcpClient.h
+            ${src_dir}mbtcpClient.cpp
+            ${inc_dir}crc32.h
+            ${src_dir}crc32.cpp
+    )
+elseif(QT_VERSION_MAJOR EQUAL 5)
+    set(PROJECT_SOURCES
+        ${src_dir}main2.cpp
+            qml/qml_5.qrc
+            ${inc_dir}ipAddr.h
+            ${src_dir}ipAddr.cpp
+            ${inc_dir}mbtcpClient.h
+            ${src_dir}mbtcpClient.cpp
+            ${inc_dir}crc32.h
+            ${src_dir}crc32.cpp
+    )
+else()
+    message(FATAL_ERROR "Unsupported Qt version")
+endif()
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(kmdelta6

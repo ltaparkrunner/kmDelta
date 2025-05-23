@@ -34,15 +34,15 @@ int main(int argc, char *argv[])
 #else
     QString extraImportPath(QStringLiteral("%1/../../../%2"));
 #endif
-    //    viewer.engine()->addImportPath(extraImportPath.arg(QGuiApplication::applicationDirPath(),
-    //                                      QString::fromLatin1("qml")));
-    //    QObject::connect(viewer.engine(), &QQmlEngine::quit, &viewer, &QWindow::close);
 
-    //    viewer.setTitle(QStringLiteral("QML Chart"));
-    //    viewer.setSource(QUrl("qrc:/main.qml"));
+//#if QT_VERSION_MAJOR
+//#endif
+
+#if QT_VERSION > 0x060000
     engine.load(QUrl("qrc:/main.qml"));
-    //    viewer.setResizeMode(QQuickView::SizeRootObjectTo.;///////4;/"ReView);
-    //    viewer.show();
+#else
+    engine.load(QUrl("qrc:/main_5.qml"));
+#endif
 
 
     return app.exec();

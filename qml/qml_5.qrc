@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main_5.qml</file>
+        <file>ChatW_5.qml</file>
+        <file>CondLine_5.qml</file>
+        <file>ControlP_5.qml</file>
+        <file>IP_Addr_5.qml</file>
+    </qresource>
+</RCC>
