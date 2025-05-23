@@ -8,28 +8,13 @@
 //#include "messbox.h"
 
 //! [0]
-MbtcpClient::MbtcpClient(tcpIntrfc *cl, QObject *parent)
+MbtcpClient::MbtcpClient(/*tcpIntrfc *cl,*/ QObject *parent)
     : tcpSocket(new QTcpSocket(this))
-//    , ip(new IpAddr(this))
-//    , tmr(new QTimer(this))
-    , tcpm(cl)
+//    , tcpm(cl)
     , cur_ip("192.168.1.170")
     , cur_port("502")
 {
-//        connect(tcpSocket, &QIODevice::readyRead, this, &MbtcpClient::readFortune);
-//        connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::parseMessage);
-//        connect(tcpSocket, &QIODevice::readyRead, tcpm, &tcpMan::periodReqResp);
-
-//        connect(tcpSocket, &QAbstractSocket::connected, cl, &tcpIntrfc::successConn);
 /*
-        typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
-
-        connect(tcpSocket, static_cast<QAbstractSocketErrorSignal>(&QAbstractSocket::error),
-//                this, &MbtcpClient::displayError);
-                  tcpm, &tcpIntrfc::displayError);
-*/
-
-
 #if QT_VERSION >= 0x060000
         connect(tcpSocket, &QAbstractSocket::errorOccurred,
                 tcpm, &tcpIntrfc::displayError);
@@ -38,19 +23,8 @@ MbtcpClient::MbtcpClient(tcpIntrfc *cl, QObject *parent)
         connect(tcpSocket, static_cast<QAbstractSocketErrorSignal>(&QAbstractSocket::error),
             tcpm, &tcpIntrfc::displayError);
 #endif
-
-//                this, &MbtcpClient::displayError);
-//                  tcpm, &tcpMan::displayError);
-
-
-//        connect(tcpSocket, &QAbstractSocket::error, tcpm, &tcpIntrfc::displayError);
-/*                  */
-//            tcpm, &tcpMan::periodReqResp);
+*/
 }
-
-// void MbtcpClient::successMsg(){
-//     emit sendToMB(tr("Fortune Client"), "Success");
-// }
 
 bool MbtcpClient::isConnected(){
     if(tcpSocket->state() == QAbstractSocket::ConnectedState) {
@@ -63,8 +37,6 @@ bool MbtcpClient::isConnected(){
 
 int MbtcpClient::connectTcp(QString &ip_t, QString port_t)
 {
-//    connect(tcpSocket, &QAbstractSocket::error, tcpm, &tcpIntrfc::displayError);
-
     qDebug() << "tcpClient: ip_t: " << ip_t << " port_t: " << port_t;
     tcpSocket->abort();
     tcpSocket->connectToHost(ip_t, port_t.toInt());
@@ -125,6 +97,7 @@ int MbtcpClient::onChangeIpPort(QString ip, QString port){
     return 0;
 }
 
+/*
 int MbtcpClient::setReadyRead_loadDev(tcpIntrfc *cl) {
     connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::loadDev_Respond);
     return 0;
@@ -139,6 +112,7 @@ int MbtcpClient::setReadyRead_Chart(tcpIntrfc *cl) {
     connect(tcpSocket, &QIODevice::readyRead, cl, &tcpIntrfc::loadChart_Respond);
     return 0;
 }
+*/
 
 QTcpSocket *MbtcpClient::getTcpSocket(){
     return tcpSocket;

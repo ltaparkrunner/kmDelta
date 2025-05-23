@@ -83,14 +83,6 @@ public:
     int load_tcp_configs(MbtcpClient* tcpC); // send message to load params from device
     int load_tcp_configs_resp(MbtcpClient* tcpC); // respond after load params from device and parsing
 
-//    int save_view_configs(); // save params to view means output to view
-//    int load_view_configs(); // load params from view means save to variable cnfg
-
-//    int setReadyRead_loadDev(MbtcpClient* tcpC, tcpIntrfc *cl);
-//    int setReadyRead_saveDev(tcpIntrfc *cl);
-//    int setReadyRead_loadChart(tcpIntrfc *cl);
-//    parms cnfg;
-//    tcp_exch* te;
     QList<QString>* fillList();         //  preparing list to save params to view means output to view
     int fillCompareCfg(QList<QString> &ls);    //  load params from view means save to cnfg variable
     int fill_buf(QByteArray &buf, int pos);

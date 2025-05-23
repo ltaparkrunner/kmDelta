@@ -2,29 +2,33 @@
 #include <QtTest/QTest>
 #include <QMessageBox>
 
-vmConfigsChat::vmConfigsChat(configs *cs_, MbtcpClient* tcpC_, tcpIntrfc *parent):
-    tcpIntrfc(parent)
-    ,cs(cs_)
-    ,tcpC(tcpC_= new MbtcpClient(this))
+vmConfigsChat::vmConfigsChat(configs *cs_, /*MbtcpClient* tcpC_,*/ QObject *parent):
+//    tcpIntrfc(parent)
+/*    ,*/cs(cs_)
+    ,tcpC(/*tcpC_= */new MbtcpClient(/*this*/))
     ,pointTmr(new pointTimer())
     ,cht(new chat())
     ,msg_type(nomsg)
     ,conn_dir(idle)
     ,conn_c(disconn)
     ,butt(noneB)
-//    ,w_buf(QByteArray(ba_len, 0))
 {
-//    connect(this, this->ParamsChanged, this, this->dbg_message);
-//    connect(this, this->ipChanged, this, this->dbg_message);
-    connect(pointTmr->getTmrPtr(), &QTimer::timeout, this, &tcpIntrfc::timeout_Respond );
+    connect(pointTmr->getTmrPtr(), &QTimer::timeout, this, &vmConfigsChat::timeout_Respond );
     connect(pointTmr, &pointTimer::expired, this, &vmConfigsChat::expired_Respond);
-//    connect(tcpC->getTcpSocket(), &QIODevice::readyRead, this, &vmConfigsChat::tcpDevRespond);
     connect(tcpC->getTcpSocket(), &QTcpSocket::readyRead, this, &vmConfigsChat::tcpDevRespond);
     connect(tcpC->getTcpSocket(), &QAbstractSocket::connected, this, &vmConfigsChat::successConn);
     connect(tcpC->getTcpSocket(), &QAbstractSocket::disconnected, this, &vmConfigsChat::successDisconn);
     connect(&probePollTmr, &QTimer::timeout, this, &vmConfigsChat::getSensorsTransmit);
-    // connect(tcpSocket, &QAbstractSocket::errorOccurred,
-    //         tcpm, &tcpIntrfc::displayError);
+
+#if QT_VERSION >= 0x060000
+    connect(tcpC->getTcpSocket(), &QAbstractSocket::errorOccurred,
+            this, &vmConfigsChat::displayError);
+#elif QT_VERSION >= 0x050000
+    typedef void (QAbstractSocket::*QAbstractSocketErrorSignal)(QAbstractSocket::SocketError);
+    connect(tcpC->getTcpSocket(), static_cast<QAbstractSocketErrorSignal>(&QAbstractSocket::error),
+            this, &vmConfigsChat::displayError);
+#endif
+
 }
 
 //void vmConfigsChat::displayError(QAbstractSocket::SocketError socketError) {
@@ -47,10 +51,7 @@ void vmConfigsChat::successDisconn() {
     conn_dir = idle;
     if(!tcpC->isConnected()) emit sendToMB("Eth_14", "Successfully disconnected to device");
     else emit sendToMB("Eth_15", "Something strange");
-//    if((int)butt > 0 && (int)butt < buttAmount) {
-//        emit sendToMB("TCP", "Attempt to connect");
-//        tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT);
-//    }
+
     switch(butt){
         case connectB:
         case periodReqB:
@@ -87,30 +88,16 @@ int vmConfigsChat::rectCompleted_Qml(){
 
     emit sendCurrIp(*str_cs);
     delete str_cs;
-//    QTest::qWait(5000);
-//    emit openFileSucc("Can't open config.ini", "failure");
-//    QMessageBox msgBox;
-//    msgBox.setText("The document has been modified.");
-//    msgBox.setInformativeText("Do you want to save your changes?");
-//    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-//    msgBox.setDefaultButton(QMessageBox::Save);
-//    int ret = msgBox.exec();
-
-//    QTimer::singleShot(50, this, &vmConfigsChat::sendMesg);
     return 0;       //ret;
 }
-
-//void loadDev_readyRead2()
-//{
-
-// }
 
 int vmConfigsChat::loadDeviceButt()    // send message to load params from device
 {
     count++;
     if(!(tcpC->isConnected()))
         if(tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT) < 0) return -1;
-    tcpC -> setReadyRead_loadDev(this);
+//    tcpC -> setReadyRead_loadDev(this);
+    connect(tcpC->getTcpSocket(), &QIODevice::readyRead, this, &vmConfigsChat::loadDev_Respond);
     if(cs -> load_tcp_configs(tcpC) < 0) return -2;
     return 0;
 }
@@ -120,7 +107,8 @@ int vmConfigsChat::saveDeviceButt()    // save params to device
     count++;
     if(!(tcpC->isConnected()))
         if(tcpC->connectTcp(cs->cnfg.tcpIP, cs->cnfg.tcpPORT) < 0) return -1;
-    tcpC -> setReadyRead_saveDev(this);
+//    tcpC -> setReadyRead_saveDev(this);
+    connect(tcpC->getTcpSocket(), &QIODevice::readyRead, this, &vmConfigsChat::saveDev_Respond);
 //    if(cs -> save_tcp_configs(tcpC) < 0) return -2;
     return 0;
 }
@@ -475,7 +463,8 @@ int vmConfigsChat::butt_proc(){
 }
 
 int vmConfigsChat::periodReqButt(){
-    tcpC -> setReadyRead_Chart(this);
+//    tcpC -> setReadyRead_Chart(this);
+    connect(tcpC->getTcpSocket(), &QIODevice::readyRead, this, &vmConfigsChat::loadChart_Respond);
 //    QObject::connect(&probePollTmr, &QTimer::timeout, this, &vmConfigsChat::getSensorsTransmit);
     probePollTmr.setInterval(300);
     probePollTmr.start();

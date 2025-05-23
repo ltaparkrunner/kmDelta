@@ -6,7 +6,7 @@ pointTimer::pointTimer(QObject *parent):
     , attempts(0)
     , dir(idle)
 {
-//    connect(tmr, &QTimer::timeout, vmCC, &tcpIntrfc::timeout_Respond );
+
 }
 
 void pointTimer::setTmr(int i, QString s, dir_t d) {

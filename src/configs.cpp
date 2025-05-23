@@ -440,24 +440,6 @@ int configs::updateIP(void) {
     cnfg.tcpPORT = cnfg.tcpPORT_new;
     return 0;
 }
-/*
-int configs::setReadyRead_loadDev(MbtcpClient* tcpC, tcpIntrfc *cl) {
-//    tcpC->setReadyRead_loadDev(cl);
-    ret_t res = save_tcp_configs_bArray();
-    tcpC->sendToTcp(res.bdata);
-//    else if(str == "") tcpC->setReadyReadSlot(cl->loadChart_readyRead);
-    return 0;
-}
-*/
-//int configs::setReadyRead_saveDev(tcpIntrfc *cl) {
-//    tcpC->setReadyRead_saveDev(cl);
-//    return 0;
-//}
-
-//int configs::setReadyRead_loadChart(tcpIntrfc *cl) {
-//    tcpC->set_loadChart_ReadyReadSlot(cl);
-//    return 0;
-//}
 
 int configs::load_tcp_configs_resp(MbtcpClient* tcpC){ // respond after load params from device and parsing
     QByteArray ba = tcpC->getAll();

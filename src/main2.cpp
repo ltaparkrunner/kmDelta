@@ -18,11 +18,10 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     //    QQuickView viewer;
     QQmlApplicationEngine engine;//(/*QUrl("qrc:/main2.qml")*/);
-    MbtcpClient *mc = nullptr;
+//    MbtcpClient *mc = nullptr;
     configs cs("config.ini");// = new configs();
     //vmConfigsChat vm(&cs, &mc);
-    vmConfigsChat vmCC(&cs, mc);
-
+    vmConfigsChat vmCC(&cs/*, mc*/);
 
     QQmlContext *context = engine.rootContext();
     context->setContextProperty("vmConfigsChat", &vmCC);
@@ -38,7 +37,7 @@ int main(int argc, char *argv[])
 //#if QT_VERSION_MAJOR
 //#endif
 
-#if QT_VERSION > 0x060000
+#if QT_VERSION >= 0x060000
     engine.load(QUrl("qrc:/main.qml"));
 #else
     engine.load(QUrl("qrc:/main_5.qml"));

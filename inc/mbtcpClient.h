@@ -9,7 +9,7 @@
 #include <QString>
 
 //#include "ipAddr.h"
-#include "tcpIntrfc.h"
+//#include "tcpIntrfc.h"
 
 QT_BEGIN_NAMESPACE
 class QTcpSocket;
@@ -19,7 +19,7 @@ class MbtcpClient : public QObject
 {
     Q_OBJECT
 public:
-    explicit MbtcpClient(tcpIntrfc *cl, QObject *parent = nullptr);
+    explicit MbtcpClient(/*tcpIntrfc *cl,*/ QObject *parent = nullptr);
 
     int connectTcp(QString &ip_t, QString port_t);
     int disconnectTcp();
@@ -30,9 +30,11 @@ public:
     quint16 getBlSz(){return blockSize;}
     int  getBAvl(){return tcpSocket->bytesAvailable();}
     QByteArray getAll(){return tcpSocket->readAll();}
+    /*
     int setReadyRead_loadDev(tcpIntrfc *cl);
     int setReadyRead_saveDev(tcpIntrfc *cl);
     int setReadyRead_Chart(tcpIntrfc *cl);
+    */
     int setEventsSlot();
     bool isConnected();
     QTcpSocket *getTcpSocket();
@@ -46,7 +48,7 @@ public slots:
 private:
     QTcpSocket *tcpSocket = nullptr;
 
-    tcpIntrfc *tcpm;
+//    tcpIntrfc *tcpm;
     quint16 blockSize;
     QByteArray answer;
 

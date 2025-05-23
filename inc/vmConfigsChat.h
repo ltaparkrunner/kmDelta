@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QString>
-#include "tcpIntrfc.h"
+//#include "tcpIntrfc.h"
 #include "configs.h"
 #include "chat.h"
 #include "pointtimer.h"
@@ -48,15 +48,15 @@ enum pushedButt_t {
     loadDefaultB
 };
 
-class vmConfigsChat : public tcpIntrfc//, public pTmrIntrfc
+class vmConfigsChat : public QObject    //public tcpIntrfc//, public pTmrIntrfc
 {
     Q_OBJECT
 
 public:
-    explicit vmConfigsChat(configs* cs_, MbtcpClient* tcpC_, tcpIntrfc *parent = 0);
+    explicit vmConfigsChat(configs* cs_, /*MbtcpClient* tcpC_,*/ /*tcpIntrfc*/ QObject *parent = 0);
 //    void displayError(QAbstractSocket::SocketError socketError) override;
-    void displayError() override;
-    void successConn() override;
+    void displayError() /*override*/;
+    void successConn() /*override*/;
     void successDisconn();
     configs getCs() const;
 //    ~vmConfigsChat();
@@ -94,11 +94,11 @@ public slots:
 //    void commitFromQml(QString str);
     void expired_Respond();
 
-    int loadDev_Respond() override;    // receive device's respond after send message to load params from device
-    int saveDev_Respond() override;    // receive device's respond after send message tosave params to device
-    int loadChart_Respond() override;
+    int loadDev_Respond() /*override*/;    // receive device's respond after send message to load params from device
+    int saveDev_Respond() /*override*/;    // receive device's respond after send message tosave params to device
+    int loadChart_Respond() /*override*/;
 
-    int timeout_Respond() override;
+    int timeout_Respond() /*override*/;
 
 //    int tmrAddPoint();
 private:

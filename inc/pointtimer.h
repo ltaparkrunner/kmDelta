@@ -3,9 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
-//#include "pTmrIntrfc.h"
-//#include "vmConfigsChat.h"
-//#include "tcpIntrfc.h"
+
 enum dir_t{
     idle,
     connecting,

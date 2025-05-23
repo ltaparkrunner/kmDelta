@@ -16,10 +16,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Charts Network Test)
 message("QT_VERSION_MAJOR= ${QT_VERSION_MAJOR}" )
-if(QT_VERSION_MAJOR EQUAL 6)
-    set(QT_DIR "~/Qt/6_5_2/qtbase/lib/cmake/Qt6/")
-    set(QT6_DIR "/home/alex/Qt/6_5_2/qtbase/lib/cmake/Qt6/")
-endif()
+# if(QT_VERSION_MAJOR EQUAL 6)
+#     set(QT_DIR "~/Qt/6_5_2/qtbase/lib/cmake/Qt6/")
+#     set(QT6_DIR "/home/alex/Qt/6_5_2/qtbase/lib/cmake/Qt6/")
+# endif()
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Charts Network Test)
 set(src_dir "src/")
 set(inc_dir "inc/")
@@ -53,12 +53,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(kmdelta6
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-            ${inc_dir}tcpIntrfc.h
+#            ${inc_dir}tcpIntrfc.h
             ${inc_dir}configs.h ${src_dir}configs.cpp
             ${inc_dir}vmConfigsChat.h ${src_dir}vmConfigsChat.cpp
             ${inc_dir}chat.h ${src_dir}chat.cpp
             ${inc_dir}pointtimer.h ${src_dir}pointtimer.cpp
-            ${inc_dir}pTmrIntrfc.h
+#            ${inc_dir}pTmrIntrfc.h
 #            main2.cpp
     )
 # Define target properties for Android with Qt 6 as:
