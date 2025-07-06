@@ -39,12 +39,12 @@ QList<qint32>& chat::parse_tcp_resp(QByteArray &buf) {
 //        { }
         uint d = (uint)(buf[nr]);
         d = d << 8; nr++;
-        d = d | buf[nr]; nr++;
+        d = d | (buf[nr] & 0xff); nr++;
         int16_t id = (int16_t)d;
         if (d == 0x8000) { prb.vl[i].absolutnoe = -20000; }
         else
         {
-            double dd = id / 2.0;
+            double dd = id;// / 2.0;
             prb.vl[i].absolutnoe = dd;
         }
     }

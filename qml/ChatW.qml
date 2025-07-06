@@ -6,19 +6,32 @@ Rectangle{
     property var abs: [270, 0, 200, 350, 0, 0, 1200, 0];
 
     property var txt1: Text {text: "0000"; font.pixelSize: 20}
-    property int labw: txt1.implicitWidth
+    property int labw: 5 //txt1.implicitWidth
     Connections {
         target: vmConfigsChat
         function onSendToChat(abs){
+            let text = Array("нет\nсвязи", "нет\nсвязи", "нет\nсвязи", "нет\nсвязи",
+                             "нет\nсвязи", "нет\nсвязи", "нет\nсвязи", "нет\nсвязи");
+            for(let i = 0; i < 8; i++){
+                if(abs[i] % 2 == 1){
+                    text[i] = String((abs[i] - 1)/2) + ".5";
+                    abs[i] = (abs[i]-1) / 2;
+                }
+                else {
+                    text[i] = String((abs[i])/2) + "  ";
+                    abs[i] = abs[i] / 2;
+                }
+            }
+
             f1.values = [abs[0], abs[1], abs[2], abs[3], abs[4], abs[5], abs[6], abs[7]]
-            tx0.text = abs[0] = -16384 ? "нет\nсвязи" : abs[0]
-            tx1.text = abs[1] = -16384 ? "нет\nсвязи" : abs[1]
-            tx2.text = abs[2] = -16384 ? "нет\nсвязи" : abs[2]
-            tx3.text = abs[3] = -16384 ? "нет\nсвязи" : abs[3]
-            tx4.text = abs[4] = -16384 ? "нет\nсвязи" : abs[4]
-            tx5.text = abs[5] = -16384 ? "нет\nсвязи" : abs[5]
-            tx6.text = abs[6] = -16384 ? "нет\nсвязи" : abs[6]
-            tx7.text = abs[7] = -16384 ? "нет\nсвязи" : abs[7]
+            tx0.text = abs[0] === -16384 ? "нет\nсвязи" : text[0]
+            tx1.text = abs[1] === -16384 ? "нет\nсвязи" : text[1]
+            tx2.text = abs[2] === -16384 ? "нет\nсвязи" : text[2]
+            tx3.text = abs[3] === -16384 ? "нет\nсвязи" : text[3]
+            tx4.text = abs[4] === -16384 ? "нет\nсвязи" : text[4]
+            tx5.text = abs[5] === -16384 ? "нет\nсвязи" : text[5]
+            tx6.text = abs[6] === -16384 ? "нет\nсвязи" : text[6]
+            tx7.text = abs[7] === -16384 ? "нет\nсвязи" : text[7]
         }
     }
 
@@ -60,19 +73,27 @@ Rectangle{
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.leftMargin: 95
-            anchors.rightMargin: 35
+            anchors.rightMargin: 45
             anchors.top: parent.top
             anchors.topMargin: 80
             Layout.fillWidth: true
 
             Text { id: tx0; text: /*"----\n----"*/numToString(abs[0]); Layout.alignment: Qt.AlignHCenter; font.pixelSize: 20; width: labw/*rotation : 270*/}
+//            Text { id: tx0; text: /*"----\n----"*/numToString(abs[0]); Layout.alignment: Qt.AlignHRight; font.pixelSize: 20; width: labw/*rotation : 270*/}
             Text { id: tx1;  text: numToString(abs[1]); Layout.alignment: Qt.AlignHCenter; font.pixelSize: 20; width: labw}
+//            Text { id: tx1;  text: numToString(abs[1]); Layout.alignment: Qt.AlignHRight; font.pixelSize: 20; width: labw}
             Text { id: tx2;  text: numToString(abs[2]); Layout.alignment: Qt.AlignHCenter; font.pixelSize: 20; width: labw}
+//            Text { id: tx2;  text: numToString(abs[2]); Layout.alignment: Qt.AlignHRight; font.pixelSize: 20; width: labw}
             Text { id: tx3;  text: numToString(abs[3]); Layout.alignment: Qt.AlignHCenter; font.pixelSize: 20; width: labw}
+//            Text { id: tx3;  text: numToString(abs[3]); Layout.alignment: Qt.AlignHRight; font.pixelSize: 20; width: labw}
             Text { id: tx4;  text: numToString(abs[4]); Layout.alignment: Qt.AlignHCenter; font.pixelSize: 20; width: labw}
+//            Text { id: tx4;  text: numToString(abs[4]); Layout.alignment: Qt.AlignHRight; font.pixelSize: 20; width: labw}
             Text { id: tx5;  text: numToString(abs[5]); Layout.alignment: Qt.AlignHCenter; font.pixelSize: 20; width: labw}
+//            Text { id: tx5;  text: numToString(abs[5]); Layout.alignment: Qt.AlignHRight; font.pixelSize: 20; width: labw}
             Text { id: tx6;  text: numToString(abs[6]); Layout.alignment: Qt.AlignHCenter; font.pixelSize: 20; width: labw}
+//            Text { id: tx6;  text: numToString(abs[6]); Layout.alignment: Qt.AlignHRight; font.pixelSize: 20; width: labw}
             Text { id: tx7;  text: numToString(abs[7]); Layout.alignment: Qt.AlignHCenter; font.pixelSize: 20; width: labw}
+//            Text { id: tx7;  text: numToString(abs[7]); Layout.alignment: Qt.AlignHRight; font.pixelSize: 20; width: labw}
         }
     function numToString(x){
         if(x < 10) return x.toString() + "   "
