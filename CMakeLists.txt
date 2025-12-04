@@ -76,7 +76,7 @@ else()
         add_executable(kmdelta6
           ${PROJECT_SOURCES}
 #          tcpIntrfc.h
-           ${inc_dir}tcpIntrfc.h
+#           ${inc_dir}tcpIntrfc.h
 #          tcpIntrfc.h
 #          tcpIntrfc.cpp
 #          tcpIntrfc.cpp
@@ -84,7 +84,7 @@ else()
           ${inc_dir}vmConfigsChat.h ${src_dir}vmConfigsChat.cpp
           ${inc_dir}chat.h ${src_dir}chat.cpp
           ${inc_dir}pointtimer.h ${src_dir}pointtimer.cpp
-          ${inc_dir}pTmrIntrfc.h
+#          ${inc_dir}pTmrIntrfc.h
         )
     endif()
 endif()

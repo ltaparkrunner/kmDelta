@@ -39,12 +39,12 @@ ApplicationWindow{
             height: menuh * 3 + 14
             MenuItem {
                 text: qsTr("Соединить")
-                onTriggered: Qt.quit();
+                onTriggered: ctrlP.sendButt(1);
                 height: menuh
             }
             MenuItem {
                 text: qsTr("Разъединить")
-                onTriggered: Qt.quit();
+                onTriggered: ctrlP.sendButt(2);
                 height: menuh
             }
             MenuSeparator{}
@@ -60,32 +60,32 @@ ApplicationWindow{
             height: menuh * 6 + 2
             MenuItem {
                 text: qsTr("Загрузить из файла")
-                onTriggered: Qt.quit();
+                onTriggered: ctrlP.sendButt(8);
                 height: menuh
             }
             MenuItem {
                 text: qsTr("Сохранить настройки в файл")
-                onTriggered: Qt.quit();
+                onTriggered: ctrlP.sendButt(9);
                 height: menuh
             }
             MenuItem {
                 text: qsTr("Загрузить из устройства")
-                onTriggered: Qt.quit();
+                onTriggered: ctrlP.sendButt(7);
                 height: menuh
             }
             MenuItem {
                   text: qsTr("Записать в устройство")
-                onTriggered: Qt.quit();
+                onTriggered: ctrlP.sendButt(6);
                 height: menuh
             }
             MenuItem {
                 text: qsTr("Загрузить параметры по умолчанию в программу")
-                onTriggered: Qt.quit();
+                onTriggered: ctrlP.sendButt(12);
                 height: menuh
             }
             MenuItem {
                 text: qsTr("Установить Дату и Время")
-                onTriggered: Qt.quit();
+                onTriggered: ctrlP.sendButt(5);
                 height: menuh
             }
         }
@@ -119,6 +119,7 @@ ApplicationWindow{
                 }
 
                 ControlP_5{
+                    id: ctrlP
                     Layout.fillHeight: true
                 }
             }

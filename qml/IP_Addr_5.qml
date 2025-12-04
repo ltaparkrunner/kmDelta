@@ -6,7 +6,7 @@ import QtQuick.Controls 2.0     //1.0 //2.0
 import QtQuick.Dialogs  1.2 //2.0     //1.2
 
 Rectangle {
-    id: ip_contain
+//    id: ip_contain
     width: 384
     //height: 200
     property int ht: 310//500

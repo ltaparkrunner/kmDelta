@@ -13,7 +13,7 @@ Rectangle{
     readonly property font myFont:("Helvetica")
     readonly property int butth: 40
     readonly property int spch: 7
-    id:c_ip2
+//    id:c_ip2
     width: ipAddr_2.width
     Layout.margins: 10
     Connections {
@@ -33,6 +33,7 @@ Rectangle{
     }
 
 ColumnLayout{
+    id: cl1
     spacing: spch
     Text{
         Layout.alignment: Qt.AlignHCenter
@@ -74,7 +75,7 @@ ColumnLayout{
         }
     }
 
-     IP_Addr_5{
+    IP_Addr_5{
         id: ipAddr_2
         color: parent.parent.color
         Layout.preferredHeight: ipAddr_2.ht

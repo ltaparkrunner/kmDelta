@@ -47,4 +47,5 @@ kmdelta6
 kmdelta6_autogen/
 .qt/
 qt_plugins/
+build/
 

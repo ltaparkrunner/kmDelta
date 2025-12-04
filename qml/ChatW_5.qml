@@ -10,15 +10,16 @@ Rectangle{
     Connections {
         target: vmConfigsChat
         function onSendToChat(abs){
+//            console.log("onSendToChat ", abs[0], abs[1], abs[2], abs[3], abs[4], abs[5], abs[6], abs[7])
             f1.values = [abs[0], abs[1], abs[2], abs[3], abs[4], abs[5], abs[6], abs[7]]
-            tx0.text = abs[0] = -16384 ? "нет\nсвязи" : abs[0]
-            tx1.text = abs[1] = -16384 ? "нет\nсвязи" : abs[1]
-            tx2.text = abs[2] = -16384 ? "нет\nсвязи" : abs[2]
-            tx3.text = abs[3] = -16384 ? "нет\nсвязи" : abs[3]
-            tx4.text = abs[4] = -16384 ? "нет\nсвязи" : abs[4]
-            tx5.text = abs[5] = -16384 ? "нет\nсвязи" : abs[5]
-            tx6.text = abs[6] = -16384 ? "нет\nсвязи" : abs[6]
-            tx7.text = abs[7] = -16384 ? "нет\nсвязи" : abs[7]
+            tx0.text = abs[0] === -16384 ? "нет\nсвязи" : abs[0]
+            tx1.text = abs[1] === -16384 ? "нет\nсвязи" : abs[1]
+            tx2.text = abs[2] === -16384 ? "нет\nсвязи" : abs[2]
+            tx3.text = abs[3] === -16384 ? "нет\nсвязи" : abs[3]
+            tx4.text = abs[4] === -16384 ? "нет\nсвязи" : abs[4]
+            tx5.text = abs[5] === -16384 ? "нет\nсвязи" : abs[5]
+            tx6.text = abs[6] === -16384 ? "нет\nсвязи" : abs[6]
+            tx7.text = abs[7] === -16384 ? "нет\nсвязи" : abs[7]
         }
     }
     ChartView {
