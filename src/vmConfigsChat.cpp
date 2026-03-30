@@ -68,12 +68,12 @@ void vmConfigsChat::successDisconn() {
             break;
         default: break;
     }
-
 }
 
-int vmConfigsChat::stopReqButt(QString ip_t, QString port_t, int t_out){
-    if(tcpC->isConnected())     tcpC -> disconnectTcp();
+int vmConfigsChat::stopReqButt(/*QString ip_t, QString port_t, int t_out*/){
+    //if(tcpC->isConnected())     tcpC -> disconnectTcp();
     probePollTmr.stop();
+    emit sendToMB("TCP", "Poll stopped");
     return 0;
 }
 
@@ -117,7 +117,7 @@ int vmConfigsChat::loadDev_Respond(){ // receive device's respond after send mes
     if(cs ->load_tcp_configs_resp(tcpC) < 0)
         return -1;
     QList<QString> *str_cs = cs->fillList();
-
+    qDebug() << "vmConfigsChat::loadDev_Respond filllist" << *str_cs;
     emit sendCurrIp(*str_cs);
     delete str_cs;
     return 0;
@@ -229,15 +229,18 @@ int vmConfigsChat::tcpDevRespond(/*QByteArray r_buf*/){
     case setParams:
     {
         qDebug() << "setParams " << " r_buf.length: " << r_buf.length() << "/n";
-        if(r_buf[1] == 'O' && r_buf[2] == 'K' && r_buf[3] == '!')
-            emit sendToMB("Eth_7", "Params were set successfully");
-        else emit sendToMB("Eth_8", "Params haven't beet set");
+        // if(r_buf[1] == 'O' && r_buf[2] == 'K' && r_buf[3] == '!')
+        //     emit sendToMB("Eth_7", "Params have been set successfully");
+        // else emit sendToMB("Eth_8", "Params haven't beet set");
         pointTmr->stopTmr();
         tcpC->disconnectTcp();
         cs -> updateIP();
         QList<QString> *str_cs = cs->fillList();
 
         emit sendCurrIp(*str_cs);
+        if(r_buf[1] == 'O' && r_buf[2] == 'K' && r_buf[3] == '!')
+            emit sendToMB("Eth_7", "Params have been set successfully");
+        else emit sendToMB("Eth_8", "Params haven't beet set");
         delete str_cs;
     }
         break;
@@ -448,6 +451,7 @@ int vmConfigsChat::butt_proc(){
         case periodReqB:
           periodReqButt();
           break;
+        case stopReqB:      stopReqButt(); break;
         case connectB:      connectButt(); break;
         case setParamsB:    setParamsButt(); break;
         case getParamsB:    getParamsButt(); break;

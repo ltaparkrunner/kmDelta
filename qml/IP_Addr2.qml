@@ -275,6 +275,7 @@ Rectangle {
    с устройства"
 //                font : myFont
 //               }
+                enabled: false
                 onClicked: {
                     sendButt(7)
                 }
@@ -288,6 +289,7 @@ Rectangle {
                 text: "Установить параметры
    на устройство"
 //                font : myFont
+                enabled: false
                 onClicked: {
                     sendButt(6)
                 }

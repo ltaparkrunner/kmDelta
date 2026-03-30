@@ -76,7 +76,7 @@ public slots:
     int connectButt();
     int disconnectButt(/*QString ip_t, QString port_t*/);
     int periodReqButt();
-    int stopReqButt(QString ip_t, QString port_t, int t_out);
+    int stopReqButt(/*QString ip_t, QString port_t, int t_out*/);
     int setTimeButt(/*QString ip_t, QString port_t, int t_out*/);
     void setParamsButt(/*QList<QString> ls*/);
     void getParamsButt(/*QString ip_t, QString port_t*/);

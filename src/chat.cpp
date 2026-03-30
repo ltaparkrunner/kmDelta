@@ -33,6 +33,7 @@ int chat::get_tcp_chatdata(MbtcpClient* tcpC){
 QList<qint32>& chat::parse_tcp_resp(QByteArray &buf) {
 //    QByteArray dt = tcpC->getAll();
     int nr = 9;//9 - начало данных
+
     for (int i = 0; i < 8; i++)
     {
 //        if (i == 2)
@@ -48,7 +49,6 @@ QList<qint32>& chat::parse_tcp_resp(QByteArray &buf) {
             prb.vl[i].absolutnoe = dd;
         }
     }
-
     if ( 0 != buf[32] ) { prb.glh[1].alarm = true; prb.glh[1].value = buf[32]; }
     else { prb.glh[1].alarm = false; prb.glh[1].value = 0; }
     if ( 0 != buf[33] ) { prb.glh[2].alarm = true; prb.glh[2].value = buf[33]; }
@@ -58,7 +58,8 @@ QList<qint32>& chat::parse_tcp_resp(QByteArray &buf) {
 
     if ( 0 != buf[28] && 0 != buf[29] )///Дата и время
     {
-        QString x[5];
+        //QString x[5];
+        QVector<QString> x{5, "0"};
         for (short h = 0; h < 5; h++) {
             x[h] = QString::number(buf[25 + h], 16);
             if (x[h].length() == 1) x[h] = "0" + x[h];
@@ -67,7 +68,6 @@ QList<qint32>& chat::parse_tcp_resp(QByteArray &buf) {
         dev_date = x[3] + "." + x[4] + ".20" + QString::number(buf[30], 16);
 //        T_Date = x[2] + ":" + x[1] + ":" + x[0] + " " + x[3] + "." + x[4] + ".20" + QString::number(buf[30], 16);
     }
-
     minute = (buf[35] << 8) + buf[36];
     lvm.Visible = true;
     if (1 == buf[38])
@@ -78,7 +78,6 @@ QList<qint32>& chat::parse_tcp_resp(QByteArray &buf) {
     {
         status_control = "Алгоритм калибровки: ";
     }
-
     if (CheckSum != 0)
         lvm.Text = " Версия: " + QString::number(buf[40]) + "CRC32: " + QString::number(CheckSum, 16) + ")";
     else
