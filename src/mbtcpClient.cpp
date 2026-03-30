@@ -37,7 +37,7 @@ bool MbtcpClient::isConnected(){
 
 int MbtcpClient::connectTcp(QString &ip_t, QString port_t)
 {
-    qDebug() << "tcpClient: ip_t: " << ip_t << " port_t: " << port_t;
+//    qDebug() << "tcpClient: ip_t: " << ip_t << " port_t: " << port_t;
     tcpSocket->abort();
     tcpSocket->connectToHost(ip_t, port_t.toInt());
 //    return 0;
@@ -47,7 +47,7 @@ int MbtcpClient::connectTcp(QString &ip_t, QString port_t)
 
 int MbtcpClient::disconnectTcp() {
 //    qDebug() << "tcpClient: ip_t: " << tcpSocket->peerAddress().toString() << "  disconnect";
-    qDebug() << "tcpClient: ip_t: " << tcpSocket->peerName() << "  disconnect";
+//    qDebug() << "tcpClient: ip_t: " << tcpSocket->peerName() << "  disconnect";
 
     tcpSocket->disconnectFromHost();
     return 0;

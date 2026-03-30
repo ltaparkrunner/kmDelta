@@ -117,7 +117,7 @@ int vmConfigsChat::loadDev_Respond(){ // receive device's respond after send mes
     if(cs ->load_tcp_configs_resp(tcpC) < 0)
         return -1;
     QList<QString> *str_cs = cs->fillList();
-    qDebug() << "vmConfigsChat::loadDev_Respond filllist" << *str_cs;
+//    qDebug() << "vmConfigsChat::loadDev_Respond filllist" << *str_cs;
     emit sendCurrIp(*str_cs);
     delete str_cs;
     return 0;
@@ -214,7 +214,7 @@ int vmConfigsChat::tcpDevRespond(/*QByteArray r_buf*/){
         }
         break;
     case getSensors:
-        qDebug() << "getSensors " << "r_buf.length: " << r_buf.length() << "/n";
+//        qDebug() << "getSensors " << "r_buf.length: " << r_buf.length() << "/n";
     {
         static int counter;
 
@@ -228,7 +228,7 @@ int vmConfigsChat::tcpDevRespond(/*QByteArray r_buf*/){
         break;
     case setParams:
     {
-        qDebug() << "setParams " << " r_buf.length: " << r_buf.length() << "/n";
+//        qDebug() << "setParams " << " r_buf.length: " << r_buf.length() << "/n";
         // if(r_buf[1] == 'O' && r_buf[2] == 'K' && r_buf[3] == '!')
         //     emit sendToMB("Eth_7", "Params have been set successfully");
         // else emit sendToMB("Eth_8", "Params haven't beet set");
@@ -245,7 +245,7 @@ int vmConfigsChat::tcpDevRespond(/*QByteArray r_buf*/){
     }
         break;
     case setRTC:
-        qDebug() << "setRTC" << " r_buf.length: " << r_buf.length() << "/n";
+//        qDebug() << "setRTC" << " r_buf.length: " << r_buf.length() << "/n";
         if(  1 == r_buf[0] && 1 == r_buf[1] && 0 == r_buf[2] && 0 == r_buf[3] &&
            0 == r_buf[4] && 6 == r_buf[5] && 0 == r_buf[6] && 0x10 == r_buf[7] &&
            0 == r_buf[8] && 8 == r_buf[9] && 0 == r_buf[10]  && 3 == r_buf[11]){
@@ -306,7 +306,7 @@ send_t vmConfigsChat::getSensorsTransmit(){
         }
     }
     int trasm = tcpC->sendToTcp(&w_buf);
-    qDebug() << "getSensorsTransmit()   w_buf.length: " << w_buf.length() << "  transmitted: " << trasm <<  "/n";
+//    qDebug() << "getSensorsTransmit()   w_buf.length: " << w_buf.length() << "  transmitted: " << trasm <<  "/n";
 //    if(tcpC->sendToTcp(&w_buf) == w_buf.length()) {
     if(trasm == w_buf.length()) {
         msg_type = getSensors;
@@ -486,13 +486,13 @@ int vmConfigsChat::connectButt(){
 void vmConfigsChat::setParamsButt(/*QList<QString> ls*/) {
 //    cs->fillCompareCfg(ls);
     setParamsTransmit();
-    qDebug("called setParamsButt \n");
+//    qDebug("called setParamsButt \n");
     emit sendToMB("TCP",    "Set params");
 }
 
 void vmConfigsChat::getParamsButt(/*QString ip_t, QString port_t*/) {
     getParamsTransmit();
-    qDebug("get Params \n");
+//    qDebug("get Params \n");
     emit sendToMB("TCP",    "Get params");
 }
 
